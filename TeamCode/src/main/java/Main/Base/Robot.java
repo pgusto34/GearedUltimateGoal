@@ -1,0 +1,75 @@
+package Main.Base;
+
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvInternalCamera;
+
+import Main.Base.RobotUtilities.Camera;
+import Main.Base.RobotUtilities.Gyro;
+import Main.Base.RobotUtilities.Intake;
+import Main.Base.RobotUtilities.Shooter;
+import Main.Base.RobotUtilities.WheelBase;
+import Main.Base.RobotUtilities.WobbleArm;
+
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
+public class Robot extends Hardware{
+
+    public Camera camera;
+    public Gyro gyro;
+    public WheelBase wheelBase;
+    public Shooter shooter;
+    public WobbleArm wobbleArm;
+    public Intake intake;
+
+    int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+    OpenCvInternalCamera phoneCamera = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+
+
+    @Override
+    public void init() {
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        OpenCvInternalCamera phoneCamera = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+
+        camera = new Camera(phoneCamera);
+
+
+        imu = hardwareMap.get(BNO055IMU.class, imuName);
+
+        gyro = new Gyro(imu);
+
+
+        leftFront = hardwareMap.dcMotor.get(leftFrontName);
+        leftBack = hardwareMap.dcMotor.get(leftBackName);
+        rightBack = hardwareMap.dcMotor.get(rightBackName);
+        rightFront = hardwareMap.dcMotor.get(rightFrontName);
+
+        wheelBase = new WheelBase(leftFront, leftBack, rightFront, rightBack);
+
+
+        leftIntake = hardwareMap.dcMotor.get(leftIntakeName);
+        rightIntake = hardwareMap.dcMotor.get(rightIntakeName);
+
+        intake = new Intake(leftIntake, rightIntake);
+
+
+        flyWheel = hardwareMap.dcMotor.get(flyWheelName);
+
+        feederServo = hardwareMap.servo.get(feederServoName);
+
+        shooter = new Shooter(flyWheel, feederServo);
+
+
+        wobbleArmServo = hardwareMap.servo.get(wobbleArmServoName);
+        wobbleClaw = hardwareMap.servo.get(wobbleClawName);
+
+        wobbleArm = new WobbleArm(wobbleArmServo, wobbleClaw);
+
+
+    }
+
+}
