@@ -1,17 +1,20 @@
 package Main.Base.RobotUtilities;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Shooter {
 
-    DcMotor flyWheel;
+    /** Reverse flyWheel motor so positive powers will shoot out **/
 
-    Servo feederServo;
+    private DcMotor flyWheel;
 
-    double feederServoFeedPosition = 0.25;
-    double feederServoPrepPosition = 0.0;
+    private Servo feederServo;
+
+    double feederServoFeedPosition = 0.0;
+    double feederServoPrepPosition = 0.25;
     double feederServoPosition = feederServoPrepPosition;
 
     double highGoalVelocity = 0.7;
@@ -22,17 +25,24 @@ public class Shooter {
     public Shooter(DcMotor fwMotor, Servo fServo) {
         flyWheel = fwMotor;
         feederServo = fServo;
+
+        flyWheel.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void shoot(boolean highGoal, int times){
+        resetShooter();
         flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         if(highGoal) flyWheel.setPower(highGoalVelocity);
         else flyWheel.setPower(powerShotVelocity);
+
+        runTime.reset();
+        while(runTime.milliseconds() < 300) { }
 
         for(int i = 0; i < times; i++) {
             feedShooter();
             resetShooter();
         }
+        resetShooter();
         flyWheel.setPower(0);
     }
 

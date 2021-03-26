@@ -9,7 +9,17 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gam
 @TeleOp(name = "FODEXAMPLE")
 public class FODExample extends Robot {
 
-    public void fieldOrientatedDrive() {
+
+    @Override
+    public void loop() {
+
+        fieldOrientatedDrive();
+    }
+
+
+
+
+    public void fieldOrientatedDrive () {
         double y = gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
 
@@ -20,6 +30,8 @@ public class FODExample extends Robot {
         x = (-y) * Math.sin(headingRadians) + x * Math.cos(headingRadians);
         y = temp;
 
-        wheelBase.mecanumDrive(x, y , gamepad1.right_stick_x);
+        wheelBase.mecanumDrive(x, y, gamepad1.right_stick_x);
     }
+
+
 }

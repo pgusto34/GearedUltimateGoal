@@ -16,10 +16,10 @@ public class WheelBase {
 
          lB  |-----|  rB**/
 
-    public DcMotor leftFront;
-    public DcMotor leftBack;
-    public DcMotor rightFront;
-    public DcMotor rightBack;
+    private DcMotor leftFront;
+    private DcMotor leftBack;
+    private DcMotor rightFront;
+    private DcMotor rightBack;
 
     Double lF, rF, lB, rB, maxVector;
 
@@ -31,7 +31,6 @@ public class WheelBase {
         rightFront = rF;
         rightBack = rB;
 
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         setModeAll(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -65,10 +64,10 @@ public class WheelBase {
 
 
     public void mecanumDrive(double leftX, double leftY, double rightX) {
-        lF = leftX - leftY + rightX;
-        rF = leftX + leftY + rightX;
-        lB = leftX + leftY + rightX;
-        rB = -leftX + leftY + rightX;
+        lF = -leftX - leftY - rightX;
+        rF = -leftX + leftY - rightX;
+        lB = -leftX + leftY + rightX;
+        rB = +leftX + leftY - rightX;
 
 
         maxVector = Math.max(Math.max(Math.abs(lF), Math.abs(rF)),

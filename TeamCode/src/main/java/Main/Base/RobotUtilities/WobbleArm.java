@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class WobbleArm {
 
-    Servo wobbleArm;
-    Servo wobbleClaw;
+    private Servo wobbleArm;
+    private Servo wobbleClaw;
 
     double wobbleClawPosition;
     double wobbleClawOpenPosition = 0.58;

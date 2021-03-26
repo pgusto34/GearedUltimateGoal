@@ -2,11 +2,13 @@ package Main.Base;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
+import Main.Base.HelperClasses.BooleanUpdater;
 import Main.Base.RobotUtilities.Camera;
 import Main.Base.RobotUtilities.Gyro;
 import Main.Base.RobotUtilities.Intake;
@@ -18,6 +20,8 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.har
 
 public class Robot extends Hardware{
 
+    public static Gamepad gp;
+
     public Camera camera;
     public Gyro gyro;
     public WheelBase wheelBase;
@@ -25,12 +29,12 @@ public class Robot extends Hardware{
     public WobbleArm wobbleArm;
     public Intake intake;
 
-    int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-    OpenCvInternalCamera phoneCamera = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-
+    public BooleanUpdater boolUpdater;
 
     @Override
     public void init() {
+
+        gp = gamepad1;
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         OpenCvInternalCamera phoneCamera = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
@@ -69,6 +73,8 @@ public class Robot extends Hardware{
 
         wobbleArm = new WobbleArm(wobbleArmServo, wobbleClaw);
 
+
+        //boolUpdater = new BooleanUpdater();
 
     }
 

@@ -12,9 +12,9 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.tel
 
 public class Gyro {
 
-    BNO055IMU imu;
-    BNO055IMU.Parameters imuParameters;
-    Orientation angles;
+    private BNO055IMU imu;
+    private BNO055IMU.Parameters imuParameters;
+    private Orientation angles;
 
     public Gyro(BNO055IMU IMU) {
         imu = IMU;
