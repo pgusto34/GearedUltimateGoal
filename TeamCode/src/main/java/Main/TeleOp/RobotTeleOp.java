@@ -11,41 +11,54 @@ public class RobotTeleOp extends Robot {
 
     boolean lastA = false, lastB = false, lastX = false, lastY = false, lastRight = false, lastLeft = false, lastRT = false, lastLT = false;
 
+    boolean Ltpressed = false, Rtpressed = false;
+
+    boolean intakeLIn, intakeLOut, intakeRIn, intakeROut;
+
+    boolean wobbleArmUp = true, wobbleClawOpen = true;
+
     @Override
     public void loop() {
 
-        wheelBase.mecanumDrive(-gp.left_stick_y, gp.left_stick_x, gp.right_stick_x);
+        wheelBase.mecanumDrive(-gp.left_stick_y, -gp.left_stick_x, gp.right_stick_x);
+
+        intake.controlLIntake(intakeLIn, intakeLOut);
+        intake.controlRIntake(intakeRIn, intakeROut);
 
 
-        if(gp.left_trigger > 0.1 && !lastLT) intake.setLIntakePower(0.5);
-        else if(gp.dpad_left) intake.setLIntakePower(-0.5);
-        else intake.setLIntakePower(0);
+        if (gp.right_trigger > 0.2 & !lastRT) {
+            intakeRIn = !intakeRIn;
+            intakeROut = false;
+        }
 
-        if(gp.right_trigger > 0.1 && !lastRT) intake.setRIntakePower(0.5);
-        else if(gp.dpad_right) intake.setRIntakePower(-0.5);
-        else intake.setRIntakePower(0);
+        if (gp.left_trigger > 0.2 & !lastLT) {
+            intakeLIn = !intakeLIn;
+            intakeLOut = false;
+        }
 
+        if(gp.back) {
+            intakeRIn = false;
+            intakeLIn = false;
+            intakeROut = true;
+            intakeLOut = true;
+        }
 
         if (gp.right_bumper && !lastRight) shooter.shoot(true, 3);
-
-        if (gp.right_bumper) lastRight = true;
-        else lastRight = false;
 
 
         if (gp.left_bumper && !lastLeft) shooter.shoot(false, 1);
 
 
+        if(gp.a && !lastA) wobbleArm.ControlWobbleArm(!wobbleArmUp);
+
+        if(gp.y && !lastY) wobbleArm.ControlWobbleClaw(!wobbleClawOpen);
+
+
         if (gp.left_bumper) lastLeft = true;
         else lastLeft = false;
 
-
-        if(gp.a && !lastA) wobbleArm.ControlWobbleArm(true);
-        else wobbleArm.ControlWobbleArm(false);
-
-        if(gp.y && !lastY) wobbleArm.ControlWobbleClaw(true);
-        else wobbleArm.ControlWobbleClaw(false);
-
-
+        if (gp.right_bumper) lastRight = true;
+        else lastRight = false;
 
         if (gp.a) lastA = true;
         else lastA = false;

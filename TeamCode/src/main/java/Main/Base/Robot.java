@@ -29,7 +29,7 @@ public class Robot extends Hardware{
     public WobbleArm wobbleArm;
     public Intake intake;
 
-    public BooleanUpdater boolUpdater;
+    //public BooleanUpdater boolUpdater;
 
     @Override
     public void init() {
