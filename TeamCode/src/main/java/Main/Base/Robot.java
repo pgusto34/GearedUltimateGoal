@@ -8,7 +8,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
+import java.util.HashMap;
+
 import Main.Base.HelperClasses.BooleanUpdater;
+import Main.Base.HelperClasses.Button;
 import Main.Base.RobotUtilities.Camera;
 import Main.Base.RobotUtilities.Gyro;
 import Main.Base.RobotUtilities.Intake;
@@ -29,7 +32,9 @@ public class Robot extends Hardware{
     public WobbleArm wobbleArm;
     public Intake intake;
 
-    //public BooleanUpdater boolUpdater;
+    public BooleanUpdater boolUpdater;
+
+    public HashMap<Button, Boolean> buttonChecker = new HashMap<Button, Boolean>();
 
     @Override
     public void init() {
@@ -74,7 +79,7 @@ public class Robot extends Hardware{
         wobbleArm = new WobbleArm(wobbleArmServo, wobbleClaw);
 
 
-        //boolUpdater = new BooleanUpdater();
+        boolUpdater = new BooleanUpdater();
 
     }
 

@@ -23,7 +23,20 @@ public class WheelBase {
 
     Double lF, rF, lB, rB, maxVector;
 
-    Robot robot = new Robot();
+
+    static final double COUNTS_PER_REVOLUTION = 537.7;
+    static final double WHEEL_DIAMETER = 100/25.4;
+    static final double COUNTS_PER_INCH = (COUNTS_PER_REVOLUTION / (WHEEL_DIAMETER * Math.PI));
+
+    protected Thread autoThread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            runAutonomous();
+        }
+    });
+
+    private long maxTime;
+
 
     public WheelBase(DcMotor lF, DcMotor lB, DcMotor rF, DcMotor rB) {
         leftFront = lF;
@@ -63,7 +76,7 @@ public class WheelBase {
     }
 
 
-    public void mecanumDrive(double leftX, double leftY, double rightX) {
+    public void mecanumDrive(double leftX, double leftY, double rightX, boolean slomo) {
         lF = -leftX - leftY - rightX;
         rF = -leftX + leftY - rightX;
         lB = -leftX + leftY + rightX;
@@ -80,10 +93,19 @@ public class WheelBase {
         lB /= maxVector;
         rB /= maxVector;
 
-        setMotorPowers(lF, lB, rF, rB);
+        if(slomo) setMotorPowers(lF/2, lB/2, rF/2, rB/2);
+        else setMotorPowers(lF, lB, rF, rB);
 
     }
 
 
+
+
+
+
+
+
+
+    public void runAutonomous(){};
 
 }

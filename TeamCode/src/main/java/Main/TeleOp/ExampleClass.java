@@ -11,7 +11,7 @@ public class ExampleClass extends Robot {
 
         shooter.shoot(true, 3);
 
-        wheelBase.mecanumDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+        wheelBase.mecanumDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, false);
 
         if(gp.a && !lastA) shooter.shoot(true, 1);
 

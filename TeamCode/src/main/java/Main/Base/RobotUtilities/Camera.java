@@ -74,12 +74,20 @@ public class Camera
     }
 
 
-    public SkystoneDeterminationPipeline.RingPosition detectRings() {
-        return pipeline.position;
+    public int detectRings() {
+
+        if(pipeline.position == SkystoneDeterminationPipeline.RingPosition.FOUR) {
+            return 4;
+        }
+        else if(pipeline.position == SkystoneDeterminationPipeline.RingPosition.ONE) {
+            return 1;
+        }
+        else return 0;
+
     }
 
     public void displayRings() {
-        telemetry.addData("Ring Position: ", pipeline.position);
+        telemetry.addData("Ring Position: ", detectRings());
     }
 
 
