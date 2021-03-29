@@ -18,7 +18,7 @@ public class Shooter {
     double feederServoPosition = feederServoPrepPosition;
 
     double highGoalVelocity = 0.7;
-    double powerShotVelocity = 0.6;
+    double powerShotVelocity = 0.35;
 
     private ElapsedTime runTime = new ElapsedTime();
 

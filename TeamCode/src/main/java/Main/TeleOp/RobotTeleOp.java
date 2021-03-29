@@ -2,18 +2,17 @@ package Main.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import Main.Base.HelperClasses.BooleanUpdater;
 import Main.Base.HelperClasses.Button;
 import Main.Base.HelperClasses.Button.*;
 import Main.Base.Robot;
 import Main.Base.RobotUtilities.WobbleArm;
 
+import static Main.Base.HelperClasses.BooleanUpdater.*;
+
 
 @TeleOp(name = "TeleOp", group = "competition")
 public class RobotTeleOp extends Robot {
-//
-//    boolean lastA = false, lastB = false, lastX = false, lastY = false, lastRight = false, lastLeft = false, lastRT = false, lastLT = false;
-//
-//    boolean Ltpressed = false, Rtpressed = false;
 
     boolean intakeLIn, intakeLOut, intakeRIn, intakeROut;
 
@@ -24,7 +23,9 @@ public class RobotTeleOp extends Robot {
     @Override
     public void loop() {
 
-        if (gp.a & !buttonChecker.get(Button.a)) slomo = !slomo;
+        buttonChecker = updateBooleans(gamepad1, buttonChecker);
+
+        if (buttonChecker.get(Button.a)) slomo = !slomo;
 
         wheelBase.mecanumDrive(-gp.left_stick_y, -gp.left_stick_x, gp.right_stick_x, slomo);
 
@@ -33,12 +34,12 @@ public class RobotTeleOp extends Robot {
         intake.controlRIntake(intakeRIn, intakeROut);
 
 
-        if (gp.right_trigger > 0.2 & !buttonChecker.get(Button.right_trigger)) {
+        if (buttonChecker.get(Button.right_trigger)) {
             intakeRIn = !intakeRIn;
             intakeROut = false;
         }
 
-        if (gp.left_trigger > 0.2 & !buttonChecker.get(Button.left_trigger)) {
+        if (buttonChecker.get(Button.left_trigger)) {
             intakeLIn = !intakeLIn;
             intakeLOut = false;
         }
@@ -51,45 +52,21 @@ public class RobotTeleOp extends Robot {
         }
 
 
-        if (gp.right_bumper && !buttonChecker.get(Button.right_bumper)) shooter.shoot(true, 3);
+        if (buttonChecker.get(Button.right_bumper)) shooter.shoot(true, 3);
 
-        if (gp.left_bumper && !buttonChecker.get(Button.left_bumper)) shooter.shoot(false, 1);
-
-
-        if(gp.x && !buttonChecker.get(Button.x)) wobbleArm.ControlWobbleArm(!wobbleArmUp);
-
-        if(gp.y && !buttonChecker.get(Button.y)) wobbleArm.ControlWobbleClaw(!wobbleClawOpen);
+        if (buttonChecker.get(Button.left_bumper)) shooter.shoot(false, 1);
 
 
-        boolUpdater.updateBooleans(gp);
+        if(buttonChecker.get(Button.b)) wobbleArm.ControlWobbleArm(!wobbleArmUp);
+
+        if(buttonChecker.get(Button.y)) wobbleArm.ControlWobbleClaw(!wobbleClawOpen);
 
 
         telemetry.addData("Heading: ", gyro.getHeading());
 
-//        if (gp.left_bumper) lastLeft = true;
-//        else lastLeft = false;
-//
-//        if (gp.right_bumper) lastRight = true;
-//        else lastRight = false;
-//
-//        if (gp.a) lastA = true;
-//        else lastA = false;
-//
-//        if (gp.b) lastB = true;
-//        else lastB = false;
-//
-//        if (gp.x) lastX = true;
-//        else lastX = false;
-//
-//        if (gp.y) lastY = true;
-//        else lastY = false;
-//
-//        if(gp.left_trigger > 0.1) lastLT = true;
-//        else lastLT = false;
-//
-//        if(gp.right_trigger > 0.1) lastRT = true;
-//        else lastRT = false;
+        telemetry.addData("a: ", buttonChecker.get(Button.a));
 
+        telemetry.addData("Gamepad a: ", gp.a);
     }
 
 

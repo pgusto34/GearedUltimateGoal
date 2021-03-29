@@ -15,6 +15,8 @@ public enum Button {
     dpad_up,
     dpad_down,
     dpad_left,
-    dpad_right
+    dpad_right,
+    left_stick_button,
+    right_stick_button
 
 }

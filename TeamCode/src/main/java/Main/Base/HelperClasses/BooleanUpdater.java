@@ -8,103 +8,137 @@ import java.util.HashMap;
 
 public class BooleanUpdater {
 
-    Gamepad gamepad;
-
-    static HashMap<Button, Boolean> buttons = new HashMap<Button, Boolean>();
-
     public static boolean lastA = false, lastB = false, lastX = false, lastY = false, lastRB = false, lastLB = false, lastRT = false, lastLT = false;
     public static boolean lastDLeft = false, lastDRight = false, lastDUp = false, lastDDown = false;
     public static boolean lastStart = false, lastBack = false;
+    public static boolean lastLS = false, lastRS = false;
+
+    public static boolean pressA = false, pressB = false, pressX = false, pressY = false, pressRB = false, pressLB = false, pressRT = false, pressLT = false;
+    public static boolean pressDLeft = false, pressDRight = false, pressDUp = false, pressDDown = false;
+    public static boolean pressStart = false, pressBack = false;
+    public static boolean pressLS = false, pressRS = false;
 
 
-    public BooleanUpdater() {}
 
 
-    public static HashMap<Button, Boolean> updateBooleans(Gamepad gp) {
-        if (gp.a) lastA = true;
-        else lastA = false;
+    public static HashMap<Button, Boolean> updateBooleans(Gamepad gp, HashMap<Button, Boolean> hm) {
+        hm.put(Button.a, gp.a);
 
-        buttons.put(a, lastA);
+        lastA = gp.a;
 
+        lastB = gp.b;
 
-        if (gp.b) lastB = true;
-        else lastB = false;
+        lastX = gp.x;
 
-        buttons.put(b, lastB);
+        lastY = gp.y;
 
+        lastLT = gp.left_trigger > 0.1;
 
-        if (gp.x) lastX = true;
-        else lastX = false;
+        lastRT = gp.right_trigger > 0.1;
 
-        buttons.put(x, lastX);
+        lastRB = gp.right_bumper;
 
+        lastLB = gp.left_bumper;
 
-        if (gp.y) lastY = true;
-        else lastY = false;
+        lastDUp = gp.dpad_up;
 
-        buttons.put(y, lastY);
+        lastDDown = gp.dpad_down;
 
+        lastDRight = gp.dpad_right;
 
-        if(gp.left_trigger > 0.1) lastLT = true;
-        else lastLT = false;
+        lastDLeft = gp.dpad_left;
 
-        buttons.put(left_trigger, lastLT);
+        lastStart = gp.start;
 
+        lastBack = gp.back;
 
-        if(gp.right_trigger > 0.1) lastRT = true;
-        else lastRT = false;
+        lastLS = gp.left_stick_button;
 
-        buttons.put(right_trigger, lastRT);
-
-
-        if(gp.right_bumper) lastRB = true;
-        else lastRB = false;
-
-        buttons.put(right_bumper, lastRB);
+        lastRS = gp.right_stick_button;
 
 
-        if(gp.left_bumper) lastLB = true;
-        else lastLB = false;
 
-        buttons.put(left_bumper, lastLB);
+        //pressA = gp.a && !lastA;
 
-
-        if(gp.dpad_up) lastDUp = true;
-        else lastDUp = false;
-
-        buttons.put(dpad_up, lastDUp);
+        //buttons.put(a, gp.a);
 
 
-        if(gp.dpad_down) lastDDown = true;
-        else lastDDown = false;
+        pressB = gp.b && !lastB;
 
-        buttons.put(dpad_down, lastDDown);
-
-
-        if(gp.dpad_right) lastDRight = true;
-        else lastDRight = false;
-
-        buttons.put(dpad_right, lastDRight);
+        hm.put(b, pressB);
 
 
-        if(gp.dpad_left) lastDLeft = true;
-        else lastDLeft = false;
+        pressX = gp.x && !lastX;
 
-        buttons.put(dpad_left, lastDLeft);
-
-
-        if(gp.start) lastStart = true;
-        else lastStart = false;
-
-        buttons.put(start, lastStart);
+        hm.put(x, pressX);
 
 
-        if(gp.back) lastBack = true;
-        else lastBack = false;
+        pressY = gp.y && !lastY;
 
-        buttons.put(back, lastBack);
+        hm.put(y, pressY);
 
 
-        return buttons;
+        pressLB = gp.left_bumper && !lastLB;
+
+        hm.put(left_bumper, pressLB);
+
+
+        pressRB = gp.right_bumper && !lastRB;
+
+        hm.put(right_bumper, pressRB);
+
+
+        pressLT = gp.left_trigger > 0.2 && !lastLT;
+
+        hm.put(left_trigger, pressLT);
+
+
+        pressRT = gp.right_trigger > 0.2 && !lastA;
+
+        hm.put(right_trigger, pressRT);
+
+
+        pressDUp = gp.dpad_up && !lastDUp;
+
+        hm.put(dpad_up, pressDUp);
+
+
+        pressDDown = gp.dpad_down && !lastDDown;
+
+        hm.put(dpad_down, pressDDown);
+
+
+        pressDLeft = gp.dpad_left && !lastDLeft;
+
+        hm.put(dpad_left, pressDLeft);
+
+
+        pressDRight = gp.dpad_right && !lastDRight;
+
+        hm.put(dpad_right, pressDRight);
+
+
+        pressA = gp.a && !lastA;
+
+        hm.put(a, pressA);
+
+
+        pressA = gp.a && !lastA;
+
+        hm.put(a, pressA);
+
+
+        pressLS = gp.left_stick_button && !lastLS;
+
+        hm.put(left_stick_button, pressLS);
+
+
+        pressRS = gp.right_stick_button && !lastRS;
+
+        hm.put(right_stick_button, pressRS);
+
+
+
+        return hm;
     }
 }

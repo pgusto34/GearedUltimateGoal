@@ -23,6 +23,8 @@ public class WheelBase {
 
     Double lF, rF, lB, rB, maxVector;
 
+    static final double SLOMO_DIVIDER = 2;
+
 
     static final double COUNTS_PER_REVOLUTION = 537.7;
     static final double WHEEL_DIAMETER = 100/25.4;
@@ -45,6 +47,8 @@ public class WheelBase {
         rightBack = rB;
 
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         setModeAll(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -93,7 +97,7 @@ public class WheelBase {
         lB /= maxVector;
         rB /= maxVector;
 
-        if(slomo) setMotorPowers(lF/2, lB/2, rF/2, rB/2);
+        if(slomo) setMotorPowers(lF/SLOMO_DIVIDER, lB/SLOMO_DIVIDER, rF/SLOMO_DIVIDER, rB/SLOMO_DIVIDER);
         else setMotorPowers(lF, lB, rF, rB);
 
     }
