@@ -1,9 +1,13 @@
 package Testing;
 
+import androidx.appcompat.app.ActionBar;
+
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import Main.Base.Robot;
 
+@Disabled
 @TeleOp(name = "Intake Test", group = "test")
 public class IntakeTest extends Robot {
 

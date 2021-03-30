@@ -5,8 +5,14 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import Main.Base.Robot;
 
+import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
+import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
+import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_WITHOUT_ENCODER;
+import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
+import static java.lang.Math.abs;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 public class WheelBase {
 
@@ -25,19 +31,11 @@ public class WheelBase {
 
     static final double SLOMO_DIVIDER = 2;
 
+    static final double ROBOT_DIAMETER = 20;
 
-    static final double COUNTS_PER_REVOLUTION = 8192;
+    static final double TICKS_PER_REVOLUTION = 8192;
     static final double WHEEL_DIAMETER = 1.45;
-    static final double COUNTS_PER_INCH = (COUNTS_PER_REVOLUTION / (WHEEL_DIAMETER * Math.PI));
-
-    protected Thread autoThread = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            runAutonomous();
-        }
-    });
-
-    private long maxTime;
+    static final double TICKS_PER_INCH = (TICKS_PER_REVOLUTION / (WHEEL_DIAMETER * Math.PI));
 
 
     public WheelBase(DcMotor lF, DcMotor lB, DcMotor rF, DcMotor rB) {
@@ -47,6 +45,7 @@ public class WheelBase {
         rightBack = rB;
 
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -84,7 +83,7 @@ public class WheelBase {
         lF = -leftX - leftY - rightX;
         rF = -leftX + leftY - rightX;
         lB = -leftX + leftY + rightX;
-        rB = +leftX + leftY - rightX;
+        rB = -leftX - leftY + rightX;
 
 
         maxVector = Math.max(Math.max(Math.abs(lF), Math.abs(rF)),
@@ -103,13 +102,120 @@ public class WheelBase {
     }
 
 
+    public void moveBot(String direction, double distance, double speed) {
 
 
+        int newTargetLF;
+        int newTargetLB;
+        int newTargetRF;
+        int newTargetRB;
+
+        speed = abs(speed) >= 1 ? 1 : speed;
+
+        double travelTicks = distance * TICKS_PER_INCH;
+
+        switch (direction) {
+            case "f":
+                newTargetLF = leftFront.getCurrentPosition() - (int) (travelTicks);
+                newTargetLB = leftBack.getCurrentPosition() + (int) (travelTicks);
+                newTargetRF = rightFront.getCurrentPosition() + (int) (travelTicks);
+                newTargetRB = rightBack.getCurrentPosition() - (int) (travelTicks);
+                break;
+            case "r":
+                newTargetLF = leftFront.getCurrentPosition() - (int) (travelTicks);
+                newTargetLB = leftBack.getCurrentPosition() - (int) (travelTicks);
+                newTargetRF = rightFront.getCurrentPosition() - (int) (travelTicks);
+                newTargetRB = rightBack.getCurrentPosition() - (int) (travelTicks);
+                break;
+            case "l":
+                newTargetLF = leftFront.getCurrentPosition() + (int) (travelTicks);
+                newTargetLB = leftBack.getCurrentPosition() + (int) (travelTicks);
+                newTargetRF = rightFront.getCurrentPosition() + (int) (travelTicks);
+                newTargetRB = rightBack.getCurrentPosition() + (int) (travelTicks);
+                break;
+            case "b":
+                newTargetLF = leftFront.getCurrentPosition() + (int) (travelTicks);
+                newTargetLB = leftBack.getCurrentPosition() - (int) (travelTicks);
+                newTargetRF = rightFront.getCurrentPosition() - (int) (travelTicks);
+                newTargetRB = rightBack.getCurrentPosition() + (int) (travelTicks);
+                break;
+            default:
+                newTargetLF = leftFront.getCurrentPosition();
+                newTargetLB = leftBack.getCurrentPosition();
+                newTargetRF = rightFront.getCurrentPosition();
+                newTargetRB = rightBack.getCurrentPosition();
+        }
 
 
+        rightFront.setTargetPosition(newTargetRF);
+        rightBack.setTargetPosition(newTargetRB);
+        leftFront.setTargetPosition(newTargetLF);
+        leftBack.setTargetPosition(newTargetLB);
+
+        setModeAll(RUN_TO_POSITION);
+
+        setMotorPowers(speed, speed, speed, speed);
+
+        try {
+            while (leftFront.isBusy() && leftBack.isBusy() && rightFront.isBusy() && rightBack.isBusy()) {
+
+            }
+        } catch (Exception e) {
+            telemetry.addData("Error", e);
+        }
+
+        setMotorPowers(0, 0, 0, 0);
+
+        setModeAll(RUN_WITHOUT_ENCODER);
+    }
 
 
+    public void turnBot(double speed, double degrees, boolean clockwise) {
 
-    public void runAutonomous(){};
 
+        degrees = ((ROBOT_DIAMETER * Math.PI) / 360) * degrees;
+
+        int newTargetLF;
+        int newTargetLB;
+        int newTargetRF;
+        int newTargetRB;
+
+        double travelTicks = degrees * TICKS_PER_INCH;
+
+        if (clockwise) {
+            newTargetLF = leftFront.getCurrentPosition() - (int) (travelTicks);
+            newTargetLB = leftBack.getCurrentPosition() + (int) (travelTicks);
+            newTargetRF = rightFront.getCurrentPosition() - (int) (travelTicks);
+            newTargetRB = rightBack.getCurrentPosition() + (int) (travelTicks);
+        } else {
+            newTargetLF = leftFront.getCurrentPosition() + (int) (travelTicks);
+            newTargetLB = leftBack.getCurrentPosition() - (int) (travelTicks);
+            newTargetRF = rightFront.getCurrentPosition() + (int) (travelTicks);
+            newTargetRB = rightBack.getCurrentPosition() - (int) (travelTicks);
+        }
+
+        leftFront.setTargetPosition(newTargetLF);
+        leftBack.setTargetPosition(newTargetLB);
+        rightFront.setTargetPosition(newTargetRF);
+        rightBack.setTargetPosition(newTargetRB);
+
+        setModeAll(RUN_TO_POSITION);
+
+        setMotorPowers(speed, speed, speed, speed);
+
+
+        try {
+            while (leftFront.isBusy() && leftBack.isBusy() && rightFront.isBusy() && rightBack.isBusy()) {
+
+            }
+        } catch (Exception e) {
+            telemetry.addData("Error", e);
+        }
+
+        setMotorPowers(0, 0, 0, 0);
+
+        setModeAll(RUN_WITHOUT_ENCODER);
+    }
+
+    
 }

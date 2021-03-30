@@ -86,10 +86,6 @@ public class Camera
 
     }
 
-    public void displayRings() {
-        telemetry.addData("Ring Position: ", detectRings());
-    }
-
 
     public static class SkystoneDeterminationPipeline extends OpenCvPipeline
     {

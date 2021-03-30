@@ -1,5 +1,6 @@
 package Testing;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -11,7 +12,7 @@ import Main.Base.Robot;
 
 import static Main.Base.HelperClasses.BooleanUpdater.updateBooleans;
 
-
+@Disabled
 @TeleOp(name = "BooleanUpdater Test", group = "testing")
 public class BooleanUpdaterTest extends OpMode {
 
