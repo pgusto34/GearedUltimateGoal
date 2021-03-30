@@ -36,13 +36,18 @@ public class Intake {
         rightIntake.setPower(rightPower);
     }
 
+
     public void lIntakeIn() {leftIntake.setPower(1);}
+
 
     public void lSpitOut() {leftIntake.setPower(-1);}
 
+
     public void rIntakeIn() {rightIntake.setPower(1);}
 
+
     public void rSpitOut() {rightIntake.setPower(-1);}
+
 
     public void controlLIntake(boolean intakeIn, boolean intakeOut) {
         if(intakeIn) leftIntake.setPower(1);

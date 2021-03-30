@@ -26,8 +26,8 @@ public class WheelBase {
     static final double SLOMO_DIVIDER = 2;
 
 
-    static final double COUNTS_PER_REVOLUTION = 537.7;
-    static final double WHEEL_DIAMETER = 100/25.4;
+    static final double COUNTS_PER_REVOLUTION = 8192;
+    static final double WHEEL_DIAMETER = 1.45;
     static final double COUNTS_PER_INCH = (COUNTS_PER_REVOLUTION / (WHEEL_DIAMETER * Math.PI));
 
     protected Thread autoThread = new Thread(new Runnable() {

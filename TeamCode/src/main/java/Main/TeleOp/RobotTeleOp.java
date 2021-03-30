@@ -9,64 +9,75 @@ import Main.Base.Robot;
 import Main.Base.RobotUtilities.WobbleArm;
 
 import static Main.Base.HelperClasses.BooleanUpdater.*;
+import static Main.Base.HelperClasses.Button.*;
 
 
 @TeleOp(name = "TeleOp", group = "competition")
 public class RobotTeleOp extends Robot {
 
-    boolean intakeLIn, intakeLOut, intakeRIn, intakeROut;
+    boolean intakeLIn = false, intakeLOut = false, intakeRIn = false, intakeROut = false;
 
-    boolean wobbleArmUp = true, wobbleClawOpen = true;
+    boolean wobbleArmDown = false, wobbleClawClosed = false;
 
-    boolean slomo = false;
+    boolean slomo = false, reverse = false;
 
     @Override
     public void loop() {
 
-        buttonChecker = updateBooleans(gamepad1, buttonChecker);
+        buttonChecker = updateBooleans(gp, buttonChecker);
 
-        if (buttonChecker.get(Button.a)) slomo = !slomo;
 
-        wheelBase.mecanumDrive(-gp.left_stick_y, -gp.left_stick_x, gp.right_stick_x, slomo);
+        if (buttonChecker.get(x)) slomo = !slomo;
+
+        if(buttonChecker.get(a)) reverse = !reverse;
+
+        if(reverse) wheelBase.mecanumDrive(gp.left_stick_x, -gp.left_stick_y, gp.right_stick_x, slomo);
+        else wheelBase.mecanumDrive(-gp.left_stick_y, -gp.left_stick_x, gp.right_stick_x, slomo);
 
 
         intake.controlLIntake(intakeLIn, intakeLOut);
         intake.controlRIntake(intakeRIn, intakeROut);
 
 
-        if (buttonChecker.get(Button.right_trigger)) {
+        if (buttonChecker.get(right_trigger)) {
             intakeRIn = !intakeRIn;
             intakeROut = false;
         }
 
-        if (buttonChecker.get(Button.left_trigger)) {
+        if (buttonChecker.get(left_trigger)) {
             intakeLIn = !intakeLIn;
             intakeLOut = false;
         }
 
         if(gp.back) {
-            intakeRIn = false;
-            intakeLIn = false;
-            intakeROut = true;
             intakeLOut = true;
+            intakeROut = true;
+            intakeLIn = false;
+            intakeRIn = false;
+        }
+        else {
+            intakeLOut = false;
+            intakeROut = false;
         }
 
 
-        if (buttonChecker.get(Button.right_bumper)) shooter.shoot(true, 3);
+        if (buttonChecker.get(right_bumper)) shooter.shoot(true, 3);
 
-        if (buttonChecker.get(Button.left_bumper)) shooter.shoot(false, 1);
+        if (buttonChecker.get(left_bumper)) shooter.shoot(false, 1);
 
 
-        if(buttonChecker.get(Button.b)) wobbleArm.ControlWobbleArm(!wobbleArmUp);
+        if(buttonChecker.get(b)) wobbleArmDown = !wobbleArmDown;
 
-        if(buttonChecker.get(Button.y)) wobbleArm.ControlWobbleClaw(!wobbleClawOpen);
+        wobbleArm.ControlWobbleArm(wobbleArmDown);
+
+
+        if(buttonChecker.get(y)) wobbleClawClosed = !wobbleClawClosed;
+
+        wobbleArm.ControlWobbleClaw(wobbleClawClosed);
 
 
         telemetry.addData("Heading: ", gyro.getHeading());
 
-        telemetry.addData("a: ", buttonChecker.get(Button.a));
-
-        telemetry.addData("Gamepad a: ", gp.a);
     }
 
 
