@@ -17,8 +17,8 @@ public class Shooter {
     double feederServoPrepPosition = 0.25;
     double feederServoPosition = feederServoPrepPosition;
 
-    double highGoalVelocity = 0.7;
-    double powerShotVelocity = 0.35;
+    double highGoalVelocity = 0.05;
+    double powerShotVelocity = 0.007;
 
     private ElapsedTime runTime = new ElapsedTime();
 
@@ -36,7 +36,7 @@ public class Shooter {
         else flyWheel.setPower(powerShotVelocity);
 
         runTime.reset();
-        while(runTime.milliseconds() < 400) { }
+        while(runTime.milliseconds() < 2000) { }
 
         for(int i = 0; i < times; i++) {
             feedShooter();

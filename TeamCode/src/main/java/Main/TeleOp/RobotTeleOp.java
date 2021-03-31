@@ -35,6 +35,7 @@ public class RobotTeleOp extends Robot {
         else wheelBase.mecanumDrive(-gp.left_stick_y, -gp.left_stick_x, gp.right_stick_x, slomo);
 
 
+
         intake.controlLIntake(intakeLIn, intakeLOut);
         intake.controlRIntake(intakeRIn, intakeROut);
 
@@ -61,9 +62,23 @@ public class RobotTeleOp extends Robot {
         }
 
 
-        if (buttonChecker.get(right_bumper)) shooter.shoot(true, 3);
 
-        if (buttonChecker.get(left_bumper)) shooter.shoot(false, 1);
+        if (buttonChecker.get(right_bumper)) {
+            intake.controlLIntake(false, false);
+            intake.controlRIntake(false, false);
+            intakeLIn = false;
+            intakeRIn = false;
+            shooter.shoot(true, 3);
+        }
+
+        if (buttonChecker.get(left_bumper)) {
+            intake.controlLIntake(false, false);
+            intake.controlRIntake(false, false);
+            intakeLIn = false;
+            intakeRIn = false;
+            shooter.shoot(false, 1);
+        }
+
 
 
         if(buttonChecker.get(b)) wobbleArmDown = !wobbleArmDown;

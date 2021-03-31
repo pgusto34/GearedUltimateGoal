@@ -24,32 +24,38 @@ public class AutoRobot extends Robot {
 
     }
 
-//    protected Thread autoThread = new Thread(new Runnable() {
-//        @Override
-//        public void run() {
-//            runAutonomous();
-//        }
-//    });
-//
-//    private long maxTime;
-//
-//    protected void pause(long millis){
-//        maxTime = System.currentTimeMillis() + millis;
-//        while(System.currentTimeMillis() < maxTime && !autoThread.isInterrupted()) {}
-//    }
-//
-//
-//    @Override
-//    public void stop(){
-//        try{
-//            autoThread.interrupt();
-//
-//        }catch(Exception e){
-//            telemetry.addData("ENCOUNTERED AN EXCEPTION", e);
-//        }
-//
-//    }
-//
-//    public void runAutonomous(){};
+    @Override
+    public void start(){
+        autoThread.start();
+    }
+
+
+    protected Thread autoThread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            runAutonomous();
+        }
+    });
+
+    private long maxTime;
+
+    protected void pause(long millis){
+        maxTime = System.currentTimeMillis() + millis;
+        while(System.currentTimeMillis() < maxTime && !autoThread.isInterrupted()) {}
+    }
+
+
+    @Override
+    public void stop(){
+        try{
+            autoThread.interrupt();
+
+        }catch(Exception e){
+            telemetry.addData("ENCOUNTERED AN EXCEPTION", e);
+        }
+
+    }
+
+    public void runAutonomous(){};
 
 }
