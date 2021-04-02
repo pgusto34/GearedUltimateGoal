@@ -2,6 +2,7 @@ package Main.Base.Odometry;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
 import java.io.File;
 
-@TeleOp(name = "Odometry Calibration", group = "Odometry")
+@Autonomous(name = "Odometry Calibration", group = "Odometry")
 public class OdometryCalibration extends LinearOpMode {
     //Drive motors
     DcMotor leftFront, rightFront, leftBack, rightBack;
@@ -25,7 +26,7 @@ public class OdometryCalibration extends LinearOpMode {
 
     //Hardware Map Names for drive motors and odometry wheels. THIS WILL CHANGE ON EACH ROBOT, YOU NEED TO UPDATE THESE VALUES ACCORDINGLY
     String rfName = "rightFront", rbName = "rightBack", lfName = "leftFront", lbName = "leftBack";
-    String verticalLeftEncoderName = rfName, verticalRightEncoderName = rbName, horizontalEncoderName = lbName;
+    String verticalLeftEncoderName = lfName, verticalRightEncoderName = lbName, horizontalEncoderName = rbName;
 
     final double PIVOT_SPEED = 0.5;
 
@@ -71,14 +72,11 @@ public class OdometryCalibration extends LinearOpMode {
 
         //Begin calibration (if robot is unable to pivot at these speeds, please adjust the constant at the top of the code
         while(getZAngle() < 90 && opModeIsActive()){
-            rightFront.setPower(-PIVOT_SPEED);
-            rightBack.setPower(-PIVOT_SPEED);
-            leftFront.setPower(-PIVOT_SPEED);
-            leftBack.setPower(PIVOT_SPEED);
+
             if(getZAngle() < 60) {
-                setPowerAll(-PIVOT_SPEED, -PIVOT_SPEED, -PIVOT_SPEED, PIVOT_SPEED);
+                setPowerAll(PIVOT_SPEED, PIVOT_SPEED, -PIVOT_SPEED, -PIVOT_SPEED);
             }else{
-                setPowerAll(-PIVOT_SPEED/2, -PIVOT_SPEED/2, PIVOT_SPEED/2, PIVOT_SPEED/2);
+                setPowerAll(PIVOT_SPEED/2, PIVOT_SPEED/2, -PIVOT_SPEED/2, -PIVOT_SPEED/2);
 
             }
 
@@ -122,7 +120,7 @@ public class OdometryCalibration extends LinearOpMode {
 
             //Display raw values
             telemetry.addData("IMU Angle", getZAngle());
-            telemetry.addData("Vertical Left Position", -verticalLeft.getCurrentPosition());
+            telemetry.addData("Vertical Left Position", verticalLeft.getCurrentPosition());
             telemetry.addData("Vertical Right Position", verticalRight.getCurrentPosition());
             telemetry.addData("Horizontal Position", horizontal.getCurrentPosition());
             telemetry.addData("Vertical Encoder Offset", verticalEncoderTickOffsetPerDegree);

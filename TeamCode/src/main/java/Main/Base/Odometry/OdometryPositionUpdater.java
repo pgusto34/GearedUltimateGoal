@@ -9,6 +9,8 @@ import java.io.File;
 
 import Main.Base.RobotUtilities.Gyro;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 public class OdometryPositionUpdater implements Runnable{
 
     //Odometry wheels
@@ -40,7 +42,7 @@ public class OdometryPositionUpdater implements Runnable{
     private File horizontalTickOffsetFile = AppUtil.getInstance().getSettingsFile("horizontalTickOffset.txt");
 
     //Change Multipliers to reverse Encoders
-    private int leftPositionMultiplier = 1;
+    private int leftPositionMultiplier = -1;
     private int rightPositionMultiplier = 1;
     private int midPositionMultiplier = 1;
 
@@ -133,6 +135,8 @@ public class OdometryPositionUpdater implements Runnable{
     @Override
     public void run() {
         while(isRunning) {
+            telemetry.addData("LLLLLL: ", isRunning);
+            telemetry.update();
             globalCoordinatePositionUpdate();
             try {
                 Thread.sleep(sleepTime);

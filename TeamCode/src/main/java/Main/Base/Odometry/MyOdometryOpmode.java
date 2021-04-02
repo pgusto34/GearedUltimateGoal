@@ -1,14 +1,18 @@
 package Main.Base.Odometry;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import Main.Base.Robot;
+import Main.Base.RobotUtilities.WheelBase;
 
+@TeleOp(name = "Odometry OpMode")
 public class MyOdometryOpmode extends Robot {
 
-    OdometryPositionUpdater globalPositionUpdate;
+    OdometryGlobalCoordinatePosition globalPositionUpdate;
     Thread positionThread;
 
     final double TICKS_PER_REV = 8192;
@@ -16,28 +20,32 @@ public class MyOdometryOpmode extends Robot {
 
     final double TICKS_PER_INCH = TICKS_PER_REV / (Math.PI * WHEEL_DIAMETER);
 
-    @Override
-    public void init() {
 
-
-
-        //Create and start GlobalCoordinatePosition thread to constantly update the global coordinate positions
-        globalPositionUpdate = new OdometryPositionUpdater(left, right, mid, gyro, 75);
-        positionThread = new Thread(globalPositionUpdate);
-        positionThread.start();
-
-    }
+//    @Override
+//    public void init() {
+//
+//
+//
+//
+//    }
 
     @Override
     public void start() {
 
-        goToPosition(0, 24, 1, 0, 1);
+        //Create and start GlobalCoordinatePosition thread to constantly update the global coordinate positions
+        globalPositionUpdate = new OdometryGlobalCoordinatePosition(left, right, mid, TICKS_PER_INCH, 75);
+        positionThread = new Thread(globalPositionUpdate);
+        positionThread.start();
+
+        
+        goToPosition(0, 24, 0.5, 0, 1);
 
     }
 
 
     @Override
     public void loop() {
+
 
         //Display Global (x, y, theta) coordinates
         telemetry.addData("X Position", globalPositionUpdate.returnXCoordinate());
@@ -78,7 +86,12 @@ public class MyOdometryOpmode extends Robot {
             double robotMovementXComponent = calculateX(robotMovementAngle, robotPower);
             double robotMovementYComponent = calculateY(robotMovementAngle, robotPower);
             double pivotCorrection = desiredRobotOrientation - globalPositionUpdate.returnOrientation();
+
+            wheelBase.mecanumDrive(robotMovementXComponent, robotMovementYComponent, 0, false);
+
         }
+
+        wheelBase.mecanumDrive(0, 0, 0, false);
     }
 
 
