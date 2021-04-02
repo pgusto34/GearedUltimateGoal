@@ -82,4 +82,20 @@ public class Shooter {
         }
     }
 
+    public void changePSV(double num){
+        powerShotVelocity += num;
+    }
+
+    public double getPSV(){
+        return powerShotVelocity;
+    }
+
+    public void changeHGV(double num){
+        highGoalVelocity += num;
+    }
+
+    public double getHGV(){
+        return highGoalVelocity;
+    }
+
 }

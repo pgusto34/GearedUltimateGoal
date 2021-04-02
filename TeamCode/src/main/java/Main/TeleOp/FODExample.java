@@ -1,5 +1,6 @@
 package Main.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
@@ -7,6 +8,7 @@ import Main.Base.Robot;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
 
+@Disabled
 @TeleOp(name = "FODEXAMPLE")
 public class FODExample extends Robot {
 

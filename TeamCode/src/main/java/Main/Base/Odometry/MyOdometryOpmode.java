@@ -1,6 +1,7 @@
 package Main.Base.Odometry;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import Main.Base.Robot;
 import Main.Base.RobotUtilities.WheelBase;
+
 
 @TeleOp(name = "Odometry OpMode")
 public class MyOdometryOpmode extends Robot {
@@ -33,12 +35,12 @@ public class MyOdometryOpmode extends Robot {
     public void start() {
 
         //Create and start GlobalCoordinatePosition thread to constantly update the global coordinate positions
-        //globalPositionUpdate = new OdometryGlobalCoordinatePosition(left, right, mid, TICKS_PER_INCH, 75);
+        globalPositionUpdate = new OdometryGlobalCoordinatePosition(left, right, mid, TICKS_PER_INCH, 75);
         positionThread = new Thread(globalPositionUpdate);
         positionThread.start();
 
         
-        goToPosition(0, 24, 0.5, 0, 1);
+        goToPosition(0, 24, 0.5, 0, 2);
 
     }
 
@@ -48,8 +50,8 @@ public class MyOdometryOpmode extends Robot {
 
 
         //Display Global (x, y, theta) coordinates
-        telemetry.addData("X Position", globalPositionUpdate.returnXCoordinate());
-        telemetry.addData("Y Position", globalPositionUpdate.returnYCoordinate());
+        telemetry.addData("X Position", globalPositionUpdate.returnXCoordinate() / TICKS_PER_INCH);
+        telemetry.addData("Y Position", globalPositionUpdate.returnYCoordinate() / TICKS_PER_INCH);
         telemetry.addData("Orientation (Degrees)", globalPositionUpdate.returnOrientation());
 
         telemetry.addData("Vertical left encoder position", left.getCurrentPosition());
@@ -76,7 +78,12 @@ public class MyOdometryOpmode extends Robot {
 
         double distance = Math.hypot(distanceToXTarget, distanceToYTarget);
 
-        while(distance < error) {
+        error = error * TICKS_PER_INCH;
+
+        while(distance > error) { //|| Math.abs(desiredRobotOrientation - globalPositionUpdate.returnOrientation()) > 4) {
+
+            //if(distance - error < 4*error) robotPower /= 4;
+
             distance = Math.hypot(distanceToXTarget, distanceToYTarget);
             distanceToXTarget = targetX - globalPositionUpdate.returnXCoordinate();
             distanceToYTarget = targetY - globalPositionUpdate.returnYCoordinate();
@@ -87,11 +94,22 @@ public class MyOdometryOpmode extends Robot {
             double robotMovementYComponent = calculateY(robotMovementAngle, robotPower);
             double pivotCorrection = desiredRobotOrientation - globalPositionUpdate.returnOrientation();
 
+            if (pivotCorrection > 3) pivotCorrection = pivotCorrection / 180;
+            else if(pivotCorrection < 3) pivotCorrection = pivotCorrection / 180;
+            else pivotCorrection = 0;
+
             wheelBase.mecanumDrive(robotMovementXComponent, robotMovementYComponent, 0, false);
+
+
+
+//            telemetry.addData("X: ", globalPositionUpdate.returnXCoordinate());
+//            telemetry.addData("Y: ", globalPositionUpdate.returnYCoordinate());
+//            telemetry.update();
+
 
         }
 
-        wheelBase.mecanumDrive(0, 0, 0, false);
+        wheelBase.setMotorPowers(0, 0, 0, 0);
     }
 
 

@@ -1,5 +1,6 @@
 package Main.Base.Odometry;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -8,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import Main.Base.RobotUtilities.WheelBase;
 
+@Disabled
 @TeleOp(name = "Odometry Thread Test")
 public class OdometryThreadTest extends OpMode {
 

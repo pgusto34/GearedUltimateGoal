@@ -57,6 +57,10 @@ public class Robot extends Hardware{
         rightBack = hardwareMap.dcMotor.get(rightBackName);
         rightFront = hardwareMap.dcMotor.get(rightFrontName);
 
+        left = hardwareMap.dcMotor.get(leftName);
+        right = hardwareMap.dcMotor.get(rightName);
+        mid = hardwareMap.dcMotor.get(midName);
+
         wheelBase = new WheelBase(leftFront, leftBack, rightFront, rightBack);
 
 

@@ -86,6 +86,27 @@ public class RobotTeleOp extends Robot {
             shooter.shoot(false, 1);
         }
 
+        if(buttonChecker.get(dpad_down)){
+            shooter.changePSV(-0.0005);
+            telemetry.addData("PSV: ", shooter.getPSV());
+        }
+
+        if(buttonChecker.get(dpad_up)){
+            shooter.changePSV(0.0005);
+            telemetry.addData("PSV: ", shooter.getPSV());
+        }
+
+        if(buttonChecker.get(dpad_left)){
+            shooter.changeHGV(-0.0005);
+            telemetry.addData("HGV: ", shooter.getHGV());
+        }
+
+        if(buttonChecker.get(dpad_right)){
+            shooter.changeHGV(0.0005);
+            telemetry.addData("HGV: ", shooter.getHGV());
+        }
+
+
 
 
         if(buttonChecker.get(b)) wobbleArmDown = !wobbleArmDown;
