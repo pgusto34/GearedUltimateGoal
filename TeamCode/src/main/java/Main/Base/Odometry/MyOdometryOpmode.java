@@ -33,7 +33,7 @@ public class MyOdometryOpmode extends Robot {
     public void start() {
 
         //Create and start GlobalCoordinatePosition thread to constantly update the global coordinate positions
-        globalPositionUpdate = new OdometryGlobalCoordinatePosition(left, right, mid, TICKS_PER_INCH, 75);
+        //globalPositionUpdate = new OdometryGlobalCoordinatePosition(left, right, mid, TICKS_PER_INCH, 75);
         positionThread = new Thread(globalPositionUpdate);
         positionThread.start();
 

@@ -65,6 +65,18 @@ public class OdometryPositionUpdater implements Runnable{
 
     }
 
+    public OdometryPositionUpdater(DcMotor verticalEncoderLeft, DcMotor verticalEncoderRight, DcMotor horizontalEncoder,  int threadSleepDelay){
+        this.left = verticalEncoderLeft;
+        this.right = verticalEncoderRight;
+        this.mid = horizontalEncoder;
+        
+        sleepTime = threadSleepDelay;
+
+        robotEncoderWheelDistance = Double.parseDouble(ReadWriteFile.readFile(wheelBaseSeparationFile).trim()) * TICKS_PER_INCH;
+        this.horizontalEncoderTickPerDegreeOffset = Double.parseDouble(ReadWriteFile.readFile(horizontalTickOffsetFile).trim());
+
+    }
+
     /**
      * Updates the global (x, y, theta) coordinate position of the robot using the odometry encoders
      */

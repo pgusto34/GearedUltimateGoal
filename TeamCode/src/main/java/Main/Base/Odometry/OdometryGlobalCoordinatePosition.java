@@ -7,6 +7,8 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
 import java.io.File;
 
+import Main.Base.RobotUtilities.Gyro;
+
 /**
  * Created by Sarthak on 6/1/2019.
  */
@@ -37,6 +39,8 @@ public class OdometryGlobalCoordinatePosition implements Runnable {
     private int verticalRightEncoderPositionMultiplier = -1;
     private int normalEncoderPositionMultiplier = -1;
 
+    Gyro gyro;
+
     /**
      * Constructor for GlobalCoordinatePosition Thread
      * @param verticalEncoderLeft left odometry encoder, facing the vertical direction
@@ -44,11 +48,26 @@ public class OdometryGlobalCoordinatePosition implements Runnable {
      * @param horizontalEncoder horizontal odometry encoder, perpendicular to the other two odometry encoder wheels
      * @param threadSleepDelay delay in milliseconds for the GlobalPositionUpdate thread (50-75 milliseconds is suggested)
      */
+    public OdometryGlobalCoordinatePosition(DcMotor verticalEncoderLeft, DcMotor verticalEncoderRight, DcMotor horizontalEncoder, Gyro gyro, double COUNTS_PER_INCH, int threadSleepDelay){
+        this.verticalEncoderLeft = verticalEncoderLeft;
+        this.verticalEncoderRight = verticalEncoderRight;
+        this.horizontalEncoder = horizontalEncoder;
+        sleepTime = threadSleepDelay;
+
+        this.gyro = gyro;
+
+        robotEncoderWheelDistance = Double.parseDouble(ReadWriteFile.readFile(wheelBaseSeparationFile).trim()) * COUNTS_PER_INCH;
+        this.horizontalEncoderTickPerDegreeOffset = Double.parseDouble(ReadWriteFile.readFile(horizontalTickOffsetFile).trim());
+
+    }
+
     public OdometryGlobalCoordinatePosition(DcMotor verticalEncoderLeft, DcMotor verticalEncoderRight, DcMotor horizontalEncoder, double COUNTS_PER_INCH, int threadSleepDelay){
         this.verticalEncoderLeft = verticalEncoderLeft;
         this.verticalEncoderRight = verticalEncoderRight;
         this.horizontalEncoder = horizontalEncoder;
         sleepTime = threadSleepDelay;
+
+        this.gyro = gyro;
 
         robotEncoderWheelDistance = Double.parseDouble(ReadWriteFile.readFile(wheelBaseSeparationFile).trim()) * COUNTS_PER_INCH;
         this.horizontalEncoderTickPerDegreeOffset = Double.parseDouble(ReadWriteFile.readFile(horizontalTickOffsetFile).trim());

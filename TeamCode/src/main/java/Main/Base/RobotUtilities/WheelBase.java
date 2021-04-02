@@ -2,6 +2,8 @@ package Main.Base.RobotUtilities;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.Range;
 
 import Main.Base.Robot;
 
@@ -102,178 +104,26 @@ public class WheelBase {
     }
 
 
-    public void moveBot(String direction, double distance, double speed) {
+    public void fieldOrientatedDrive (Gamepad gamepad, Gyro gyro, boolean slomo) {
+        double y = -gamepad.left_stick_y;
+        double x = gamepad.left_stick_x;
+        double turn = gamepad.right_stick_x;
 
+        double gamepadHpot = Range.clip(Math.hypot(x, y), 0, 1);
 
-        int newTargetLF;
-        int newTargetLB;
-        int newTargetRF;
-        int newTargetRB;
+        double gamepadDegree = gyro.angleWrapRadians(Math.atan2(y, x));
 
-        speed = abs(speed) >= 1 ? 1 : speed;
+        double heading = gyro.angleWrapRadians(gyro.getHeadingRadians());
 
-        double travelTicks = distance * TICKS_PER_INCH;
+        double movementDegree = gamepadDegree - heading;
 
-//        switch (direction) {
-//            case "f":
-                newTargetLF = leftFront.getCurrentPosition() - (int) (travelTicks);
-                newTargetLB = leftBack.getCurrentPosition() + (int) (travelTicks);
-                newTargetRF = rightFront.getCurrentPosition() + (int) (travelTicks);
-                newTargetRB = rightBack.getCurrentPosition() - (int) (travelTicks);
-//                break;
-//            case "r":
-//                newTargetLF = leftFront.getCurrentPosition() - (int) (travelTicks);
-//                newTargetLB = leftBack.getCurrentPosition() - (int) (travelTicks);
-//                newTargetRF = rightFront.getCurrentPosition() - (int) (travelTicks);
-//                newTargetRB = rightBack.getCurrentPosition() - (int) (travelTicks);
-//                break;
-//            case "l":
-//                newTargetLF = leftFront.getCurrentPosition() + (int) (travelTicks);
-//                newTargetLB = leftBack.getCurrentPosition() + (int) (travelTicks);
-//                newTargetRF = rightFront.getCurrentPosition() + (int) (travelTicks);
-//                newTargetRB = rightBack.getCurrentPosition() + (int) (travelTicks);
-//                break;
-//            case "b":
-//                newTargetLF = leftFront.getCurrentPosition() + (int) (travelTicks);
-//                newTargetLB = leftBack.getCurrentPosition() - (int) (travelTicks);
-//                newTargetRF = rightFront.getCurrentPosition() - (int) (travelTicks);
-//                newTargetRB = rightBack.getCurrentPosition() + (int) (travelTicks);
-//                break;
-//            default:
-//                newTargetLF = leftFront.getCurrentPosition();
-//                newTargetLB = leftBack.getCurrentPosition();
-//                newTargetRF = rightFront.getCurrentPosition();
-//                newTargetRB = rightBack.getCurrentPosition();
-//        }
+        x = Math.cos(movementDegree) * gamepadHpot;
 
+        y = Math.sin(movementDegree) * gamepadHpot;
 
-        rightFront.setTargetPosition(newTargetRF);
-        rightBack.setTargetPosition(newTargetRB);
-        leftFront.setTargetPosition(newTargetLF);
-        leftBack.setTargetPosition(newTargetLB);
-
-        setModeAll(RUN_TO_POSITION);
-
-        setMotorPowers(speed, speed, speed, speed);
-
-        try {
-            while (leftFront.isBusy() && leftBack.isBusy() && rightFront.isBusy() && rightBack.isBusy()) {
-
-            }
-        } catch (Exception e) {
-            telemetry.addData("Error", e);
-        }
-
-        setMotorPowers(0, 0, 0, 0);
-
-        setModeAll(RUN_WITHOUT_ENCODER);
+        mecanumDrive(y, -x, turn, slomo);
     }
 
-    public void mecanumEMove(double speed, double distance, boolean forward) {
-
-        /** distance is in INCHES **/
-
-        setModeAll(STOP_AND_RESET_ENCODER);
-
-        int newTargetLF;
-        int newTargetLB;
-        int newTargetRF;
-        int newTargetRB;
-
-        if (forward) {
-            newTargetLF = leftFront.getCurrentPosition() - (int) (distance * TICKS_PER_INCH);
-            newTargetLB = leftBack.getCurrentPosition() - (int) (distance * TICKS_PER_INCH);
-            newTargetRF = rightFront.getCurrentPosition() + (int) (distance * TICKS_PER_INCH);
-            newTargetRB = rightBack.getCurrentPosition() + (int) (distance * TICKS_PER_INCH);
-        } else {
-            newTargetLF = leftFront.getCurrentPosition() + (int) (distance * TICKS_PER_INCH);
-            newTargetLB = leftBack.getCurrentPosition() + (int) (distance * TICKS_PER_INCH);
-            newTargetRF = rightFront.getCurrentPosition() - (int) (distance * TICKS_PER_INCH);
-            newTargetRB = rightBack.getCurrentPosition() - (int) (distance * TICKS_PER_INCH);
-        }
-
-        leftFront.setTargetPosition(newTargetLF);
-        leftBack.setTargetPosition(newTargetLB);
-        rightFront.setTargetPosition(newTargetRF);
-        rightBack.setTargetPosition(newTargetRB);
-
-
-        setModeAll(RUN_TO_POSITION);
-
-
-
-        leftFront.setPower(speed);
-        leftBack.setPower(speed);
-        rightFront.setPower(speed);
-        rightBack.setPower(speed);
-
-
-
-        try {
-            while (leftFront.isBusy() && leftBack.isBusy() && rightFront.isBusy() && rightBack.isBusy()) {
-
-            }
-        } catch (Exception e) {
-            telemetry.addData("Error", e);
-        }
-
-        leftFront.setPower(0);
-        leftBack.setPower(0);
-        rightFront.setPower(0);
-        rightBack.setPower(0);
-
-        setModeAll(RUN_USING_ENCODER);
-
-
-    }
-
-
-    public void turnBot(double speed, double degrees, boolean clockwise) {
-
-
-        degrees = ((ROBOT_DIAMETER * Math.PI) / 360) * degrees;
-
-        int newTargetLF;
-        int newTargetLB;
-        int newTargetRF;
-        int newTargetRB;
-
-        double travelTicks = degrees * TICKS_PER_INCH;
-
-        if (clockwise) {
-            newTargetLF = leftFront.getCurrentPosition() - (int) (travelTicks);
-            newTargetLB = leftBack.getCurrentPosition() + (int) (travelTicks);
-            newTargetRF = rightFront.getCurrentPosition() - (int) (travelTicks);
-            newTargetRB = rightBack.getCurrentPosition() + (int) (travelTicks);
-        } else {
-            newTargetLF = leftFront.getCurrentPosition() + (int) (travelTicks);
-            newTargetLB = leftBack.getCurrentPosition() - (int) (travelTicks);
-            newTargetRF = rightFront.getCurrentPosition() + (int) (travelTicks);
-            newTargetRB = rightBack.getCurrentPosition() - (int) (travelTicks);
-        }
-
-        leftFront.setTargetPosition(newTargetLF);
-        leftBack.setTargetPosition(newTargetLB);
-        rightFront.setTargetPosition(newTargetRF);
-        rightBack.setTargetPosition(newTargetRB);
-
-        setModeAll(RUN_TO_POSITION);
-
-        setMotorPowers(speed, speed, speed, speed);
-
-
-        try {
-            while (leftFront.isBusy() && leftBack.isBusy() && rightFront.isBusy() && rightBack.isBusy()) {
-
-            }
-        } catch (Exception e) {
-            telemetry.addData("Error", e);
-        }
-
-        setMotorPowers(0, 0, 0, 0);
-
-        setModeAll(RUN_WITHOUT_ENCODER);
-    }
 
     
 }

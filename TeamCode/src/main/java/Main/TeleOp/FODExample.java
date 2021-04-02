@@ -27,9 +27,9 @@ public class FODExample extends Robot {
 
         double gamepadHpot = Range.clip(Math.hypot(x, y), 0, 1);
 
-        double gamepadDegree = Math.toRadians(Math.atan2(y, x));
+        double gamepadDegree = gyro.angleWrapRadians(Math.atan2(y, x));
 
-        double heading = gyro.getHeadingRadians();
+        double heading = gyro.angleWrapRadians(gyro.getHeadingRadians());
 
         double movementDegree = gamepadDegree - heading;
 
@@ -37,7 +37,13 @@ public class FODExample extends Robot {
 
         y = Math.sin(movementDegree) * gamepadHpot;
 
-        wheelBase.mecanumDrive(x, y, turn, false);
+        telemetry.addData("Heading: ", heading);
+        telemetry.addData("Stick Degree: ", gamepadDegree);
+        telemetry.addData("X: ", x);
+        telemetry.addData("Y: ", y);
+        telemetry.update();
+
+        wheelBase.mecanumDrive(y, -x, turn, false);
     }
 
 

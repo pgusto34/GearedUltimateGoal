@@ -80,7 +80,9 @@ public class OdometrySamplePositionGoTo extends LinearOpMode {
         Thread positionThread = new Thread(globalPositionUpdate);
         positionThread.start();
 
-        goToPosition(24, 0, 0.5, 90, 4);
+        goToPosition(24, 24, 1, 0, 4);
+        goToPosition(70, 30, 1, 0, 4);
+        goToPosition(10, 40, 1, 0, 4);
 //        goToPosition(0, 24, 0.5, 0, 4);
 
         while(opModeIsActive()){
@@ -112,7 +114,7 @@ public class OdometrySamplePositionGoTo extends LinearOpMode {
 
         error = error * TICKS_PER_INCH;
 
-        while(distance > error || Math.abs(desiredRobotOrientation - globalPositionUpdate.returnOrientation()) > 4) {
+        while(distance > error) { //|| Math.abs(desiredRobotOrientation - globalPositionUpdate.returnOrientation()) > 4) {
 
             //if(distance - error < 4*error) robotPower /= 4;
 
@@ -130,7 +132,7 @@ public class OdometrySamplePositionGoTo extends LinearOpMode {
             else if(pivotCorrection < 3) pivotCorrection = pivotCorrection / 180;
             else pivotCorrection = 0;
 
-            wheelbase.mecanumDrive(robotMovementXComponent, robotMovementYComponent, pivotCorrection, false);
+            wheelbase.mecanumDrive(robotMovementXComponent, robotMovementYComponent, 0, false);
 
 
 

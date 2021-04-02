@@ -21,6 +21,8 @@ public class RobotTeleOp extends Robot {
 
     boolean slomo = false, reverse = false;
 
+    boolean FOD = true;
+
     @Override
     public void loop() {
 
@@ -31,9 +33,14 @@ public class RobotTeleOp extends Robot {
 
         if(buttonChecker.get(a)) reverse = !reverse;
 
-        if(reverse) wheelBase.mecanumDrive(gp.left_stick_x, -gp.left_stick_y, gp.right_stick_x, slomo);
+        if(buttonChecker.get(left_stick_button)) FOD = !FOD;
+
+        if(FOD) wheelBase.fieldOrientatedDrive(gp, gyro, slomo);
+        else if(reverse) wheelBase.mecanumDrive(gp.left_stick_x, -gp.left_stick_y, gp.right_stick_x, slomo);
         else wheelBase.mecanumDrive(-gp.left_stick_y, -gp.left_stick_x, gp.right_stick_x, slomo);
 
+        if(FOD) telemetry.addData("Drive: ", "FOD");
+        else telemetry.addData("Drive: ", "ROD");
 
 
         intake.controlLIntake(intakeLIn, intakeLOut);
