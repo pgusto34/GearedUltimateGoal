@@ -1,13 +1,15 @@
 package Main.Base.Odometry;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
 import Main.Base.RobotUtilities.WheelBase;
 
-@TeleOp(name = "REVENGE OF SARTHAAK")
-public class OdometrySamplePositionGoTo extends LinearOpMode {
+@TeleOp(name = "Odometry Thread Test")
+public class OdometryThreadTest extends OpMode {
 
     //Odometry encoder wheels
     DcMotor verticalRight, verticalLeft, horizontal;
@@ -29,7 +31,7 @@ public class OdometrySamplePositionGoTo extends LinearOpMode {
     OdometryGlobalCoordinatePosition globalPositionUpdate;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void init() {
 
         String leftFrontName = "leftFront", rightFrontName = "rightFront", leftBackName = "leftBack", rightBackName = "rightBack";
 
@@ -67,34 +69,39 @@ public class OdometrySamplePositionGoTo extends LinearOpMode {
         //Init complete
         telemetry.addData("Status", "Init Complete");
         telemetry.update();
-        waitForStart();
+    }
 
         /**
          * *****************
          * OpMode Begins Here
          * *****************
          */
+    @Override
+    public void start() {
 
-        //Create and start GlobalCoordinatePosition thread to constantly update the global coordinate positions\
         globalPositionUpdate = new OdometryGlobalCoordinatePosition(verticalLeft, verticalRight, horizontal, COUNTS_PER_INCH, 75);
         Thread positionThread = new Thread(globalPositionUpdate);
         positionThread.start();
 
         goToPosition(24, 0, 0.5, 90, 4);
+    }
+
+    //Create and start GlobalCoordinatePosition thread to constantly update the global coordinate positions\
 //        goToPosition(0, 24, 0.5, 0, 4);
 
-        while(opModeIsActive()){
-            //Display Global (x, y, theta) coordinates
-            telemetry.addData("X Position", globalPositionUpdate.returnXCoordinate() / TICKS_PER_INCH);
-            telemetry.addData("Y Position", globalPositionUpdate.returnYCoordinate() / TICKS_PER_INCH);
-            telemetry.addData("Orientation (Degrees)", globalPositionUpdate.returnOrientation());
-            telemetry.addData("Thread Active", positionThread.isAlive());
-            telemetry.addData("Left: ", verticalLeft.getCurrentPosition());
-            telemetry.addData("Mid: ", horizontal.getCurrentPosition());
-            telemetry.addData("Right: ", verticalRight.getCurrentPosition());
-            telemetry.update();
-        }
 
+    public void loop(){
+        //Display Global (x, y, theta) coordinates
+        telemetry.addData("X Position", globalPositionUpdate.returnXCoordinate() / TICKS_PER_INCH);
+        telemetry.addData("Y Position", globalPositionUpdate.returnYCoordinate() / TICKS_PER_INCH);
+        telemetry.addData("Orientation (Degrees)", globalPositionUpdate.returnOrientation());
+        telemetry.addData("Left: ", verticalLeft.getCurrentPosition());
+        telemetry.addData("Mid: ", horizontal.getCurrentPosition());
+        telemetry.addData("Right: ", verticalRight.getCurrentPosition());
+        telemetry.update();
+    }
+
+    public void stop() {
         //Stop the thread
         globalPositionUpdate.stop();
     }
@@ -112,7 +119,7 @@ public class OdometrySamplePositionGoTo extends LinearOpMode {
 
         error = error * TICKS_PER_INCH;
 
-        while(distance > error || Math.abs(desiredRobotOrientation - globalPositionUpdate.returnOrientation()) > 4) {
+        while(distance > error) {
 
             //if(distance - error < 4*error) robotPower /= 4;
 
@@ -126,8 +133,8 @@ public class OdometrySamplePositionGoTo extends LinearOpMode {
             double robotMovementYComponent = calculateY(robotMovementAngle, robotPower);
             double pivotCorrection = desiredRobotOrientation - globalPositionUpdate.returnOrientation();
 
-            if (pivotCorrection > 3) pivotCorrection = pivotCorrection / 180;
-            else if(pivotCorrection < 3) pivotCorrection = pivotCorrection / 180;
+            if (pivotCorrection > 5) pivotCorrection = 0.4;
+            else if(pivotCorrection < 5) pivotCorrection = -0.4;
             else pivotCorrection = 0;
 
             wheelbase.mecanumDrive(robotMovementXComponent, robotMovementYComponent, pivotCorrection, false);

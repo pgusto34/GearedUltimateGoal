@@ -1,6 +1,7 @@
 package Main.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.Range;
 
 import Main.Base.Robot;
 
@@ -20,17 +21,23 @@ public class FODExample extends Robot {
 
 
     public void fieldOrientatedDrive () {
-        double y = gamepad1.left_stick_y;
+        double y = -gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
+        double turn = gamepad1.right_stick_x;
 
-        double heading = gyro.getHeading();
-        double headingRadians = Math.toRadians(heading);
+        double gamepadHpot = Range.clip(Math.hypot(x, y), 0, 1);
 
-        double temp = y * Math.cos(headingRadians) + x * Math.sin(headingRadians);
-        x = (-y) * Math.sin(headingRadians) + x * Math.cos(headingRadians);
-        y = temp;
+        double gamepadDegree = Math.toRadians(Math.atan2(y, x));
 
-        wheelBase.mecanumDrive(x, y, gamepad1.right_stick_x, false);
+        double heading = gyro.getHeadingRadians();
+
+        double movementDegree = gamepadDegree - heading;
+
+        x = Math.cos(movementDegree) * gamepadHpot;
+
+        y = Math.sin(movementDegree) * gamepadHpot;
+
+        wheelBase.mecanumDrive(x, y, turn, false);
     }
 
 
