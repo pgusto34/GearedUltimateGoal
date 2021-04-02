@@ -10,8 +10,12 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 public class Hardware extends OpMode {
 
     //Define all motors, servos, and sensors in this class as well as their names in the config
-    public DcMotor leftFront, rightFront, leftBack, rightBack;
+    DcMotor leftFront, rightFront, leftBack, rightBack;
     String leftFrontName = "leftFront", rightFrontName = "rightFront", leftBackName = "leftBack", rightBackName = "rightBack";
+
+    public DcMotor left = rightFront;
+    public DcMotor right = rightBack;
+    public DcMotor mid = leftBack;
 
     DcMotor leftIntake, rightIntake;
     String leftIntakeName = "leftIntake", rightIntakeName = "rightIntake";
