@@ -118,52 +118,95 @@ public class WheelBase {
     }
 
 
-    public void goToPosition(Odometry odometer, double targetX, double targetY, double robotPower, double turnSpeed, double desiredRobotOrientation, double error){
+    public void goToPosition(Odometry odometry, double targetX, double targetY, double robotPower,  double desiredRobotOrientation, double error){
         targetX = targetX * TICKS_PER_INCH;
         targetY = targetY * TICKS_PER_INCH;
 
-        double distanceToXTarget = targetX - odometer.returnXCoordinate();
-        double distanceToYTarget = targetY - odometer.returnYCoordinate();
+        double distanceToXTarget = targetX - odometry.returnXCoordinate();
+        double distanceToYTarget = targetY - odometry.returnYCoordinate();
 
         double distance = Math.hypot(distanceToXTarget, distanceToYTarget);
 
         error = error * TICKS_PER_INCH;
 
-        desiredRobotOrientation = Math.toRadians(desiredRobotOrientation);
 
         while(distance > error) {
 
             distance = Math.hypot(distanceToXTarget, distanceToYTarget);
-            distanceToXTarget = targetX - odometer.returnXCoordinate();
-            distanceToYTarget = targetY - odometer.returnYCoordinate();
+            distanceToXTarget = targetX - odometry.returnXCoordinate();
+            distanceToYTarget = targetY - odometry.returnYCoordinate();
 
             double robotMovementAngle = Math.toDegrees(Math.atan2(distanceToXTarget, distanceToYTarget));
 
-            double robotMovementXComponent = Math.sin(Math.toRadians(desiredRobotOrientation)) * robotPower;
-            double robotMovementYComponent = Math.cos(Math.toRadians(desiredRobotOrientation)) * robotPower;
+            double robotMovementXComponent = calculateX(robotMovementAngle, robotPower);
+            double robotMovementYComponent = calculateY(robotMovementAngle, robotPower);
 
             double xPower = robotMovementXComponent / (Math.abs(robotMovementXComponent) + Math.abs(robotMovementYComponent));
             double yPower = robotMovementYComponent / (Math.abs(robotMovementXComponent) + Math.abs(robotMovementYComponent));
 
-            xPower *= robotPower;
-            yPower *= robotPower;
+            xPower = robotMovementXComponent * robotPower;
+            yPower = robotMovementYComponent * robotPower;
+
+//
+//            double pivotCorrection =  angleWrapRadians(desiredRobotOrientation - odometer.returnOrientation());
+//            double turnAngle = pivotCorrection- Math.toRadians(180) + desiredRobotOrientation;
+//
+//            double turnPower;
+//
+//            if(distance < 10) turnPower = 0;
+//            else turnPower = Range.clip(turnAngle / Math.toRadians(30), -1, 1) * turnSpeed;
 
 
-            double pivotCorrection =  angleWrapRadians(desiredRobotOrientation - odometer.returnOrientation());
-            double turnAngle = pivotCorrection- Math.toRadians(180) + desiredRobotOrientation;
-
-            double turnPower;
-
-            if(distance < 10) turnPower = 0;
-            else turnPower = Range.clip(turnAngle / Math.toRadians(30), -1, 1) * turnSpeed;
-
-
-            mecanumDrive(robotMovementXComponent, robotMovementYComponent, 0, false);
+            mecanumDrive(xPower, yPower, 0, false);
 
         }
 
         setMotorPowers(0, 0, 0, 0);
     }
+
+//    public void goToPosition(Odometry odometry, double targetX, double targetY, double robotPower, double desiredRobotOrientation, double error){
+//        targetX = targetX * TICKS_PER_INCH;
+//        targetY = targetY * TICKS_PER_INCH;
+//
+//        double distanceToXTarget = targetX - odometry.returnXCoordinate();
+//        double distanceToYTarget = targetY - odometry.returnYCoordinate();
+//
+//        double distance = Math.hypot(distanceToXTarget, distanceToYTarget);
+//
+//        error = error * TICKS_PER_INCH;
+//
+//        while(distance > error) { //|| Math.abs(desiredRobotOrientation - globalPositionUpdate.returnOrientation()) > 4) {
+//
+//            //if(distance - error < 4*error) robotPower /= 4;
+//
+//            distance = Math.hypot(distanceToXTarget, distanceToYTarget);
+//            distanceToXTarget = targetX - odometry.returnXCoordinate();
+//            distanceToYTarget = targetY - odometry.returnYCoordinate();
+//
+//            double robotMovementAngle = Math.toDegrees(Math.atan2(distanceToXTarget, distanceToYTarget));
+//
+//            double robotMovementXComponent = calculateX(robotMovementAngle, robotPower);
+//            double robotMovementYComponent = calculateY(robotMovementAngle, robotPower);
+////            double pivotCorrection = desiredRobotOrientation - odometry.returnOrientation();
+////
+////            if (pivotCorrection > 3) pivotCorrection = pivotCorrection / 180;
+////            else if(pivotCorrection < 3) pivotCorrection = pivotCorrection / 180;
+////            else pivotCorrection = 0;
+//
+//            mecanumDrive(robotMovementXComponent, robotMovementYComponent, 0, false);
+//
+//
+//
+////            telemetry.addData("X: ", globalPositionUpdate.returnXCoordinate());
+////            telemetry.addData("Y: ", globalPositionUpdate.returnYCoordinate());
+////            telemetry.update();
+//
+//
+//        }
+//
+//        setMotorPowers(0, 0, 0, 0);
+//    }
+
 
 
     public double angleWrapRadians(double angle) {
@@ -177,5 +220,18 @@ public class WheelBase {
     }
 
 
+    private double calculateX(double desiredAngle, double speed) {
+        return Math.sin(Math.toRadians(desiredAngle)) * speed;
+    }
+
+    /**
+     * Calculate the power in the y direction
+     * @param desiredAngle angle on the y axis
+     * @param speed robot's speed
+     * @return the y vector
+     */
+    private double calculateY(double desiredAngle, double speed) {
+        return Math.cos(Math.toRadians(desiredAngle)) * speed;
+    }
     
 }

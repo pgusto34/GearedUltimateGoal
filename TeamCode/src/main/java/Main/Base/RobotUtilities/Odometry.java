@@ -32,7 +32,7 @@ public class Odometry implements Runnable {
 
     private int verticalLeftEncoderPositionMultiplier = -1;
     private int verticalRightEncoderPositionMultiplier = -1;
-    private int normalEncoderPositionMultiplier = 1;
+    private int normalEncoderPositionMultiplier = -1;
 
 
 
@@ -78,10 +78,24 @@ public class Odometry implements Runnable {
     }
 
 
-    public double returnXCoordinate(){ return robotXPosition / TICKS_PER_INCH; }
+    private double calculateX(double desiredAngle, double speed) {
+        return Math.sin(Math.toRadians(desiredAngle)) * speed;
+    }
+
+    /**
+     * Calculate the power in the y direction
+     * @param desiredAngle angle on the y axis
+     * @param speed robot's speed
+     * @return the y vector
+     */
+    private double calculateY(double desiredAngle, double speed) {
+        return Math.cos(Math.toRadians(desiredAngle)) * speed;
+    }
+
+    public double returnXCoordinate(){ return robotXPosition; }
 
 
-    public double returnYCoordinate(){ return robotYPosition / TICKS_PER_INCH; }
+    public double returnYCoordinate(){ return robotYPosition; }
 
 
     public double returnOrientation(){ return Math.toDegrees(robotOrientationRadians) % 360; }

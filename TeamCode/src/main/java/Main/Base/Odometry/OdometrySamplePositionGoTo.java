@@ -5,9 +5,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
+import Main.Base.RobotUtilities.Odometry;
 import Main.Base.RobotUtilities.Shooter;
 import Main.Base.RobotUtilities.WheelBase;
+
+import static java.lang.Math.PI;
 
 @TeleOp(name = "REVENGE OF SARTHAAK")
 public class OdometrySamplePositionGoTo extends LinearOpMode {
@@ -46,7 +50,7 @@ public class OdometrySamplePositionGoTo extends LinearOpMode {
         Servo feeder = hardwareMap.servo.get("feeder");
 
 
-        shooter = new Shooter(flywheel, feeder);
+        //shooter = new Shooter(flywheel, feeder);
 
         wheelbase = new WheelBase(leftFront, leftBack, rightFront, rightBack);
 
@@ -95,15 +99,15 @@ public class OdometrySamplePositionGoTo extends LinearOpMode {
 //        goToPosition(10, 40, 1, 0, 4);
 //        goToPosition(0, 24, 0.5, 0, 4);
 
-        shooter.runFlywheels(true);
-        goToPosition(52, 6 , 0.5, 0, 2);
+        //shooter.runFlywheels(true);
+        goToPosition(52, 6 , 0.5, 0, 4);
         //shooter.shoot(true, 3);
-        shooter.feedShooter();
-        shooter.resetShooter();
-        shooter.feedShooter();
-        shooter.resetShooter();
-        shooter.feedShooter();
-        shooter.resetShooter();
+//        shooter.feedShooter();
+//        shooter.resetShooter();
+//        shooter.feedShooter();
+//        shooter.resetShooter();
+//        shooter.feedShooter();
+//        shooter.resetShooter();
 
 
 
@@ -169,6 +173,63 @@ public class OdometrySamplePositionGoTo extends LinearOpMode {
     }
 
 
+//    public void goToPosition(double targetX, double targetY, double robotPower, double turnSpeed, double desiredRobotOrientation, double error){
+//        targetX = targetX * TICKS_PER_INCH;
+//        targetY = targetY * TICKS_PER_INCH;
+//
+//        double distanceToXTarget = targetX - globalPositionUpdate.returnXCoordinate();
+//        double distanceToYTarget = targetY - globalPositionUpdate.returnYCoordinate();
+//
+//        double distance = Math.hypot(distanceToXTarget, distanceToYTarget);
+//
+//        error = error * TICKS_PER_INCH;
+//
+//        desiredRobotOrientation = Math.toRadians(desiredRobotOrientation);
+//
+//        while(distance > error) {
+//
+//            distance = Math.hypot(distanceToXTarget, distanceToYTarget);
+//            distanceToXTarget = targetX - globalPositionUpdate.returnXCoordinate();
+//            distanceToYTarget = targetY - globalPositionUpdate.returnYCoordinate();
+//
+//            double robotMovementAngle = Math.toDegrees(Math.atan2(distanceToXTarget, distanceToYTarget));
+//
+//            double robotMovementXComponent = Math.cos(Math.toRadians(desiredRobotOrientation)) * robotPower;
+//            double robotMovementYComponent = Math.sin(Math.toRadians(desiredRobotOrientation)) * robotPower;
+//
+//            double xPower = robotMovementXComponent / (Math.abs(robotMovementXComponent) + Math.abs(robotMovementYComponent));
+//            double yPower = robotMovementYComponent / (Math.abs(robotMovementXComponent) + Math.abs(robotMovementYComponent));
+//
+//            xPower *= robotPower;
+//            yPower *= robotPower;
+//
+//
+//            double pivotCorrection =  angleWrapRadians(desiredRobotOrientation - globalPositionUpdate.returnOrientation());
+//            double turnAngle = pivotCorrection- Math.toRadians(180) + desiredRobotOrientation;
+//
+////            double turnPower;
+////
+////            if(distance < 10) turnPower = 0;
+////            else turnPower = Range.clip(turnAngle / Math.toRadians(30), -1, 1) * turnSpeed;
+//
+//
+//            wheelbase.mecanumDrive(robotMovementXComponent, robotMovementYComponent, 0, false);
+//
+//        }
+//
+//        wheelbase.setMotorPowers(0, 0, 0, 0);
+//    }
+
+
+    public double angleWrapRadians(double angle) {
+        while (angle > 2 * PI ) {
+            angle -= 2 * PI;
+        } while(angle < 0){
+            angle += 2 * PI;
+        }
+
+        return angle;
+    }
 
     /**
      * Calculate the power in the x direction

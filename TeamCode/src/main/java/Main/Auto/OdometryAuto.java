@@ -3,40 +3,44 @@ package Main.Auto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import Main.Base.AutoRobot;
-
+import Main.Base.RobotUtilities.Odometry;
 
 
 @Autonomous(name = "Odometry Auto")
 public class OdometryAuto extends AutoRobot {
 
-//       rings = camera.detectRings();
-//       telemetry.addData("Rings: ", rings);
-//       telemetry.update();
+    static final double TICKS_PER_REVOLUTION = 8192;
+    static final double WHEEL_DIAMETER = 1.45;
+    static final double TICKS_PER_INCH = (TICKS_PER_REVOLUTION / (WHEEL_DIAMETER * Math.PI));
 
 
     @Override
     public void runOpMode() {
         initialize();
 
-        positionThread.start();
+       // positionThread.start();
 
-        rings = camera.detectRings();
-        telemetry.addData("Rings: ", rings);
-        telemetry.update();
-
-        while(!isStarted()) {
-            rings = camera.detectRings();
-            telemetry.addData("Rings: ", rings);
-            telemetry.update();
-        }
+//        rings = camera.detectRings();
+//        telemetry.addData("Rings: ", rings);
+//        telemetry.update();
+//
+//        while(!isStarted()) {
+//            rings = camera.detectRings();
+//            telemetry.addData("Rings: ", rings);
+//            telemetry.update();
+//        }
 
         waitForStart();
 
-        if (rings == 0) {}//do something
-        else if (rings == 1) {} //do something else
-        else if (rings == 4) {} //do another things
+//        if (rings == 0) {}//do something
+//        else if (rings == 1) {} //do something else
+//        else if (rings == 4) {} //do another things
+        odometry = new Odometry(left, right, mid,  75);
+        positionThread = new Thread(odometry);
 
-        wheelBase.goToPosition(odometry, 24, 0, 0.5, 0.3, 0, 4);
+        positionThread.start();
+
+        wheelBase.goToPosition(odometry,  52, 6, 0.5, 0, 4);
 
 
 
@@ -51,7 +55,9 @@ public class OdometryAuto extends AutoRobot {
             telemetry.update();
         }
 
-
+        positionThread.stop();
 
     }
+
+
 }

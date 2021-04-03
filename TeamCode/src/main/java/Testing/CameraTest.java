@@ -3,14 +3,15 @@ package Testing;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import Main.Base.AutoRobot;
+import Main.Base.Robot;
 
 @Autonomous(name = "Camera Test", group = "testing")
-public class CameraTest extends AutoRobot {
+public class CameraTest extends Robot {
 
     @Override
     public void loop() {
 
-        rings = camera.detectRings();
+        int rings = camera.detectRings();
         telemetry.addData("Rings: ", rings);
         telemetry.update();
 
