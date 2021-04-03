@@ -4,6 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import Main.Base.RobotUtilities.Shooter;
 import Main.Base.RobotUtilities.WheelBase;
 
 @TeleOp(name = "REVENGE OF SARTHAAK")
@@ -25,6 +28,7 @@ public class OdometrySamplePositionGoTo extends LinearOpMode {
     String verticalLeftEncoderName = "leftFront", verticalRightEncoderName = "leftBack", horizontalEncoderName = "rightBack";
 
     WheelBase wheelbase;
+    Shooter shooter;
 
     OdometryGlobalCoordinatePosition globalPositionUpdate;
 
@@ -37,6 +41,12 @@ public class OdometrySamplePositionGoTo extends LinearOpMode {
         DcMotor leftBack = hardwareMap.dcMotor.get(leftBackName);
         DcMotor rightBack = hardwareMap.dcMotor.get(rightBackName);
         DcMotor rightFront = hardwareMap.dcMotor.get(rightFrontName);
+
+        DcMotor flywheel = hardwareMap.dcMotor.get("flyWheel");
+        Servo feeder = hardwareMap.servo.get("feeder");
+
+
+        shooter = new Shooter(flywheel, feeder);
 
         wheelbase = new WheelBase(leftFront, leftBack, rightFront, rightBack);
 
@@ -79,11 +89,23 @@ public class OdometrySamplePositionGoTo extends LinearOpMode {
         globalPositionUpdate = new OdometryGlobalCoordinatePosition(verticalLeft, verticalRight, horizontal, COUNTS_PER_INCH, 75);
         Thread positionThread = new Thread(globalPositionUpdate);
         positionThread.start();
-
-        goToPosition(24, 24, 1, 0, 4);
-        goToPosition(70, 30, 1, 0, 4);
-        goToPosition(10, 40, 1, 0, 4);
+//
+//        goToPosition(24, 24, 1, 0, 4);
+//        goToPosition(70, 30, 1, 0, 4);
+//        goToPosition(10, 40, 1, 0, 4);
 //        goToPosition(0, 24, 0.5, 0, 4);
+
+        shooter.runFlywheels(true);
+        goToPosition(52, 6 , 0.5, 0, 2);
+        //shooter.shoot(true, 3);
+        shooter.feedShooter();
+        shooter.resetShooter();
+        shooter.feedShooter();
+        shooter.resetShooter();
+        shooter.feedShooter();
+        shooter.resetShooter();
+
+
 
         while(opModeIsActive()){
             //Display Global (x, y, theta) coordinates

@@ -35,7 +35,7 @@ public class RobotTeleOp extends Robot {
 
         if(buttonChecker.get(left_stick_button)) FOD = !FOD;
 
-        if(FOD) wheelBase.fieldOrientatedDrive(gp, gyro, slomo);
+        if(FOD) wheelBase.fieldOrientatedDrive(gp, gyro, slomo, reverse);
         else if(reverse) wheelBase.mecanumDrive(gp.left_stick_x, -gp.left_stick_y, gp.right_stick_x, slomo);
         else wheelBase.mecanumDrive(-gp.left_stick_y, -gp.left_stick_x, gp.right_stick_x, slomo);
 
@@ -88,23 +88,19 @@ public class RobotTeleOp extends Robot {
 
         if(buttonChecker.get(dpad_down)){
             shooter.changePSV(-0.0005);
-            telemetry.addData("PSV: ", shooter.getPSV());
+
+        } else if(buttonChecker.get(dpad_up)){
+            shooter.changePSV(0.0005);
         }
 
-        if(buttonChecker.get(dpad_up)){
-            shooter.changePSV(0.0005);
-            telemetry.addData("PSV: ", shooter.getPSV());
-        }
+        telemetry.addData("PSV: ", shooter.getPSV());
 
         if(buttonChecker.get(dpad_left)){
-            shooter.changeHGV(-0.0005);
-            telemetry.addData("HGV: ", shooter.getHGV());
+            shooter.changeHGV(-0.00025);
+        } else if(buttonChecker.get(dpad_right)){
+            shooter.changeHGV(0.00025);
         }
-
-        if(buttonChecker.get(dpad_right)){
-            shooter.changeHGV(0.0005);
-            telemetry.addData("HGV: ", shooter.getHGV());
-        }
+        telemetry.addData("HGV: ", shooter.getHGV());
 
 
 

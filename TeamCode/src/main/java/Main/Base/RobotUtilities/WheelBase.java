@@ -104,7 +104,7 @@ public class WheelBase {
     }
 
 
-    public void fieldOrientatedDrive (Gamepad gamepad, Gyro gyro, boolean slomo) {
+    public void fieldOrientatedDrive (Gamepad gamepad, Gyro gyro, boolean slomo, boolean reverse) {
         double y = -gamepad.left_stick_y;
         double x = gamepad.left_stick_x;
         double turn = gamepad.right_stick_x;
@@ -121,7 +121,8 @@ public class WheelBase {
 
         y = Math.sin(movementDegree) * gamepadHpot;
 
-        mecanumDrive(y, -x, turn, slomo);
+        if(reverse) mecanumDrive(x, y, turn, slomo);
+        else mecanumDrive(y, -x, turn, slomo);
     }
 
 
