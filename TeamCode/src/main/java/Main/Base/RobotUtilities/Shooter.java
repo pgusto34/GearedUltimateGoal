@@ -35,8 +35,8 @@ public class Shooter {
         if(highGoal) flyWheel.setPower(highGoalVelocity);
         else flyWheel.setPower(powerShotVelocity);
 
-        runTime.reset();
-        while(runTime.milliseconds() < 2500) { }
+//        runTime.reset();
+//        while(runTime.milliseconds() < 2500) { }
 
         for(int i = 0; i < times; i++) {
             feedShooter();
@@ -92,6 +92,21 @@ public class Shooter {
 
     }
 
+
+    public void runFlyWheelHigh() {
+        flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        flyWheel.setPower(highGoalVelocity);
+    }
+
+    public void stopFlyWheel() {
+        flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        flyWheel.setPower(0);
+    }
+
+    public void runFlyWheelPower() {
+        flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        flyWheel.setPower(powerShotVelocity);
+    }
 
     public void changePSV(double num){
         powerShotVelocity += num;

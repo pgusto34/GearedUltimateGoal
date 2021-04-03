@@ -23,6 +23,8 @@ public class RobotTeleOp extends Robot {
 
     boolean FOD = true;
 
+    boolean HIGH = false;
+
     @Override
     public void loop() {
 
@@ -49,10 +51,10 @@ public class RobotTeleOp extends Robot {
         intake.controlRIntake(intakeRIn, intakeROut);
 
 
-        if (buttonChecker.get(right_trigger)) {
-            intakeRIn = !intakeRIn;
-            intakeROut = false;
-        }
+//        if (buttonChecker.get(right_trigger)) {
+//            intakeRIn = !intakeRIn;
+//            intakeROut = false;
+//        }
 
         if (buttonChecker.get(left_trigger)) {
             intakeLIn = !intakeLIn;
@@ -88,7 +90,10 @@ public class RobotTeleOp extends Robot {
             shooter.shoot(false, 1);
         }
 
-        if(gp.right_stick_button) shooter.setFlywheelPower(true, true);
+        if (buttonChecker.get(right_trigger)) HIGH = !HIGH;
+
+        if(HIGH) shooter.runFlyWheelHigh();
+        else shooter.stopFlyWheel();
 
 
 

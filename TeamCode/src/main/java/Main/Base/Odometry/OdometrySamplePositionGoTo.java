@@ -100,7 +100,7 @@ public class OdometrySamplePositionGoTo extends LinearOpMode {
 //        goToPosition(0, 24, 0.5, 0, 4);
 
         //shooter.runFlywheels(true);
-        goToPosition(52, 6 , 0.5, 0, 4);
+        goToPosition(60, 6 , 1, 0, 4);
         //shooter.shoot(true, 3);
 //        shooter.feedShooter();
 //        shooter.resetShooter();
