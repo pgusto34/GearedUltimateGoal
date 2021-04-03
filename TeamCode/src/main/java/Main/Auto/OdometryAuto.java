@@ -24,6 +24,12 @@ public class OdometryAuto extends AutoRobot {
         telemetry.addData("Rings: ", rings);
         telemetry.update();
 
+        while(!isStarted()) {
+            rings = camera.detectRings();
+            telemetry.addData("Rings: ", rings);
+            telemetry.update();
+        }
+
         waitForStart();
 
         if (rings == 0) {}//do something
@@ -33,11 +39,7 @@ public class OdometryAuto extends AutoRobot {
         wheelBase.goToPosition(odometry, 24, 0, 0.5, 0.3, 0, 4);
 
 
-        while(!opModeIsActive()) {
-            rings = camera.detectRings();
-            telemetry.addData("Rings: ", rings);
-            telemetry.update();
-        }
+
 
 
         while(opModeIsActive()) {
