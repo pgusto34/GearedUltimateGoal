@@ -5,16 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.Range;
 
-import Main.Base.Robot;
+import static java.lang.Math.PI;
 
-import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
-import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
-import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_WITHOUT_ENCODER;
-import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
-import static java.lang.Math.abs;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 public class WheelBase {
 
@@ -121,8 +113,67 @@ public class WheelBase {
 
         y = Math.sin(movementDegree) * gamepadHpot;
 
-        if(reverse) mecanumDrive(x, y, turn, slomo);
-        else mecanumDrive(y, -x, turn, slomo);
+        if(reverse) mecanumDrive(y, -x, turn, slomo);
+        else mecanumDrive(x, y, turn, slomo);
+    }
+
+
+    public void goToPosition(Odometry odometer, double targetX, double targetY, double robotPower, double turnSpeed, double desiredRobotOrientation, double error){
+        targetX = targetX * TICKS_PER_INCH;
+        targetY = targetY * TICKS_PER_INCH;
+
+        double distanceToXTarget = targetX - odometer.returnXCoordinate();
+        double distanceToYTarget = targetY - odometer.returnYCoordinate();
+
+        double distance = Math.hypot(distanceToXTarget, distanceToYTarget);
+
+        error = error * TICKS_PER_INCH;
+
+        desiredRobotOrientation = Math.toRadians(desiredRobotOrientation);
+
+        while(distance > error) {
+
+            distance = Math.hypot(distanceToXTarget, distanceToYTarget);
+            distanceToXTarget = targetX - odometer.returnXCoordinate();
+            distanceToYTarget = targetY - odometer.returnYCoordinate();
+
+            double robotMovementAngle = Math.toDegrees(Math.atan2(distanceToXTarget, distanceToYTarget));
+
+            double robotMovementXComponent = Math.sin(Math.toRadians(desiredRobotOrientation)) * robotPower;
+            double robotMovementYComponent = Math.cos(Math.toRadians(desiredRobotOrientation)) * robotPower;
+
+            double xPower = robotMovementXComponent / (Math.abs(robotMovementXComponent) + Math.abs(robotMovementYComponent));
+            double yPower = robotMovementYComponent / (Math.abs(robotMovementXComponent) + Math.abs(robotMovementYComponent));
+
+            xPower *= robotPower;
+            yPower *= robotPower;
+
+
+            double pivotCorrection =  angleWrapRadians(desiredRobotOrientation - odometer.returnOrientation());
+            double turnAngle = pivotCorrection- Math.toRadians(180) + desiredRobotOrientation;
+
+            double turnPower;
+
+            if(distance < 10) turnPower = 0;
+            else turnPower = Range.clip(turnAngle / Math.toRadians(30), -1, 1) * turnSpeed;
+
+
+            mecanumDrive(robotMovementXComponent, robotMovementYComponent, 0, false);
+
+        }
+
+        setMotorPowers(0, 0, 0, 0);
+    }
+
+
+    public double angleWrapRadians(double angle) {
+        while (angle > 2 * PI ) {
+            angle -= 2 * PI;
+        } while(angle < 0){
+            angle += 2 * PI;
+        }
+
+        return angle;
     }
 
 

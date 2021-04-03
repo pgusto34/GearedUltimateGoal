@@ -29,6 +29,7 @@ public class RobotTeleOp extends Robot {
         buttonChecker = updateBooleans(gp, buttonChecker);
 
 
+
         if (buttonChecker.get(x)) slomo = !slomo;
 
         if(buttonChecker.get(a)) reverse = !reverse;
@@ -41,6 +42,7 @@ public class RobotTeleOp extends Robot {
 
         if(FOD) telemetry.addData("Drive: ", "FOD");
         else telemetry.addData("Drive: ", "ROD");
+
 
 
         intake.controlLIntake(intakeLIn, intakeLOut);
@@ -86,22 +88,7 @@ public class RobotTeleOp extends Robot {
             shooter.shoot(false, 1);
         }
 
-        if(buttonChecker.get(dpad_down)){
-            shooter.changePSV(-0.0005);
-
-        } else if(buttonChecker.get(dpad_up)){
-            shooter.changePSV(0.0005);
-        }
-
-        telemetry.addData("PSV: ", shooter.getPSV());
-
-        if(buttonChecker.get(dpad_left)){
-            shooter.changeHGV(-0.00025);
-        } else if(buttonChecker.get(dpad_right)){
-            shooter.changeHGV(0.00025);
-        }
-        telemetry.addData("HGV: ", shooter.getHGV());
-
+        if(gp.right_stick_button) shooter.setFlywheelPower(true, true);
 
 
 
@@ -113,6 +100,7 @@ public class RobotTeleOp extends Robot {
         if(buttonChecker.get(y)) wobbleClawClosed = !wobbleClawClosed;
 
         wobbleArm.ControlWobbleClaw(wobbleClawClosed);
+
 
 
         telemetry.addData("Heading: ", gyro.getHeading());

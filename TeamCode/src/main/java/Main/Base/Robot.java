@@ -83,8 +83,6 @@ public class Robot extends Hardware{
         wobbleArm = new WobbleArm(wobbleArmServo, wobbleClaw);
 
 
-        //boolUpdater = new BooleanUpdater();
-
     }
 
 }
