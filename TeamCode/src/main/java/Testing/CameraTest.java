@@ -6,7 +6,7 @@ import Main.Base.AutoRobot;
 import Main.Base.Robot;
 
 @Autonomous(name = "Camera Test", group = "testing")
-public class CameraTest extends Robot {
+public class CameraTest extends AutoRobot {
 
     @Override
     public void loop() {
@@ -17,4 +17,8 @@ public class CameraTest extends Robot {
 
     }
 
+    @Override
+    public void runAutonomous() {
+
+    }
 }

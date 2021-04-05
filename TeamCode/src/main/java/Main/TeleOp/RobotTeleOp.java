@@ -1,8 +1,8 @@
 package Main.TeleOp;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+//import com.acmerobotics.dashboard.FtcDashboard;
+//import com.acmerobotics.dashboard.config.Config;
+//import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -16,7 +16,7 @@ import Main.Base.RobotUtilities.WobbleArm;
 import static Main.Base.HelperClasses.BooleanUpdater.*;
 import static Main.Base.HelperClasses.Button.*;
 
-@Config
+//@Config
 @TeleOp(name = "TeleOp", group = "competition")
 public class RobotTeleOp extends Robot {
 
@@ -30,7 +30,7 @@ public class RobotTeleOp extends Robot {
 
     boolean HIGH = false;
 
-    FtcDashboard dashboard;
+    //FtcDashboard dashboard;
     public static double highGoalVelocity = 2000;
     public static double powerShotVelocity = 800;
     public static double currentVelocity = 0;
@@ -39,7 +39,7 @@ public class RobotTeleOp extends Robot {
     public void init() {
         super.init();
 
-        dashboard = FtcDashboard.getInstance();
+        //dashboard = FtcDashboard.getInstance();
     }
 
     @Override
@@ -115,35 +115,34 @@ public class RobotTeleOp extends Robot {
 
         if(buttonChecker.get(b)) wobbleArmDown = !wobbleArmDown;
 
-        //wobbleArm.ControlWobbleArm(wobbleArmDown);
+        wobbleArm.ControlWobbleArm(wobbleArmDown);
 
 
         if(buttonChecker.get(y)) wobbleClawClosed = !wobbleClawClosed;
 
         wobbleArm.ControlWobbleClaw(wobbleClawClosed);
 
-        wobbleArm.setWobbleArmInPosition();
 
 
         telemetry.addData("Heading: ", gyro.getHeading());
 
-        if(buttonChecker.get(dpad_down)) shooter.changeHGV(10);
+//        if(buttonChecker.get(dpad_down)) shooter.changeHGV(10);
+//
+//        if(buttonChecker.get(dpad_up)) shooter.changeHGV(-10);
+//
+//        if(buttonChecker.get(dpad_left)) shooter.changePSV(-10);
+//
+//        if(buttonChecker.get(dpad_right)) shooter.changePSV(10);
+//
+//        telemetry.addData("Velocity: ", shooter.getVelocity());
+//
+//        telemetry.addData("HGV: ", shooter.getHGV());
+//        telemetry.addData("PSV: ", shooter.getPSV());
 
-        if(buttonChecker.get(dpad_up)) shooter.changeHGV(-10);
-
-        if(buttonChecker.get(dpad_left)) shooter.changePSV(-10);
-
-        if(buttonChecker.get(dpad_right)) shooter.changePSV(10);
-
-        telemetry.addData("Velocity: ", shooter.getVelocity());
-
-        telemetry.addData("HGV: ", shooter.getHGV());
-        telemetry.addData("PSV: ", shooter.getPSV());
-
-        TelemetryPacket packet = new TelemetryPacket();
-        packet.put("Velocity", currentVelocity);
-        packet.put("HighGoalVelocity", highGoalVelocity);
-        dashboard.sendTelemetryPacket(packet);
+//        TelemetryPacket packet = new TelemetryPacket();
+//        packet.put("Velocity", currentVelocity);
+//        packet.put("HighGoalVelocity", highGoalVelocity);
+//        dashboard.sendTelemetryPacket(packet);
 
 
 

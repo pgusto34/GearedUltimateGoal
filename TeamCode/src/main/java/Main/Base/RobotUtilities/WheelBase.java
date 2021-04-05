@@ -199,13 +199,21 @@ public class WheelBase {
 //
     public void straighten(Odometry odometry, double turnPower) {
 
-        if(odometry.returnOrientation() > 0) turnPower *= -1;
+//        if(odometry.returnOrientation() > 0) turnPower *= -1;
+//
+//        while(odometry.returnOrientation() > 0)  mecanumDrive(0, 0, turnPower, false);
+//
+//
+//        while(odometry.returnOrientation() < 0)  mecanumDrive(0, 0, turnPower, false);
 
-        while(odometry.returnOrientation() > 0)  mecanumDrive(0, 0, turnPower, false);
+        while(abs(odometry.returnOrientation()) > 0.5) {
 
+            if(odometry.returnOrientation() > 0) turnPower = -turnPower;
+            else turnPower = turnPower;
 
-        while(odometry.returnOrientation() < 0)  mecanumDrive(0, 0, turnPower, false);
+            mecanumDrive(0, 0, turnPower, false);
 
+        }
 
         mecanumDrive(0, 0, 0, false);
     }

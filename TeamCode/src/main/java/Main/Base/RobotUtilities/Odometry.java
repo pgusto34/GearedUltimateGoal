@@ -48,6 +48,21 @@ public class Odometry implements Runnable {
     }
 
 
+    public Odometry(DcMotor verticalEncoderLeft, DcMotor verticalEncoderRight, DcMotor horizontalEncoder, double worldX, double worldY, int threadSleepDelay){
+        this.left = verticalEncoderLeft;
+        this.right = verticalEncoderRight;
+        this.mid = horizontalEncoder;
+        sleepTime = threadSleepDelay;
+
+        this.robotXPosition = worldX;
+        this.robotYPosition = worldY;
+
+        robotEncoderWheelDistance = Double.parseDouble(ReadWriteFile.readFile(wheelBaseSeparationFile).trim()) * TICKS_PER_INCH;
+        this.horizontalEncoderTickPerDegreeOffset = Double.parseDouble(ReadWriteFile.readFile(horizontalTickOffsetFile).trim());
+
+    }
+
+
     private void updatePositions(){
         //Get Current Positions
         leftEncoderPosition = (left.getCurrentPosition() * verticalLeftEncoderPositionMultiplier);

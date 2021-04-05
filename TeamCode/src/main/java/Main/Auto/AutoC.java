@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import Main.Base.AutoRobot;
 
 @Autonomous(name = "C", group = "testing")
-public class TestAuto3 extends AutoRobot {
+public class AutoC extends AutoRobot {
 
     double speed = 0.6;
 
@@ -14,9 +14,6 @@ public class TestAuto3 extends AutoRobot {
     public void runAutonomous(){
 
         try {
-
-//            wheelBase.goToPosition(odometry,  0, 48, speed, 4);
-//            wheelBase.goToPosition(odometry,  0, 24, speed, 4);
 
 
             wobbleArm.setWobbleArmInPosition();
@@ -49,17 +46,6 @@ public class TestAuto3 extends AutoRobot {
             shooter.shoot(true, 3);
             intake.controlLIntake(false, false);
             wheelBase.goToPosition(odometry,  67, 14, speed, error);
-//            pause(1000);
-//            wheelBase.goToPosition(odometry,  24, 18, speed, 4);
-//            pause(1000);
-//            wheelBase.goToPosition(odometry,  6, 36, speed, 4);
-//            pause(1000);
-//            wheelBase.goToPosition(odometry,  76, 36, speed, 4);
-//            pause(1000);
-//            wheelBase.goToPosition(odometry,  76, 0, speed, 4);
-//            pause(1000);
-//            wheelBase.goToPosition(odometry,  73, 0, speed, 4);
-
 
         }catch(Exception e){
             autoThread.interrupt();

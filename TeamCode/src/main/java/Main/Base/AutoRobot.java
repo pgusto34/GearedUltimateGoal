@@ -93,6 +93,14 @@ public abstract class AutoRobot extends Hardware {
 
 
     @Override
+    public void init_loop() {
+        rings = camera.detectRings();
+        telemetry.addData("Rings: ", rings);
+        telemetry.update();
+    }
+
+
+    @Override
     public void start() {
         autoThread.start();
     }
@@ -117,6 +125,7 @@ public abstract class AutoRobot extends Hardware {
         }
 
     }
+
 
     protected void pause(long millis) {
         long maxTime;

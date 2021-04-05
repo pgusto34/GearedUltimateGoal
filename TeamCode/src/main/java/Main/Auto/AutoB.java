@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import Main.Base.AutoRobot;
 
-@Autonomous(name = "A", group = "testing")
-public class TestAuto extends AutoRobot {
+@Autonomous(name = "B", group = "testing")
+public class AutoB extends AutoRobot {
 
     double speed = 0.5;
 
@@ -21,16 +21,23 @@ public class TestAuto extends AutoRobot {
 
             wobbleArm.setWobbleArmInPosition();
             wobbleArm.ControlWobbleClaw(true);
-            wheelBase.goToPosition(odometry,  56, 0, speed, 4);
+            wheelBase.goToPosition(odometry, 56, 0, speed, error);
+            wheelBase.goToPosition(odometry,  80, 21, speed, error);
             wobbleArm.ControlWobbleArm(true);
             pause(1000);
             wobbleArm.ControlWobbleClaw(false);
             pause(1000);
             wobbleArm.ControlWobbleArm(false);
-            wheelBase.goToPosition(odometry,  58, 10, speed, 4);
+            wheelBase.goToPosition(odometry,  57, 14, speed, error);
             shooter.shoot(true, 3);
             pause(1000);
-            wheelBase.goToPosition(odometry,  66, 14, speed, 4);
+            wheelBase.goToPosition(odometry,  40, 0, speed, error);
+            intake.controlLIntake(true, false);
+            wheelBase.goToPosition(odometry, 40, 10, speed, error);
+            wheelBase.goToPosition(odometry,  58, 10, speed, error);
+            shooter.shoot(true, 3);
+            intake.controlLIntake(false, false);
+            wheelBase.goToPosition(odometry,  67, 14, speed, error);
 //            pause(1000);
 //            wheelBase.goToPosition(odometry,  24, 18, speed, 4);
 //            pause(1000);
