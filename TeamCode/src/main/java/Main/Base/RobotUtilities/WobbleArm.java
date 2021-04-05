@@ -13,8 +13,8 @@ public class WobbleArm {
 
     double wobbleArmPosition;
     double wobbleArmOutPosition = 0.0;
-    double wobbleArmUpPosition = 0.331;
-    double wobbleArmInPosition = 0.653;
+    double wobbleArmUpPosition = 0.4;
+    double wobbleArmInPosition = 0.7;
 
 
     public WobbleArm(Servo wA, Servo wC) {
@@ -31,14 +31,18 @@ public class WobbleArm {
     }
 
 
-    public void ControlWobbleArm(boolean armState) {
+    public void ControlWobbleArm(boolean out) {
 
-        if(armState) wobbleArmPosition = wobbleArmOutPosition;
+        if(out) wobbleArmPosition = wobbleArmOutPosition;
         else wobbleArmPosition = wobbleArmUpPosition;
 
         wobbleArm.setPosition(wobbleArmPosition);
     }
 
+
+    public void setWobbleArmInPosition() {
+        wobbleArm.setPosition(wobbleArmInPosition);
+    }
 
     public void WobbleArmIn() {
         wobbleArm.setPosition(wobbleArmInPosition);

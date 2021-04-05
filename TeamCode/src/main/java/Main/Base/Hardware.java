@@ -3,6 +3,7 @@ package Main.Base;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.openftc.easyopencv.OpenCvInternalCamera;
@@ -22,7 +23,7 @@ public class Hardware extends OpMode {
     DcMotor leftIntake, rightIntake;
     String leftIntakeName = "leftIntake", rightIntakeName = "rightIntake";
 
-    DcMotor flyWheel;
+    DcMotorEx flyWheel;
     String flyWheelName = "flyWheel";
 
     Servo wobbleArmServo, wobbleClaw;

@@ -98,8 +98,15 @@ public class Odometry implements Runnable {
     public double returnYCoordinate(){ return robotYPosition; }
 
 
+    public double returnXCoordinateInches(){ return robotXPosition / TICKS_PER_INCH;}
+
+
+    public double returnYCoordinateInches(){ return robotYPosition / TICKS_PER_INCH;}
+
+
     public double returnOrientation(){ return Math.toDegrees(robotOrientationRadians) % 360; }
 
+    public double returnOrientationRadians(){ return robotOrientationRadians; }
 
     public void stop(){ isRunning = false; }
 

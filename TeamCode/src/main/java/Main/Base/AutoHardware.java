@@ -3,6 +3,7 @@ package Main.Base;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class AutoHardware extends LinearOpMode {
@@ -20,7 +21,7 @@ public class AutoHardware extends LinearOpMode {
     DcMotor leftIntake, rightIntake;
     String leftIntakeName = "leftIntake", rightIntakeName = "rightIntake";
 
-    DcMotor flyWheel;
+    DcMotorEx flyWheel;
     String flyWheelName = "flyWheel";
 
     Servo wobbleArmServo, wobbleClaw;
@@ -32,6 +33,6 @@ public class AutoHardware extends LinearOpMode {
     BNO055IMU imu;
     String imuName = "imu";
 
-    public void runOpMode(){}
+    public void runOpMode() throws InterruptedException {}
 
 }

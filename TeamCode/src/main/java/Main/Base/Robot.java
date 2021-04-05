@@ -1,7 +1,10 @@
 package Main.Base;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -20,7 +23,7 @@ import Main.Base.RobotUtilities.WheelBase;
 import Main.Base.RobotUtilities.WobbleArm;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
+@Config
 public class Robot extends Hardware{
 
     public static Gamepad gp;
@@ -35,6 +38,8 @@ public class Robot extends Hardware{
     public BooleanUpdater boolUpdater;
 
     public HashMap<Button, Boolean> buttonChecker = new HashMap<Button, Boolean>();
+
+
 
     @Override
     public void init() {
@@ -70,7 +75,7 @@ public class Robot extends Hardware{
         intake = new Intake(leftIntake, rightIntake);
 
 
-        flyWheel = hardwareMap.dcMotor.get(flyWheelName);
+        flyWheel = hardwareMap.get(DcMotorEx.class, flyWheelName);
 
         feederServo = hardwareMap.servo.get(feederServoName);
 
@@ -81,6 +86,7 @@ public class Robot extends Hardware{
         wobbleClaw = hardwareMap.servo.get(wobbleClawName);
 
         wobbleArm = new WobbleArm(wobbleArmServo, wobbleClaw);
+
 
 
     }

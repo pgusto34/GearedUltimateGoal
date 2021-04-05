@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.Range;
 
 import static java.lang.Math.PI;
+import static java.lang.Math.abs;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 
 public class WheelBase {
@@ -23,7 +25,7 @@ public class WheelBase {
 
     Double lF, rF, lB, rB, maxVector;
 
-    static final double SLOMO_DIVIDER = 2;
+    static final double SLOMO_DIVIDER = 4;
 
     static final double ROBOT_DIAMETER = 20;
 
@@ -118,7 +120,99 @@ public class WheelBase {
     }
 
 
-    public void goToPosition(Odometry odometry, double targetX, double targetY, double robotPower,  double desiredRobotOrientation, double error){
+
+    public void fieldOrientatedDrive (Odometry odometry, double xPower, double yPower,  boolean slomo) {
+        double y = yPower;
+        double x = xPower;
+
+        double gamepadHpot = Range.clip(Math.hypot(x, y), 0, 1);
+
+        double gamepadDegree = angleWrapRadians(Math.atan2(y, x));
+
+        double heading = angleWrapRadians(odometry.returnOrientationRadians());
+
+        double movementDegree = gamepadDegree - heading;
+
+        x = Math.cos(movementDegree) * gamepadHpot;
+
+        y = Math.sin(movementDegree) * gamepadHpot;
+
+        mecanumDrive(x, y, 0, false);
+    }
+
+
+//    public void goToPosition(Odometry odometry, double targetX, double targetY, double robotPower,  double error){
+//        targetX = targetX * TICKS_PER_INCH;
+//        targetY = targetY * TICKS_PER_INCH;
+//
+//        double distanceToXTarget = targetX - odometry.returnXCoordinate();
+//        double distanceToYTarget = targetY - odometry.returnYCoordinate();
+//
+//        double distance = Math.hypot(distanceToXTarget, distanceToYTarget);
+//
+//        error = error * TICKS_PER_INCH;
+//
+//       // desiredRobotOrientation -= 90;
+//        //desiredRobotOrientation = Math.toRadians(desiredRobotOrientation);
+//
+//        double robotMovementAngle = Math.toDegrees(Math.atan2(distanceToXTarget, distanceToYTarget));
+//        double relativeAngleToTarget = angleWrapRadians(Math.toRadians(robotMovementAngle) - (odometry.returnOrientationRadians() - Math.toRadians(90)));
+//
+//
+//        while(distance > error) {
+//
+//            distance = Math.hypot(distanceToXTarget, distanceToYTarget);
+//            distanceToXTarget = targetX - odometry.returnXCoordinate();
+//            distanceToYTarget = targetY - odometry.returnYCoordinate();
+//
+////            double robotMovementAngle = Math.toDegrees(Math.atan2(distanceToXTarget, distanceToYTarget));
+//
+//            double xPower = Math.sin(Math.toRadians(robotMovementAngle)) * robotPower;;
+//            double yPower = Math.cos(Math.toRadians(robotMovementAngle)) * robotPower;;
+//
+//            xPower = xPower / (Math.abs(xPower) + Math.abs(yPower));
+//            yPower = yPower / (Math.abs(xPower) + Math.abs(yPower));
+//
+//
+//            xPower *= robotPower;
+//            yPower *= robotPower;
+//
+//
+////            double relativeAngleToTarget = angleWrapRadians(Math.toRadians(robotMovementAngle) - (odometry.returnOrientationRadians() - Math.toRadians(90)));
+////            double relativeTurnAngle = relativeAngleToTarget - Math.toRadians(180) + desiredRobotOrientation;
+////            double turnPower = Range.clip(relativeTurnAngle / Math.toRadians(30), -1, 1) * turnSpeed;
+//
+//            //if(Math.abs(relativeAngleToTarget) < 3) turnPower = 0;
+////            if(distance < 10) turnPower = 0;
+//
+//            if(distance < 10) mecanumDrive(xPower, yPower, 0, false);
+//            else mecanumDrive(xPower, yPower, 0, true);
+//            //fieldOrientatedDrive(odometry, xPower, yPower, false);
+//
+//
+//        }
+//
+//        setMotorPowers(0, 0, 0, 0);
+//    }
+//
+//
+//
+    public void straighten(Odometry odometry, double turnPower) {
+
+        if(odometry.returnOrientation() > 0) turnPower *= -1;
+
+        while(odometry.returnOrientation() > 0)  mecanumDrive(0, 0, turnPower, false);
+
+
+        while(odometry.returnOrientation() < 0)  mecanumDrive(0, 0, turnPower, false);
+
+
+        mecanumDrive(0, 0, 0, false);
+    }
+
+
+
+    public void goToPosition(Odometry odometry, double targetX, double targetY, double robotPower, double error){
         targetX = targetX * TICKS_PER_INCH;
         targetY = targetY * TICKS_PER_INCH;
 
@@ -130,7 +224,10 @@ public class WheelBase {
         error = error * TICKS_PER_INCH;
 
 
-        while(distance > error) {
+
+        while(distance > error) { //|| Math.abs(desiredRobotOrientation - globalPositionUpdate.returnOrientation()) > 4) {
+
+            //if(distance - error < 4*error) robotPower /= 4;
 
             distance = Math.hypot(distanceToXTarget, distanceToYTarget);
             distanceToXTarget = targetX - odometry.returnXCoordinate();
@@ -141,71 +238,25 @@ public class WheelBase {
             double robotMovementXComponent = calculateX(robotMovementAngle, robotPower);
             double robotMovementYComponent = calculateY(robotMovementAngle, robotPower);
 
-            double xPower = robotMovementXComponent / (Math.abs(robotMovementXComponent) + Math.abs(robotMovementYComponent));
-            double yPower = robotMovementYComponent / (Math.abs(robotMovementXComponent) + Math.abs(robotMovementYComponent));
-
-            xPower = robotMovementXComponent * robotPower;
-            yPower = robotMovementYComponent * robotPower;
-
+          //  double pivotCorrection = desiredRobotOrientation - odometry.returnOrientation();
 //
-//            double pivotCorrection =  angleWrapRadians(desiredRobotOrientation - odometer.returnOrientation());
-//            double turnAngle = pivotCorrection- Math.toRadians(180) + desiredRobotOrientation;
-//
-//            double turnPower;
-//
-//            if(distance < 10) turnPower = 0;
-//            else turnPower = Range.clip(turnAngle / Math.toRadians(30), -1, 1) * turnSpeed;
+//            if (pivotCorrection > 3) pivotCorrection = pivotCorrection / 180;
+//            else if(pivotCorrection < 3) pivotCorrection = pivotCorrection / 180;
+//            else pivotCorrection = 0;
+
+            mecanumDrive(robotMovementXComponent, robotMovementYComponent, 0, false);
 
 
-            mecanumDrive(xPower, yPower, 0, false);
+
+//            telemetry.addData("X: ", globalPositionUpdate.returnXCoordinate());
+//            telemetry.addData("Y: ", globalPositionUpdate.returnYCoordinate());
+//            telemetry.update();
+
 
         }
 
         setMotorPowers(0, 0, 0, 0);
     }
-
-//    public void goToPosition(Odometry odometry, double targetX, double targetY, double robotPower, double desiredRobotOrientation, double error){
-//        targetX = targetX * TICKS_PER_INCH;
-//        targetY = targetY * TICKS_PER_INCH;
-//
-//        double distanceToXTarget = targetX - odometry.returnXCoordinate();
-//        double distanceToYTarget = targetY - odometry.returnYCoordinate();
-//
-//        double distance = Math.hypot(distanceToXTarget, distanceToYTarget);
-//
-//        error = error * TICKS_PER_INCH;
-//
-//        while(distance > error) { //|| Math.abs(desiredRobotOrientation - globalPositionUpdate.returnOrientation()) > 4) {
-//
-//            //if(distance - error < 4*error) robotPower /= 4;
-//
-//            distance = Math.hypot(distanceToXTarget, distanceToYTarget);
-//            distanceToXTarget = targetX - odometry.returnXCoordinate();
-//            distanceToYTarget = targetY - odometry.returnYCoordinate();
-//
-//            double robotMovementAngle = Math.toDegrees(Math.atan2(distanceToXTarget, distanceToYTarget));
-//
-//            double robotMovementXComponent = calculateX(robotMovementAngle, robotPower);
-//            double robotMovementYComponent = calculateY(robotMovementAngle, robotPower);
-////            double pivotCorrection = desiredRobotOrientation - odometry.returnOrientation();
-////
-////            if (pivotCorrection > 3) pivotCorrection = pivotCorrection / 180;
-////            else if(pivotCorrection < 3) pivotCorrection = pivotCorrection / 180;
-////            else pivotCorrection = 0;
-//
-//            mecanumDrive(robotMovementXComponent, robotMovementYComponent, 0, false);
-//
-//
-//
-////            telemetry.addData("X: ", globalPositionUpdate.returnXCoordinate());
-////            telemetry.addData("Y: ", globalPositionUpdate.returnYCoordinate());
-////            telemetry.update();
-//
-//
-//        }
-//
-//        setMotorPowers(0, 0, 0, 0);
-//    }
 
 
 

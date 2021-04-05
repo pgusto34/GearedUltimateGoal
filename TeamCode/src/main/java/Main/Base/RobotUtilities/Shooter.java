@@ -1,6 +1,7 @@
 package Main.Base.RobotUtilities;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -9,7 +10,7 @@ public class Shooter {
 
     /** Reverse flyWheel motor so positive powers will shoot out **/
 
-    private DcMotor flyWheel;
+    private DcMotorEx flyWheel;
 
     private Servo feederServo;
 
@@ -17,12 +18,14 @@ public class Shooter {
     double feederServoPrepPosition = 0.25;
     double feederServoPosition = feederServoPrepPosition;
 
-    double highGoalVelocity = 0.05;
-    double powerShotVelocity = 0.0055;
+    public static double highGoalVelocity = 2000;
+    public static double powerShotVelocity = 250;
+
+    double TICKS_PER_REV = 28;
 
     private ElapsedTime runTime = new ElapsedTime();
 
-    public Shooter(DcMotor fwMotor, Servo fServo) {
+    public Shooter(DcMotorEx fwMotor, Servo fServo) {
         flyWheel = fwMotor;
         feederServo = fServo;
 
@@ -30,19 +33,25 @@ public class Shooter {
     }
 
     public void shoot(boolean highGoal, int times){
+
+        double velocity;
+        if(highGoal) velocity = highGoalVelocity;
+        else velocity = powerShotVelocity;
+
         resetShooter();
         flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        if(highGoal) flyWheel.setPower(highGoalVelocity);
-        else flyWheel.setPower(powerShotVelocity);
+        runTime.reset();
+        flyWheel.setVelocity(velocity);
 
-//        runTime.reset();
-//        while(runTime.milliseconds() < 2500) { }
+        runTime.reset();
+        while(runTime.milliseconds() < 1000) { }
 
         for(int i = 0; i < times; i++) {
             feedShooter();
             resetShooter();
         }
         resetShooter();
+        flyWheel.setVelocity(0);
         flyWheel.setPower(0);
     }
 
@@ -82,21 +91,25 @@ public class Shooter {
         }
     }
 
-    public void setFlywheelPower(boolean HighGoal, boolean on) {
+    public void setFlywheelPower(double velocity, boolean on) {
 
         if (on) {
-            if (HighGoal) flyWheel.setPower(highGoalVelocity);
-            else flyWheel.setPower(powerShotVelocity);
+        flyWheel.setVelocity(velocity);
         }
         else flyWheel.setPower(0);
 
     }
 
+    public void runFlyWheel(double v) {
+        flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        flyWheel.setVelocity(v);
+    }
 
     public void runFlyWheelHigh() {
         flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        flyWheel.setPower(highGoalVelocity);
+        flyWheel.setVelocity(highGoalVelocity);
     }
+
 
     public void stopFlyWheel() {
         flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -105,7 +118,11 @@ public class Shooter {
 
     public void runFlyWheelPower() {
         flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        flyWheel.setPower(powerShotVelocity);
+        flyWheel.setVelocity(powerShotVelocity);
+    }
+
+    public double getVelocity(){
+       return flyWheel.getVelocity();
     }
 
     public void changePSV(double num){

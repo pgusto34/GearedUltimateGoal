@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import Main.Base.Robot;
 
-@Disabled
+
 @TeleOp(name = "WobbleArm Test", group = "test")
 public class WobbleArmTest extends Robot {
 

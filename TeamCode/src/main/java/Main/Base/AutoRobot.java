@@ -1,6 +1,7 @@
 package Main.Base;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvInternalCamera;
@@ -14,7 +15,7 @@ import Main.Base.RobotUtilities.Shooter;
 import Main.Base.RobotUtilities.WheelBase;
 import Main.Base.RobotUtilities.WobbleArm;
 
-public class AutoRobot extends AutoHardware {
+public abstract class AutoRobot extends Hardware {
 
 
     public Camera camera;
@@ -27,11 +28,19 @@ public class AutoRobot extends AutoHardware {
 
     public Thread positionThread;
 
+    protected Thread autoThread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            runAutonomous();
+        }
+    });
 
 
     public int rings = -1;
 
-    public void initialize() {
+    @Override
+    public void init() {
+
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         OpenCvInternalCamera phoneCamera = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
@@ -62,7 +71,7 @@ public class AutoRobot extends AutoHardware {
         intake = new Intake(leftIntake, rightIntake);
 
 
-        flyWheel = hardwareMap.dcMotor.get(flyWheelName);
+        flyWheel = hardwareMap.get(DcMotorEx.class, flyWheelName);
 
         feederServo = hardwareMap.servo.get(feederServoName);
 
@@ -74,15 +83,49 @@ public class AutoRobot extends AutoHardware {
 
         wobbleArm = new WobbleArm(wobbleArmServo, wobbleClaw);
 
-        odometry = new Odometry(left, right, mid,  75);
+        odometry = new Odometry(left, right, mid,  50);
         positionThread = new Thread(odometry);
+        positionThread.start();
 
         camera.startStreaming();
 
     }
 
 
+    @Override
+    public void start() {
+        autoThread.start();
+    }
 
 
+    @Override
+    public void loop() {
+        telemetry.addData("X Position", odometry.returnXCoordinateInches());
+        telemetry.addData("Y Position", odometry.returnYCoordinateInches());
+        telemetry.addData("Orientation (Degrees)", odometry.returnOrientation());
+        telemetry.update();
+    }
+
+
+    @Override
+    public void stop() {
+        try {
+            autoThread.join();
+            autoThread.interrupt();
+        } catch (Exception e) {
+            telemetry.addData("ENCOUNTERED AN EXCEPTION", e);
+        }
+
+    }
+
+    protected void pause(long millis) {
+        long maxTime;
+        maxTime = System.currentTimeMillis() + millis;
+        while (System.currentTimeMillis() < maxTime && !autoThread.isInterrupted()) {
+        }
+    }
+
+
+    public abstract void runAutonomous();
 
 }
