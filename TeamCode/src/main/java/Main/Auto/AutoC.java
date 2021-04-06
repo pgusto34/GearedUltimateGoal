@@ -1,9 +1,11 @@
 package Main.Auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import Main.Base.AutoRobot;
 
+@Disabled
 @Autonomous(name = "C", group = "testing")
 public class AutoC extends AutoRobot {
 

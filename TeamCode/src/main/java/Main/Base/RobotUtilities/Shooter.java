@@ -18,7 +18,7 @@ public class Shooter {
     double feederServoPrepPosition = 0.25;
     double feederServoPosition = feederServoPrepPosition;
 
-    public static double highGoalVelocity = 2000;
+    public static double highGoalVelocity = 1000;
     public static double powerShotVelocity = 250;
 
     double TICKS_PER_REV = 28;

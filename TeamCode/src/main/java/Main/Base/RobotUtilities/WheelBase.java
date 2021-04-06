@@ -25,7 +25,7 @@ public class WheelBase {
 
     Double lF, rF, lB, rB, maxVector;
 
-    static final double SLOMO_DIVIDER = 4;
+    static final double SLOMO_DIVIDER = 2.5;
 
     static final double ROBOT_DIAMETER = 20;
 
@@ -206,7 +206,7 @@ public class WheelBase {
 //
 //        while(odometry.returnOrientation() < 0)  mecanumDrive(0, 0, turnPower, false);
 
-        while(abs(odometry.returnOrientation()) > 0.5) {
+        while(abs(odometry.returnOrientation()) > 1) {
 
             if(odometry.returnOrientation() > 0) turnPower = -turnPower;
             else turnPower = turnPower;

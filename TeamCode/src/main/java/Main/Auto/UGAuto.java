@@ -1,7 +1,10 @@
 package Main.Auto;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import Main.Base.AutoRobot;
 
+@Autonomous(name = "Competition Auto", group = "competition")
 public class UGAuto extends AutoRobot {
 
     double speed = 0.6;
@@ -23,7 +26,8 @@ public class UGAuto extends AutoRobot {
                 wobbleArm.ControlWobbleClaw(false);
                 pause(1000);
                 wobbleArm.ControlWobbleArm(false);
-                wheelBase.goToPosition(odometry,  58, 10, speed, 4);
+                pause(2000);
+                wheelBase.goToPosition(odometry,  62, 11, 0.4, 4);
                 shooter.shoot(true, 3);
                 pause(1000);
                 wheelBase.goToPosition(odometry,  66, 14, speed, 4);
@@ -39,13 +43,15 @@ public class UGAuto extends AutoRobot {
                 wobbleArm.ControlWobbleClaw(false);
                 pause(1000);
                 wobbleArm.ControlWobbleArm(false);
-                wheelBase.goToPosition(odometry,  57, 14, speed, error);
+                wheelBase.goToPosition(odometry,  61, 9.5, speed, error);
+                //wheelBase.straighten(odometry, 0.2);
                 shooter.shoot(true, 3);
                 pause(1000);
                 wheelBase.goToPosition(odometry,  40, 0, speed, error);
                 intake.controlLIntake(true, false);
-                wheelBase.goToPosition(odometry, 40, 10, speed, error);
-                wheelBase.goToPosition(odometry,  58, 10, speed, error);
+                wheelBase.goToPosition(odometry, 40, 14, speed, error);
+                wheelBase.goToPosition(odometry,  59, 14, speed, error);
+                //wheelBase.straighten(odometry, 0.15);
                 shooter.shoot(true, 3);
                 intake.controlLIntake(false, false);
                 wheelBase.goToPosition(odometry,  67, 14, speed, error);
@@ -61,7 +67,7 @@ public class UGAuto extends AutoRobot {
                 pause(500);
                 wobbleArm.ControlWobbleArm(false);
                 wheelBase.straighten(odometry, 0.15);
-                wheelBase.goToPosition(odometry,  57, 14, speed, error);
+                wheelBase.goToPosition(odometry,  60, 13, speed, error);
                 shooter.shoot(true, 3);
                 pause(500);
                 wheelBase.goToPosition(odometry,  38, 0, speed, error);
@@ -69,16 +75,16 @@ public class UGAuto extends AutoRobot {
                 wheelBase.goToPosition(odometry, 38, 19, speed, error);
                 pause(500);
                 intake.controlLIntake(true, false);
-                wheelBase.goToPosition(odometry, 38, 28, 0.2, error);
+                wheelBase.goToPosition(odometry, 38, 31, 0.2, error);
                 pause(500);
-                wheelBase.goToPosition(odometry,  56, 18, speed, error);
+                wheelBase.goToPosition(odometry,  58.5, 14, speed, error);
                 shooter.shoot(true, 3);
                 intake.controlLIntake(false, true);
-                wheelBase.goToPosition(odometry,  45, 0, speed, error);
+                wheelBase.goToPosition(odometry,  42, 0, speed, error);
                 intake.controlLIntake(true, false);
-                wheelBase.goToPosition(odometry, 48, 24, speed, error);
-                wheelBase.goToPosition(odometry, 48, 44, 0.2, error);
-                wheelBase.goToPosition(odometry,  56, 18, speed, error);
+                wheelBase.goToPosition(odometry, 42, 24, speed, error);
+                wheelBase.goToPosition(odometry, 42, 47, 0.2, error);
+                wheelBase.goToPosition(odometry,  58, 14, speed, error);
                 shooter.shoot(true, 3);
                 intake.controlLIntake(false, false);
                 wheelBase.goToPosition(odometry,  67, 14, speed, error);

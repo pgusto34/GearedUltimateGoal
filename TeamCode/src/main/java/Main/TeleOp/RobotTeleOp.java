@@ -24,14 +24,14 @@ public class RobotTeleOp extends Robot {
 
     boolean wobbleArmDown = false, wobbleClawClosed = false;
 
-    boolean slomo = false, reverse = false;
+    boolean slomo = false, reverse = true;
 
     boolean FOD = true;
 
     boolean HIGH = false;
 
     //FtcDashboard dashboard;
-    public static double highGoalVelocity = 2000;
+    public static double highGoalVelocity = 1900;
     public static double powerShotVelocity = 800;
     public static double currentVelocity = 0;
 
@@ -78,9 +78,14 @@ public class RobotTeleOp extends Robot {
             intakeLOut = false;
         }
 
+        if (buttonChecker.get(right_trigger)) {
+            intakeLIn = !intakeLIn;
+            intakeLOut = false;
+        }
+
         if(gp.back) {
             intakeLOut = true;
-            intakeROut = true;
+            //intakeROut = true;
             intakeLIn = false;
             intakeRIn = false;
         }
@@ -106,10 +111,10 @@ public class RobotTeleOp extends Robot {
             shooter.shoot(false, 1);
         }
 
-        if (buttonChecker.get(right_trigger)) HIGH = !HIGH;
-
-        if(HIGH) shooter.runFlyWheel(highGoalVelocity);
-        else shooter.stopFlyWheel();
+//        if (buttonChecker.get(right_trigger)) HIGH = !HIGH;
+//
+//        if(HIGH) shooter.runFlyWheel(highGoalVelocity);
+//        else shooter.stopFlyWheel();
 
 
 
@@ -126,18 +131,18 @@ public class RobotTeleOp extends Robot {
 
         telemetry.addData("Heading: ", gyro.getHeading());
 
-//        if(buttonChecker.get(dpad_down)) shooter.changeHGV(10);
-//
-//        if(buttonChecker.get(dpad_up)) shooter.changeHGV(-10);
-//
-//        if(buttonChecker.get(dpad_left)) shooter.changePSV(-10);
-//
-//        if(buttonChecker.get(dpad_right)) shooter.changePSV(10);
-//
-//        telemetry.addData("Velocity: ", shooter.getVelocity());
-//
-//        telemetry.addData("HGV: ", shooter.getHGV());
-//        telemetry.addData("PSV: ", shooter.getPSV());
+        if(buttonChecker.get(dpad_down)) shooter.changeHGV(10);
+
+        if(buttonChecker.get(dpad_up)) shooter.changeHGV(-10);
+
+        if(buttonChecker.get(dpad_left)) shooter.changePSV(-10);
+
+        if(buttonChecker.get(dpad_right)) shooter.changePSV(10);
+
+        telemetry.addData("Velocity: ", shooter.getVelocity());
+
+        telemetry.addData("HGV: ", shooter.getHGV());
+        telemetry.addData("PSV: ", shooter.getPSV());
 
 //        TelemetryPacket packet = new TelemetryPacket();
 //        packet.put("Velocity", currentVelocity);
