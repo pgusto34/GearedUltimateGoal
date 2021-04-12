@@ -110,7 +110,7 @@ public abstract class AutoRobot extends Hardware {
     public void loop() {
         telemetry.addData("X Position", odometry.returnXCoordinateInches());
         telemetry.addData("Y Position", odometry.returnYCoordinateInches());
-        telemetry.addData("Orientation (Degrees)", odometry.returnOrientation());
+        telemetry.addData("Orientation (Degrees)", gyro.getHeading());
         telemetry.update();
     }
 

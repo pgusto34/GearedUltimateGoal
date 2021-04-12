@@ -30,14 +30,14 @@ public class Gyro {
         double heading;
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         heading = angles.firstAngle;
-        return heading;
+        return -heading;
     }
 
     public double getHeadingRadians(){
         double heading;
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
         heading = angles.firstAngle;
-        return heading;
+        return -heading;
     }
 
     public double angleWrapDegrees(double angle) {

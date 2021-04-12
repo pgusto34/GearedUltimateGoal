@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
@@ -178,10 +180,10 @@ public class WheelBase {
 //            yPower *= robotPower;
 //
 //
-////            double relativeAngleToTarget = angleWrapRadians(Math.toRadians(robotMovementAngle) - (odometry.returnOrientationRadians() - Math.toRadians(90)));
-////            double relativeTurnAngle = relativeAngleToTarget - Math.toRadians(180) + desiredRobotOrientation;
-////            double turnPower = Range.clip(relativeTurnAngle / Math.toRadians(30), -1, 1) * turnSpeed;
-//
+//            double relativeAngleToTarget = angleWrapRadians(Math.toRadians(robotMovementAngle) - (odometry.returnOrientationRadians() - Math.toRadians(90)));
+//            double relativeTurnAngle = relativeAngleToTarget - Math.toRadians(180) + desiredRobotOrientation;
+//            double turnPower = Range.clip(relativeTurnAngle / Math.toRadians(30), -1, 1) * turnSpeed;
+
 //            //if(Math.abs(relativeAngleToTarget) < 3) turnPower = 0;
 ////            if(distance < 10) turnPower = 0;
 //
@@ -260,6 +262,73 @@ public class WheelBase {
 //            telemetry.addData("Y: ", globalPositionUpdate.returnYCoordinate());
 //            telemetry.update();
 
+
+        }
+
+        setMotorPowers(0, 0, 0, 0);
+    }
+
+
+    public void goToPosition(Odometry odometry, Gyro gyro, double targetX, double targetY, double desiredRobotOrientation, double robotPower, double error){
+        boolean Slomo = false;
+
+        targetX = targetX * TICKS_PER_INCH;
+        targetY = targetY * TICKS_PER_INCH;
+
+        double distanceToXTarget = targetX - odometry.returnXCoordinate();
+        double distanceToYTarget = targetY - odometry.returnYCoordinate();
+
+        double distance = Math.hypot(distanceToXTarget, distanceToYTarget);
+
+        error = error * TICKS_PER_INCH;
+
+
+        double robotMovementAngle = Math.toDegrees(Math.atan2(distanceToXTarget, distanceToYTarget));;
+
+        double robotTurnAngle;
+
+        if(desiredRobotOrientation == 90) robotTurnAngle = Math.toDegrees(Math.atan2(0, distanceToYTarget));
+        else if(abs(distanceToYTarget) > abs(distanceToXTarget)) robotTurnAngle = Math.toDegrees(Math.atan2(distanceToYTarget, 0));
+        else robotTurnAngle = Math.toDegrees(Math.atan2(abs(distanceToXTarget), 0));
+
+
+
+        while(distance > error || abs(desiredRobotOrientation - gyro.getHeading()) > 3) {
+
+
+            distance = Math.hypot(distanceToXTarget, distanceToYTarget);
+            distanceToXTarget = targetX - odometry.returnXCoordinate();
+            distanceToYTarget = targetY - odometry.returnYCoordinate();
+
+            robotMovementAngle = Math.toDegrees(Math.atan2(distanceToXTarget, distanceToYTarget));
+
+            double robotMovementXComponent = calculateX(robotMovementAngle, robotPower);
+            double robotMovementYComponent = calculateY(robotMovementAngle, robotPower);
+
+
+            if(desiredRobotOrientation == 90) robotTurnAngle = Math.toDegrees(Math.atan2(0, abs(distanceToYTarget)));
+            else if(abs(distanceToYTarget) > abs(distanceToXTarget)) robotTurnAngle = Math.toDegrees(Math.atan2(abs(distanceToYTarget), 0));
+            else robotTurnAngle = Math.toDegrees(Math.atan2(abs(distanceToXTarget), 0));
+
+
+            double relativeAngleToTarget = angleWrapRadians(Math.toRadians(robotTurnAngle) - (gyro.getHeadingRadians() - Math.toRadians(90)));
+            double relativeTurnAngle = relativeAngleToTarget - Math.toRadians(180) + desiredRobotOrientation;
+
+            double turnPower = Range.clip(relativeTurnAngle, -1, 1) * 0.8;
+
+
+            if(distance < 7*2*TICKS_PER_INCH) Slomo = true;
+
+            mecanumDrive(robotMovementXComponent, robotMovementYComponent, turnPower, Slomo);
+
+
+
+//            tm.addData("Robot Movement Angle: ", robotMovementAngle);
+//            tm.addData("Relative Angle To Target: ", Math.toDegrees(relativeAngleToTarget));
+//            tm.addData("Relative Turn Angle: ", Math.toDegrees(relativeTurnAngle));
+//            tm.addData("Turn Power: ", turnPower);
+//            tm.addData("ANGLE: ", odometry.returnOrientation());
+//            tm.update();
 
         }
 
