@@ -1,9 +1,9 @@
-package Main.Auto;
+package Main.Auto2;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import Main.Base.AutoRobot;
+import Main.Base2.AutoRobot;
 
 @Disabled
 @Autonomous(name = "C", group = "testing")

@@ -1,5 +1,6 @@
 package Testing;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import Main.Base2.Robot;

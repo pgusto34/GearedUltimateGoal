@@ -1,33 +1,22 @@
-package Main.Base;
+package Main.Base2;
 
-//import com.acmerobotics.dashboard.FtcDashboard;
-//import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-import java.util.HashMap;
+import Main.Base2.Robot;
+import Main.Base2.RobotUtilities.Camera;
+import Main.Base2.RobotUtilities.Gyro;
+import Main.Base2.RobotUtilities.Intake;
+import Main.Base2.RobotUtilities.Odometry;
+import Main.Base2.RobotUtilities.Shooter;
+import Main.Base2.RobotUtilities.WheelBase;
+import Main.Base2.RobotUtilities.WobbleArm;
 
-import Main.Base.HelperClasses.BooleanUpdater;
-import Main.Base.HelperClasses.Button;
-import Main.Base.RobotUtilities.Camera;
-import Main.Base.RobotUtilities.Gyro;
-import Main.Base.RobotUtilities.Intake;
-import Main.Base.RobotUtilities.Shooter;
-import Main.Base.RobotUtilities.WheelBase;
-import Main.Base.RobotUtilities.WobbleArm;
+public abstract class AutoRobot extends Hardware {
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-//@Config
-public class Robot extends Hardware{
-
-    public static Gamepad gp;
 
     public Camera camera;
     public Gyro gyro;
@@ -35,17 +24,23 @@ public class Robot extends Hardware{
     public Shooter shooter;
     public WobbleArm wobbleArm;
     public Intake intake;
+    public Odometry odometry;
 
-    public BooleanUpdater boolUpdater;
+    public Thread positionThread;
 
-    public HashMap<Button, Boolean> buttonChecker = new HashMap<Button, Boolean>();
+    protected Thread autoThread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            runAutonomous();
+        }
+    });
 
 
+    public int rings = -1;
 
     @Override
     public void init() {
 
-        gp = gamepad1;
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         OpenCvInternalCamera phoneCamera = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
@@ -88,8 +83,58 @@ public class Robot extends Hardware{
 
         wobbleArm = new WobbleArm(wobbleArmServo, wobbleClaw);
 
+        odometry = new Odometry(left, right, mid,  50);
+        positionThread = new Thread(odometry);
+        positionThread.start();
 
+        camera.startStreaming();
 
     }
+
+
+    @Override
+    public void init_loop() {
+        rings = camera.detectRings();
+        telemetry.addData("Rings: ", rings);
+        telemetry.update();
+    }
+
+
+    @Override
+    public void start() {
+        autoThread.start();
+    }
+
+
+    @Override
+    public void loop() {
+        telemetry.addData("X Position", odometry.returnXCoordinateInches());
+        telemetry.addData("Y Position", odometry.returnYCoordinateInches());
+        telemetry.addData("Orientation (Degrees)", gyro.getHeading());
+        telemetry.update();
+    }
+
+
+    @Override
+    public void stop() {
+        try {
+            autoThread.join();
+            autoThread.interrupt();
+        } catch (Exception e) {
+            telemetry.addData("ENCOUNTERED AN EXCEPTION", e);
+        }
+
+    }
+
+
+    protected void pause(long millis) {
+        long maxTime;
+        maxTime = System.currentTimeMillis() + millis;
+        while (System.currentTimeMillis() < maxTime && !autoThread.isInterrupted()) {
+        }
+    }
+
+
+    public abstract void runAutonomous();
 
 }

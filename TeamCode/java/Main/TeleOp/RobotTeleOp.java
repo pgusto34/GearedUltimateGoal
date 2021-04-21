@@ -1,4 +1,4 @@
-package Main.TeleOp;
+package Main.TeleOp2;
 
 //import com.acmerobotics.dashboard.FtcDashboard;
 //import com.acmerobotics.dashboard.config.Config;
@@ -12,14 +12,14 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import Main.Base.HelperClasses.BooleanUpdater;
-import Main.Base.HelperClasses.Button;
-import Main.Base.HelperClasses.Button.*;
-import Main.Base.Robot;
-import Main.Base.RobotUtilities.WobbleArm;
+import Main.Base2.HelperClasses.BooleanUpdater;
+import Main.Base2.HelperClasses.Button;
+import Main.Base2.HelperClasses.Button.*;
+import Main.Base2.Robot;
+import Main.Base2.RobotUtilities.WobbleArm;
 
-import static Main.Base.HelperClasses.BooleanUpdater.*;
-import static Main.Base.HelperClasses.Button.*;
+import static Main.Base2.HelperClasses.BooleanUpdater.*;
+import static Main.Base2.HelperClasses.Button.*;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
 
 //@Config

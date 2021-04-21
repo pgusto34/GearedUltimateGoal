@@ -1,8 +1,8 @@
-package Main.Auto;
+package Main.Auto2;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import Main.Base.AutoRobot;
+import Main.Base2.AutoRobot;
 
 @Autonomous(name = "Competition Auto", group = "competition")
 public class UGAuto extends AutoRobot {

@@ -3,6 +3,7 @@ package Testing;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import Main.Base2.AutoRobot;
+import Main.Base2.Robot;
 
 @Autonomous(name = "Camera Test", group = "testing")
 public class CameraTest extends AutoRobot {

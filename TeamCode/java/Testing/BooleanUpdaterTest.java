@@ -6,7 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import java.util.HashMap;
 
+import Main.Base2.HelperClasses.BooleanUpdater;
 import Main.Base2.HelperClasses.Button;
+import Main.Base2.Robot;
 
 import static Main.Base2.HelperClasses.BooleanUpdater.updateBooleans;
 
