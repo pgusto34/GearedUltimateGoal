@@ -7,9 +7,10 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import Main.Base.RobotUtilities.Odometry.Odometer;
+
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 
 public class WheelBase {
@@ -164,7 +165,7 @@ public class WheelBase {
 
 
 
-    public void goToPosition(Odometry odometry, double targetX, double targetY, double robotPower, double error){
+    public void goToPosition(Odometer odometry, double targetX, double targetY, double robotPower, double error){
         targetX = targetX * TICKS_PER_INCH;
         targetY = targetY * TICKS_PER_INCH;
 
@@ -211,7 +212,7 @@ public class WheelBase {
     }
 
 
-    public void goToPosition(Odometry odometry, Gyro gyro, Telemetry tm, double targetX, double targetY, double desiredRobotOrientation, double robotPower, double error){
+    public void goToPosition(Odometer odometry, Gyro gyro, Telemetry tm, double targetX, double targetY, double desiredRobotOrientation, double robotPower, double error){
         boolean Slomo = false;
 
         targetX = targetX * TICKS_PER_INCH;
@@ -279,7 +280,7 @@ public class WheelBase {
     }
 
 
-    public void turnBot(Odometry odometry, Gyro gyro, double targetX, double targetY, double desiredRobotOrientation){
+    public void turnBot(Odometer odometry, Gyro gyro, double targetX, double targetY, double desiredRobotOrientation){
         boolean Slomo = false;
 
         targetX = targetX * TICKS_PER_INCH;

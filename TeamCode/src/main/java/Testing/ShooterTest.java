@@ -2,7 +2,7 @@ package Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import Main.Base2.Robot;
+import Main.Base.Robot;
 
 @TeleOp(name = "Shooter Test", group = "test")
 public class ShooterTest extends Robot {

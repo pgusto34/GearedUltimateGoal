@@ -3,7 +3,7 @@ package Testing;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import Main.Base2.Robot;
+import Main.Base.Robot;
 
 @TeleOp(name = "EncoderTest", group = "testing")
 public class EncoderTest extends Robot {

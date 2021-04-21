@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import java.util.HashMap;
 
-import Main.Base2.HelperClasses.Button;
+import Main.Base.HelperClasses.Button;
 
-import static Main.Base2.HelperClasses.BooleanUpdater.updateBooleans;
+import static Main.Base.HelperClasses.BooleanUpdater.updateBooleans;
 
 @Disabled
 @TeleOp(name = "BooleanUpdater Test", group = "testing")

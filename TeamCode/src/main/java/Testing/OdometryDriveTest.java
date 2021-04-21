@@ -3,7 +3,6 @@ package Testing;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import Main.Base.AutoRobot;
-import Main.Base.RobotUtilities.Odometry;
 
 @Autonomous(name = "OdometryDrive Test", group = "testing")
 public class OdometryDriveTest extends AutoRobot {

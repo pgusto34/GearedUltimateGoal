@@ -1,4 +1,4 @@
-package Main.Base.RobotUtilities;
+package Main.Base.RobotUtilities.Odometry;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ReadWriteFile;
@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
 import java.io.File;
 
-public class Odometry implements Runnable {
+public class Odometer implements Runnable {
 
     static final double TICKS_PER_REVOLUTION = 8192;
     static final double WHEEL_DIAMETER = 1.45;
@@ -36,7 +36,7 @@ public class Odometry implements Runnable {
 
 
 
-    public Odometry(DcMotor verticalEncoderLeft, DcMotor verticalEncoderRight, DcMotor horizontalEncoder, int threadSleepDelay){
+    public Odometer(DcMotor verticalEncoderLeft, DcMotor verticalEncoderRight, DcMotor horizontalEncoder, int threadSleepDelay){
         this.left = verticalEncoderLeft;
         this.right = verticalEncoderRight;
         this.mid = horizontalEncoder;
@@ -48,7 +48,7 @@ public class Odometry implements Runnable {
     }
 
 
-    public Odometry(DcMotor verticalEncoderLeft, DcMotor verticalEncoderRight, DcMotor horizontalEncoder, double worldX, double worldY, int threadSleepDelay){
+    public Odometer(DcMotor verticalEncoderLeft, DcMotor verticalEncoderRight, DcMotor horizontalEncoder, double worldX, double worldY, int threadSleepDelay){
         this.left = verticalEncoderLeft;
         this.right = verticalEncoderRight;
         this.mid = horizontalEncoder;
