@@ -54,6 +54,7 @@ public class WheelBase {
     }
 
 
+    //Robot Centric Mecanum Drive
     public void mecanumDrive(double leftX, double leftY, double rightX, boolean slomo) {
 
         lF = -leftX - leftY - rightX;
@@ -78,8 +79,10 @@ public class WheelBase {
     }
 
 
+    //Field Centric Mecanum Drive
     public void fieldOrientatedDrive (Gamepad gamepad, Gyro gyro, boolean slomo, boolean reverse) {
 
+        //Transforms inputs based on current robot heading
         double y = -gamepad.left_stick_y;
         double x = gamepad.left_stick_x;
         double turn = gamepad.right_stick_x;
@@ -96,14 +99,17 @@ public class WheelBase {
 
         y = Math.sin(movementDegree) * gamepadHpot;
 
+        //Sets motor powers
         if(reverse) mecanumDrive(y, -x, turn, slomo);
         else mecanumDrive(x, y, turn, slomo);
 
     }
 
 
+    //Field Centric Mecanum Drive for use in 'goToPosition()' function
     public void odometryDrive (Gyro gyro, double x, double y, double turn, double angle, boolean slomo) {
 
+        //Transforms inputs based on current robot heading
         double gamepadHpot = Range.clip(Math.hypot(x, y), 0, 1);
 
         double gamepadDegree = angleWrapRadians(Math.atan2(y, x));
@@ -132,16 +138,19 @@ public class WheelBase {
         lB /= maxVector;
         rB /= maxVector;
 
+        //Sets motor powers
         if(slomo) setMotorPowers(lF/SLOMO_DIVIDER, lB/SLOMO_DIVIDER, rF/SLOMO_DIVIDER, rB/SLOMO_DIVIDER);
         else setMotorPowers(lF, lB, rF, rB);
 
     }
 
 
+    //Robot goes to a position and turns to a 'desiredRobotOrientation'
     public void goToPosition(Odometer odometry, Gyro gyro, double targetX, double targetY, double desiredRobotOrientation, double robotPower, double error){
 
         boolean Slomo = false;
 
+        //Calculates encoder distance to target
         targetX = targetX * TICKS_PER_INCH;
         targetY = targetY * TICKS_PER_INCH;
 
@@ -152,25 +161,31 @@ public class WheelBase {
 
         error = error * TICKS_PER_INCH;
 
-
+        //Travel to point while distance > error and the difference between the robot orientation and robot heading is greater than 3
         while(distance > error || abs(desiredRobotOrientation - gyro.getHeading()) > 3) {
 
+            //Updates distance to point
             distance = Math.hypot(distanceToXTarget, distanceToYTarget);
             distanceToXTarget = targetX - odometry.returnXCoordinate();
             distanceToYTarget = targetY - odometry.returnYCoordinate();
 
+            //Robot movement angle for calculating travel angle to point
             double robotMovementAngle = Math.toDegrees(Math.atan2(distanceToXTarget, distanceToYTarget));
 
+            //Calculates X and Y for use in mecanum calculations
             double robotMovementXComponent = calculateX(robotMovementAngle, robotPower);
             double robotMovementYComponent = calculateY(robotMovementAngle, robotPower);
 
+            //Calculate TurnPower/Angle based on current robot heading and desired heading
             double relativeAngleToTarget = angleWrapDegrees(180 - gyro.getHeading() + desiredRobotOrientation);
             double relativeTurnAngle = relativeAngleToTarget - 180;
 
             double turnPower = Range.clip(Math.toRadians(relativeTurnAngle), -1, 1) * 0.8;
 
+            //Robot enters slomo if robot is close enough to point
             if(distance < 7*2*TICKS_PER_INCH) Slomo = true;
 
+            //Drive Function
             odometryDrive(gyro, robotMovementXComponent, robotMovementYComponent, turnPower, robotMovementAngle, Slomo);
 
         }
@@ -180,6 +195,7 @@ public class WheelBase {
     }
 
 
+    //Sets the RunMode for all drive motors
     public void setModeAll(DcMotor.RunMode runMode) {
 
         leftFront.setMode(runMode);
@@ -190,6 +206,7 @@ public class WheelBase {
     }
 
 
+    //sets the ZeroPowerBehavior for all drive motors
     public void setZeroPowerBehaviorAll(DcMotor.ZeroPowerBehavior zpb) {
 
         leftFront.setZeroPowerBehavior(zpb);
@@ -200,6 +217,7 @@ public class WheelBase {
     }
 
 
+    //Sets power to all motors
     public void setMotorPowers(double leftFrontPower, double leftBackPower, double rightFrontPower, double rightBackPower) {
 
         leftFront.setPower(leftFrontPower);
@@ -210,12 +228,15 @@ public class WheelBase {
     }
 
 
+    //Calculates xComponent for 'goToPosition()' function
     private double calculateX(double desiredAngle, double speed) { return Math.sin(Math.toRadians(desiredAngle)) * speed; }
 
 
+    //Calculates yComponent for 'goToPosition()' function
     private double calculateY(double desiredAngle, double speed) { return Math.cos(Math.toRadians(desiredAngle)) * speed; }
 
 
+    //Transform angle to a value between 0 and 360
     public double angleWrapDegrees(double angle) {
         while (angle > 360) {
             angle -= 360;
@@ -227,6 +248,7 @@ public class WheelBase {
     }
 
 
+    //Transform angle to a value between 0 and 2PI
     public double angleWrapRadians(double angle) {
         while (angle > 2 * PI ) {
             angle -= 2 * PI;

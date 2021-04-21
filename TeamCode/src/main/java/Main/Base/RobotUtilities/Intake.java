@@ -23,6 +23,7 @@ public class Intake {
     }
 
 
+    //Sets Left Intake Power
     public void controlLIntake(boolean intakeIn, boolean intakeOut) {
 
         if(intakeIn) leftIntake.setPower(1);
@@ -31,6 +32,8 @@ public class Intake {
 
     }
 
+
+    //Sets Right Intake Power (Currently Not in Use)
     public void controlRIntake(boolean intakeIn, boolean intakeOut) {
 
         if(intakeIn) rightIntake.setPower(1);
@@ -39,6 +42,9 @@ public class Intake {
 
     }
 
+
+
+    //Sets Left and Right Intake Power (Currently not in Use)
     public void controlLRIntake(boolean intakeIn, boolean intakeOut) {
 
         if(intakeIn) {

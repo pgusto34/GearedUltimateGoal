@@ -52,6 +52,7 @@ public class Camera {
     }
 
 
+    //Starts the Camera
     public void startStreaming()
     {
 
@@ -72,6 +73,7 @@ public class Camera {
     }
 
 
+    //Scan and Return the Value of Rings
     public int detectRings() {
 
         if(pipeline.position == SkystoneDeterminationPipeline.RingPosition.FOUR) {

@@ -2,6 +2,8 @@ package Main.Auto;
 
 import Main.Base.AutoRobot;
 
+/** Template Class for Creating Auto Programs **/
+
 public class TemplateAuto extends AutoRobot {
 
     double speed = 0;
@@ -12,7 +14,7 @@ public class TemplateAuto extends AutoRobot {
 
         try {
 
-
+            //Auto Code Here
 
         }catch(Exception e){
             autoThread.interrupt();

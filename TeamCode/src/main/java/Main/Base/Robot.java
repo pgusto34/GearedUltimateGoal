@@ -21,9 +21,24 @@ import Main.Base.RobotUtilities.Shooter;
 import Main.Base.RobotUtilities.WheelBase;
 import Main.Base.RobotUtilities.WobbleArm;
 
+/**TODO:
+ * -Add Stopper
+ *      -Initialize stopper servo
+ *      -Initialize new Stopper()
+ */
+
+
+/** Base Class for TeleOp code
+ * Initalizes Robot Utilities and initial values
+ * that all TeleOp code uses. Use the hardware names from
+ * the Hardware class in initialization. Just extend from
+ * this class and override the 'loop()' function to have
+ * a working teleOp OpMode
+ */
 
 public class Robot extends Hardware{
 
+    //Defines Robot Utilities
     public static Gamepad gp;
 
     public Camera camera;

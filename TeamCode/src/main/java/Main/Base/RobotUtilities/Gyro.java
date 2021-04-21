@@ -30,6 +30,7 @@ public class Gyro {
     }
 
 
+    //Returns robot heading in degrees (Negative so counterclockwise is positive)
     public double getHeading(){
 
         double heading;
@@ -40,6 +41,7 @@ public class Gyro {
     }
 
 
+    //Returns robot heading in radians
     public double getHeadingRadians(){
 
         double heading;
@@ -50,6 +52,7 @@ public class Gyro {
     }
 
 
+    //Transform angle to a value between 0 and 360
     public double angleWrapDegrees(double angle) {
 
         while (angle > 360) {
@@ -63,6 +66,7 @@ public class Gyro {
     }
 
 
+    //Transform angle to a value between 0 and 2PI
     public double angleWrapRadians(double angle) {
 
         while (angle > 2 * PI ) {

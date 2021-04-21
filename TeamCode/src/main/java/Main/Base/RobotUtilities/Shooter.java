@@ -43,6 +43,7 @@ public class Shooter {
     }
 
 
+    //Sets Motor PID values
     public void firstSetPID(){
 
         /** Real **/
@@ -55,6 +56,7 @@ public class Shooter {
     }
 
 
+    //Sets Motor either high goal or power shot velocity and shoots a given number of times
     public void shoot(boolean highGoal, int times){
 
         double velocity;
@@ -80,6 +82,7 @@ public class Shooter {
     }
 
 
+    //Sets motor velocity based on input and shoots a given number of times
     public void shoot(double velocity, int times){
 
         resetShooter();
@@ -102,6 +105,7 @@ public class Shooter {
     }
 
 
+    //Sets servo to feed position
     public void feedShooter() {
 
         runTime.reset();
@@ -113,6 +117,7 @@ public class Shooter {
     }
 
 
+    //Sets servo to reset position
     public void resetShooter() {
 
         runTime.reset();
@@ -124,6 +129,7 @@ public class Shooter {
     }
 
 
+    //Sets servo to feed position then to reset position
     public void flickFeeder() {
 
         feedShooter();
@@ -132,6 +138,7 @@ public class Shooter {
     }
 
 
+    //Sets servo to feed position then to reset position a given number of times
     public void flickFeeder(int times) {
 
         for(int i = 0; i < times; i++) {
@@ -142,6 +149,7 @@ public class Shooter {
     }
 
 
+    //Sets flywheel to a velocity
     public void runFlyWheel(double v) {
 
         flyWheel.setMode(RUN_USING_ENCODER);
@@ -150,6 +158,7 @@ public class Shooter {
     }
 
 
+    //Sets flywheel to the velocity for a high goal
     public void runFlyWheelHigh() {
 
         flyWheel.setMode(RUN_USING_ENCODER);
@@ -158,6 +167,16 @@ public class Shooter {
     }
 
 
+    //Sets flywheel to the velocity for a power shot
+    public void runFlyWheelPower() {
+
+        flyWheel.setMode(RUN_USING_ENCODER);
+        flyWheel.setVelocity(powerShotVelocity);
+
+    }
+
+
+    //Stops flywheel
     public void stopFlyWheel() {
 
         flyWheel.setMode(RUN_USING_ENCODER);
@@ -166,6 +185,7 @@ public class Shooter {
     }
 
 
+    //Colton PID Stuff that I'm not going to touch
     public void setPID(PIDFCoefficients coEs){ flyWheel.setPIDFCoefficients(RUN_USING_ENCODER, coEs); }
 
 

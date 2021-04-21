@@ -6,6 +6,8 @@ import static Main.Base.HelperClasses.Button.*;
 
 import java.util.HashMap;
 
+/** Class for updating Gamepad Booleans while driving with a controller **/
+
 public class BooleanUpdater {
 
     public static boolean lastA = false, lastB = false, lastX = false, lastY = false, lastRB = false, lastLB = false, lastRT = false, lastLT = false;
@@ -17,6 +19,13 @@ public class BooleanUpdater {
     public static boolean pressDLeft = false, pressDRight = false, pressDUp = false, pressDDown = false;
     public static boolean pressStart = false, pressBack = false;
     public static boolean pressLS = false, pressRS = false;
+
+
+    /**
+     * @param gp Intakes a Gamepad to Receive Inputs
+     * @param hm Intakes a HashMap to Update and Save Gamepad Values
+     * @return Returns the Updated HashMap
+     */
 
 
     public static HashMap<Button, Boolean> updateBooleans(Gamepad gp, HashMap<Button, Boolean> hm) {

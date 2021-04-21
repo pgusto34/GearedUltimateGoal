@@ -1,10 +1,12 @@
 package Testing;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import Main.Base.Robot;
 
+@Disabled
 @TeleOp(name = "EncoderTest", group = "testing")
 public class EncoderTest extends Robot {
     double lf, rf, lb, rb;

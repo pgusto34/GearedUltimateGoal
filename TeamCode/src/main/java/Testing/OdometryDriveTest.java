@@ -1,9 +1,11 @@
 package Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import Main.Base.AutoRobot;
 
+@Disabled
 @Autonomous(name = "OdometryDrive Test", group = "testing")
 public class OdometryDriveTest extends AutoRobot {
 

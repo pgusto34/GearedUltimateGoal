@@ -14,8 +14,20 @@ import Main.Base.RobotUtilities.Shooter;
 import Main.Base.RobotUtilities.WheelBase;
 import Main.Base.RobotUtilities.WobbleArm;
 
+
+/** Base Class for Auto code
+ * Initalizes Robot Utilities and initial values
+ * that all Auto code uses. Use the hardware names from
+ * the Hardware class in initialization. Defines threads that runs during auto.
+ * Runs 'runAutonomous()' function on 'start()'. Simply extend 'AutoRobot"
+ * and override the 'runAutonomous()' function to create an
+ * Autonomous OpMode or just copy the 'TemplateAuto' class.
+ */
+
+
 public abstract class AutoRobot extends Hardware {
 
+    //Defines Robot Utilities
     public Camera camera;
     public Gyro gyro;
     public WheelBase wheelBase;
@@ -24,8 +36,10 @@ public abstract class AutoRobot extends Hardware {
     public Intake intake;
     public Odometer odometry;
 
+    //Position Thread for updating Robot Position through Odometry. Runs on Init.
     public Thread positionThread;
 
+    //Position Thread for Running Auto. Runs on Start.
     protected Thread autoThread = new Thread(new Runnable() {
         @Override
         public void run() {
@@ -33,6 +47,7 @@ public abstract class AutoRobot extends Hardware {
         }
     });
 
+    //Variable for determining # of Rings
     public int rings = -1;
 
 
@@ -84,15 +99,18 @@ public abstract class AutoRobot extends Hardware {
 
         odometry = new Odometer(left, right, mid,  50);
 
+
+        //Starts Position Thread
         positionThread = new Thread(odometry);
         positionThread.start();
 
-
+        //Starts Camera Streaming
         camera.startStreaming();
 
     }
 
 
+    //Displays # of Rings after Init
     @Override
     public void init_loop() {
 
@@ -103,12 +121,14 @@ public abstract class AutoRobot extends Hardware {
     }
 
 
+    //Starts AutoThread
     @Override
     public void start() {
         autoThread.start();
     }
 
 
+    //Displays Robot Position During Loop
     @Override
     public void loop() {
 
@@ -120,6 +140,7 @@ public abstract class AutoRobot extends Hardware {
     }
 
 
+    //Stops autoThread on Stop
     @Override
     public void stop() {
 
@@ -133,6 +154,7 @@ public abstract class AutoRobot extends Hardware {
     }
 
 
+    //Pauses Robot during Autonomous (in milliseconds)
     protected void pause(long millis) {
         long maxTime;
         maxTime = System.currentTimeMillis() + millis;
@@ -141,6 +163,7 @@ public abstract class AutoRobot extends Hardware {
     }
 
 
+    //Overridable Function to Write Auto in
     public abstract void runAutonomous();
 
 }

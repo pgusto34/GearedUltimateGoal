@@ -23,6 +23,7 @@ public class WobbleArm {
     }
 
 
+    //Sets Wobble Claw position to either open or closed
     public void ControlWobbleClaw(boolean open) {
         if(open) wobbleClawPosition = wobbleClawOpenPosition;
         else wobbleClawPosition = wobbleClawClosedPosition;
@@ -31,6 +32,7 @@ public class WobbleArm {
     }
 
 
+    //Sets Wobble Arm position to either open or closed
     public void ControlWobbleArm(boolean out) {
 
         if(out) wobbleArmPosition = wobbleArmOutPosition;
@@ -40,6 +42,7 @@ public class WobbleArm {
     }
 
 
+    //Sets wobble arm position to 'in' (Our starting position for auto)
     public void setWobbleArmInPosition() {
         wobbleArm.setPosition(wobbleArmInPosition);
     }
