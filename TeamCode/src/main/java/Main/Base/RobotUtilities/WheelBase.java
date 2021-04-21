@@ -107,6 +107,7 @@ public class WheelBase {
 
 
     //Field Centric Mecanum Drive for use in 'goToPosition()' function
+    //All angles are between 180 and -180. + Values turn the robot Counter clockwise and vice versa
     public void odometryDrive (Gyro gyro, double x, double y, double turn, double angle, boolean slomo) {
 
         //Transforms inputs based on current robot heading
