@@ -41,10 +41,11 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 
-public class Camera
-{
+public class Camera {
+
     OpenCvInternalCamera phoneCam;
     SkystoneDeterminationPipeline pipeline;
+
 
     public Camera(OpenCvInternalCamera phoneCamera) {
         phoneCam = phoneCamera;
@@ -57,9 +58,6 @@ public class Camera
         pipeline = new SkystoneDeterminationPipeline();
         phoneCam.setPipeline(pipeline);
 
-        // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
-        // out when the RC activity is in portrait. We do our actual image processing assuming
-        // landscape orientation, though.
         phoneCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
 
         phoneCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -89,9 +87,7 @@ public class Camera
 
     public static class SkystoneDeterminationPipeline extends OpenCvPipeline
     {
-        /*
-         * An enum to define the skystone position
-         */
+
         public enum RingPosition
         {
             FOUR,
@@ -99,15 +95,9 @@ public class Camera
             NONE
         }
 
-        /*
-         * Some color constants
-         */
         static final Scalar BLUE = new Scalar(0, 0, 255);
         static final Scalar GREEN = new Scalar(0, 255, 0);
 
-        /*
-         * The core values which define the location and size of the sample regions
-         */
         static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(140,98);
 
         static final int REGION_WIDTH = 35;
@@ -123,9 +113,7 @@ public class Camera
                 REGION1_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
                 REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
 
-        /*
-         * Working variables
-         */
+
         Mat region1_Cb;
         Mat YCrCb = new Mat();
         Mat Cb = new Mat();
@@ -134,15 +122,13 @@ public class Camera
         // Volatile since accessed by OpMode thread w/o synchronization
         private volatile RingPosition position = RingPosition.FOUR;
 
-        /*
-         * This function takes the RGB frame, converts to YCrCb,
-         * and extracts the Cb channel to the 'Cb' variable
-         */
+
         void inputToCb(Mat input)
         {
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
             Core.extractChannel(YCrCb, Cb, 1);
         }
+
 
         @Override
         public void init(Mat firstFrame)
@@ -151,6 +137,7 @@ public class Camera
 
             region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
         }
+
 
         @Override
         public Mat processFrame(Mat input)
@@ -184,6 +171,7 @@ public class Camera
 
             return input;
         }
+
 
         public int getAnalysis()
         {

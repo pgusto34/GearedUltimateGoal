@@ -14,23 +14,29 @@ public class Hardware extends OpMode {
     public DcMotor leftFront, rightFront, leftBack, rightBack;
     String leftFrontName = "leftFront", rightFrontName = "rightFront", leftBackName = "leftBack", rightBackName = "rightBack";
 
+
     public DcMotor left;
     public DcMotor right;
     public DcMotor mid ;
 
     String leftName = leftFrontName, rightName = leftBackName, midName = rightBackName;
 
+
     DcMotor leftIntake, rightIntake;
     String leftIntakeName = "leftIntake", rightIntakeName = "rightIntake";
+
 
     public DcMotorEx flyWheel;
     String flyWheelName = "flyWheel";
 
+
     Servo wobbleArmServo, wobbleClaw;
     String wobbleArmServoName = "wobbleArm", wobbleClawName = "wobbleClaw";
 
+
     Servo feederServo;
     String feederServoName = "feeder";
+
 
     BNO055IMU imu;
     String imuName = "imu";

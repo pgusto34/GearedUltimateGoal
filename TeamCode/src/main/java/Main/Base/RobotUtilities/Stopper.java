@@ -11,7 +11,6 @@ public class Stopper {
     double stopperDownPosition = 0.5;
 
 
-
     public Stopper(Servo sServo) {
         stopper = sServo;
     }
@@ -22,7 +21,7 @@ public class Stopper {
     }
 
 
-    private void controlStopper(boolean up) {
+    public void controlStopper(boolean up) {
 
         double stopperPosition = up ? stopperUpPosition : stopperDownPosition;
 

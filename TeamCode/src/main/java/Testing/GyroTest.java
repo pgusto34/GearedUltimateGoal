@@ -8,8 +8,5 @@ import Main.Base.Robot;
 public class GyroTest extends Robot {
 
     @Override
-    public void loop() {
-
-        telemetry.addData("Heading: ", gyro.getHeading());
-    }
+    public void loop() { telemetry.addData("Heading: ", gyro.getHeading()); }
 }

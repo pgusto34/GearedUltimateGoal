@@ -13,7 +13,6 @@ public class Odometer implements Runnable {
     static final double WHEEL_DIAMETER = 1.45;
     static final double TICKS_PER_INCH = (TICKS_PER_REVOLUTION / (WHEEL_DIAMETER * Math.PI));
 
-
     private DcMotor left, right, mid;
 
     private boolean isRunning = true;
@@ -35,27 +34,12 @@ public class Odometer implements Runnable {
     private int normalEncoderPositionMultiplier = -1;
 
 
-
     public Odometer(DcMotor verticalEncoderLeft, DcMotor verticalEncoderRight, DcMotor horizontalEncoder, int threadSleepDelay){
+
         this.left = verticalEncoderLeft;
         this.right = verticalEncoderRight;
         this.mid = horizontalEncoder;
         sleepTime = threadSleepDelay;
-
-        robotEncoderWheelDistance = Double.parseDouble(ReadWriteFile.readFile(wheelBaseSeparationFile).trim()) * TICKS_PER_INCH;
-        this.horizontalEncoderTickPerDegreeOffset = Double.parseDouble(ReadWriteFile.readFile(horizontalTickOffsetFile).trim());
-
-    }
-
-
-    public Odometer(DcMotor verticalEncoderLeft, DcMotor verticalEncoderRight, DcMotor horizontalEncoder, double worldX, double worldY, int threadSleepDelay){
-        this.left = verticalEncoderLeft;
-        this.right = verticalEncoderRight;
-        this.mid = horizontalEncoder;
-        sleepTime = threadSleepDelay;
-
-        this.robotXPosition = worldX;
-        this.robotYPosition = worldY;
 
         robotEncoderWheelDistance = Double.parseDouble(ReadWriteFile.readFile(wheelBaseSeparationFile).trim()) * TICKS_PER_INCH;
         this.horizontalEncoderTickPerDegreeOffset = Double.parseDouble(ReadWriteFile.readFile(horizontalTickOffsetFile).trim());
@@ -64,6 +48,7 @@ public class Odometer implements Runnable {
 
 
     private void updatePositions(){
+
         //Get Current Positions
         leftEncoderPosition = (left.getCurrentPosition() * verticalLeftEncoderPositionMultiplier);
         rightEncoderPosition = (right.getCurrentPosition() * verticalRightEncoderPositionMultiplier);
@@ -90,22 +75,14 @@ public class Odometer implements Runnable {
         prevLeftPosition = leftEncoderPosition;
         prevRightPosition = rightEncoderPosition;
         prevMidPosition = midEncoderPosition;
+
     }
 
 
-    private double calculateX(double desiredAngle, double speed) {
-        return Math.sin(Math.toRadians(desiredAngle)) * speed;
-    }
+    private double calculateX(double desiredAngle, double speed) { return Math.sin(Math.toRadians(desiredAngle)) * speed; }
 
-    /**
-     * Calculate the power in the y direction
-     * @param desiredAngle angle on the y axis
-     * @param speed robot's speed
-     * @return the y vector
-     */
-    private double calculateY(double desiredAngle, double speed) {
-        return Math.cos(Math.toRadians(desiredAngle)) * speed;
-    }
+
+    private double calculateY(double desiredAngle, double speed) { return Math.cos(Math.toRadians(desiredAngle)) * speed; }
 
     public double returnXCoordinate(){ return robotXPosition; }
 
@@ -121,7 +98,9 @@ public class Odometer implements Runnable {
 
     public double returnOrientation(){ return Math.toDegrees(robotOrientationRadians) % 360; }
 
+
     public double returnOrientationRadians(){ return robotOrientationRadians; }
+
 
     public void stop(){ isRunning = false; }
 

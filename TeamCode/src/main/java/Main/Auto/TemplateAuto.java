@@ -4,13 +4,14 @@ import Main.Base.AutoRobot;
 
 public class TemplateAuto extends AutoRobot {
 
-    double speed = 0.5;
+    double speed = 0;
 
-    double error = 4;
+    double error = 0;
 
     public void runAutonomous(){
 
         try {
+
 
 
         }catch(Exception e){

@@ -21,7 +21,7 @@ public class Shooter {
     double feederServoFeedPosition = 0.0;
     double feederServoPrepPosition = 0.25;
     double feederServoPosition = feederServoPrepPosition;
-//
+
     public static double highGoalVelocity = 1000;
     public static double powerShotVelocity = 80;
 
@@ -32,21 +32,28 @@ public class Shooter {
 
     private ElapsedTime runTime = new ElapsedTime();
 
+
+    public Shooter(DcMotorEx fwMotor, Servo fServo) {
+
+        flyWheel = fwMotor;
+        feederServo = fServo;
+
+        flyWheel.setDirection(DcMotorSimple.Direction.REVERSE);
+
+    }
+
+
     public void firstSetPID(){
+
         /** Real **/
        flyWheel.setVelocityPIDFCoefficients(14,3,2.5,5.7);
 
         /** Practice **/
 //        highGoalVelocity = 3700;
 //        flyWheel.setVelocityPIDFCoefficients(18,13,3.6,6.4);
+
     }
 
-    public Shooter(DcMotorEx fwMotor, Servo fServo) {
-        flyWheel = fwMotor;
-        feederServo = fServo;
-
-        flyWheel.setDirection(DcMotorSimple.Direction.REVERSE);
-    }
 
     public void shoot(boolean highGoal, int times){
 
@@ -69,11 +76,11 @@ public class Shooter {
         resetShooter();
         flyWheel.setVelocity(0);
         flyWheel.setPower(0);
+
     }
 
 
     public void shoot(double velocity, int times){
-
 
         resetShooter();
         flyWheel.setMode(RUN_USING_ENCODER);
@@ -82,9 +89,7 @@ public class Shooter {
 
         runTime.reset();
         while(runTime.milliseconds() < 1000) { }
-//        if(times==1){
-//            flyWheel.setVelocityPIDFCoefficients(1,.5,5,0);
-//        }
+
         for(int i = 0; i < times; i++) {
             feedShooter();
             resetShooter();
@@ -93,19 +98,23 @@ public class Shooter {
         flyWheel.setVelocity(0);
         flyWheel.setPower(0);
         firstSetPID();
+
     }
 
 
-
     public void feedShooter() {
+
         runTime.reset();
 
         while (runTime.milliseconds() > 0 && runTime.milliseconds() < 250 ) {
             feederServo.setPosition(feederServoFeedPosition);
         }
+
     }
 
+
     public void resetShooter() {
+
         runTime.reset();
 
         while (runTime.milliseconds() > 0 && runTime.milliseconds() < 250 ) {
@@ -115,82 +124,66 @@ public class Shooter {
     }
 
 
-    public void setFeederServoPosition(boolean feed) {
-        if(feed) feederServoPosition = feederServoFeedPosition;
-        else feederServoPosition = feederServoPrepPosition;
+    public void flickFeeder() {
 
-        feederServo.setPosition(feederServoPosition);
-    }
-
-
-    public void runFlywheels(boolean spinning) {
-        if(spinning) {
-            flyWheel.setPower(1);
-        }
-        else {
-            flyWheel.setPower(0);
-        }
-    }
-
-    public void setFlywheelPower(double velocity, boolean on) {
-
-        if (on) {
-        flyWheel.setVelocity(velocity);
-        }
-        else flyWheel.setPower(0);
+        feedShooter();
+        resetShooter();
 
     }
+
+
+    public void flickFeeder(int times) {
+
+        for(int i = 0; i < times; i++) {
+            feedShooter();
+            resetShooter();
+
+        }
+    }
+
 
     public void runFlyWheel(double v) {
+
         flyWheel.setMode(RUN_USING_ENCODER);
         flyWheel.setVelocity(v);
+
     }
 
+
     public void runFlyWheelHigh() {
+
         flyWheel.setMode(RUN_USING_ENCODER);
         flyWheel.setVelocity(highGoalVelocity);
+
     }
 
 
     public void stopFlyWheel() {
+
         flyWheel.setMode(RUN_USING_ENCODER);
         flyWheel.setPower(0);
-    }
 
-    public void runFlyWheelPower() {
-        flyWheel.setMode(RUN_USING_ENCODER);
-        flyWheel.setVelocity(powerShotVelocity);
-    }
-
-    public PIDFCoefficients getPID(){
-        return flyWheel.getPIDFCoefficients(RUN_USING_ENCODER);
-    }
-
-    public void setPID(PIDFCoefficients coEs){
-        flyWheel.setPIDFCoefficients(RUN_USING_ENCODER, coEs);
     }
 
 
+    public void setPID(PIDFCoefficients coEs){ flyWheel.setPIDFCoefficients(RUN_USING_ENCODER, coEs); }
 
 
-    public double getVelocity(){
-       return flyWheel.getVelocity();
-    }
+    public PIDFCoefficients getPID(){ return flyWheel.getPIDFCoefficients(RUN_USING_ENCODER); }
 
-    public void changePSV(double num){
-        powerShotVelocity += num;
-    }
 
-    public double getPSV(){
-        return powerShotVelocity;
-    }
+    public double getVelocity(){ return flyWheel.getVelocity(); }
 
-    public void changeHGV(double num){
-        highGoalVelocity += num;
-    }
 
-    public double getHGV(){
-        return highGoalVelocity;
-    }
+    public void changePSV(double num){ powerShotVelocity += num; }
+
+
+    public double getPSV(){ return powerShotVelocity; }
+
+
+    public void changeHGV(double num){ highGoalVelocity += num; }
+
+
+    public double getHGV(){ return highGoalVelocity; }
 
 }

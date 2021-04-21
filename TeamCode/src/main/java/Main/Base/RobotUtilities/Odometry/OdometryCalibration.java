@@ -17,6 +17,7 @@ import java.io.File;
 @Disabled
 @Autonomous(name = "Odometry Calibration", group = "Odometry")
 public class OdometryCalibration extends LinearOpMode {
+
     //Drive motors
     DcMotor leftFront, rightFront, leftBack, rightBack;
     //Odometry Wheels
@@ -45,8 +46,10 @@ public class OdometryCalibration extends LinearOpMode {
     File wheelBaseSeparationFile = AppUtil.getInstance().getSettingsFile("wheelBaseSeparation.txt");
     File horizontalTickOffsetFile = AppUtil.getInstance().getSettingsFile("horizontalTickOffset.txt");
 
+
     @Override
     public void runOpMode() throws InterruptedException {
+
         //Initialize hardware map values. PLEASE UPDATE THESE VALUES TO MATCH YOUR CONFIGURATION
         initHardwareMap(rfName, rbName, lfName, lbName, verticalLeftEncoderName, verticalRightEncoderName, horizontalEncoderName);
 
@@ -114,6 +117,7 @@ public class OdometryCalibration extends LinearOpMode {
         ReadWriteFile.writeFile(horizontalTickOffsetFile, String.valueOf(horizontalTickOffset));
 
         while(opModeIsActive()){
+
             telemetry.addData("Odometry System Calibration Status", "Calibration Complete");
             //Display calculated constants
             telemetry.addData("Wheel Base Separation", wheelBaseSeparation);
@@ -128,10 +132,13 @@ public class OdometryCalibration extends LinearOpMode {
 
             //Update values
             telemetry.update();
+
         }
     }
 
+
     private void initHardwareMap(String rfName, String rbName, String lfName, String lbName, String vlEncoderName, String vrEncoderName, String hEncoderName){
+
         rightFront = hardwareMap.dcMotor.get(rfName);
         rightBack = hardwareMap.dcMotor.get(rbName);
         leftFront = hardwareMap.dcMotor.get(lfName);
@@ -174,25 +181,18 @@ public class OdometryCalibration extends LinearOpMode {
 
     }
 
-    /**
-     * Gets the orientation of the robot using the REV IMU
-     * @return the angle of the robot
-     */
+
     private double getZAngle(){
         return (-imu.getAngularOrientation().firstAngle);
     }
 
-    /**
-     * Sets power to all four drive motors
-     * @param rf power for right front motor
-     * @param rb power for right back motor
-     * @param lf power for left front motor
-     * @param lb power for left back motor
-     */
+
     private void setPowerAll(double rf, double rb, double lf, double lb){
+
         rightFront.setPower(rf);
         rightBack.setPower(rb);
         leftFront.setPower(lf);
         leftBack.setPower(lb);
+
     }
 }

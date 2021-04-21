@@ -23,11 +23,13 @@ public class BooleanUpdaterTest extends OpMode {
 
     @Override
     public void loop() {
+
         buttonChecker = updateBooleans(gamepad1, buttonChecker);
 
         telemetry.addData("a: ", buttonChecker.get(Button.a));
 
         telemetry.addData("Gamepad a: ", gamepad1.a);
+
     }
 
 

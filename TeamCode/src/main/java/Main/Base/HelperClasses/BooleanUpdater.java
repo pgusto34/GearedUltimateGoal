@@ -8,8 +8,6 @@ import java.util.HashMap;
 
 public class BooleanUpdater {
 
-
-
     public static boolean lastA = false, lastB = false, lastX = false, lastY = false, lastRB = false, lastLB = false, lastRT = false, lastLT = false;
     public static boolean lastDLeft = false, lastDRight = false, lastDUp = false, lastDDown = false;
     public static boolean lastStart = false, lastBack = false;
@@ -22,8 +20,6 @@ public class BooleanUpdater {
 
 
     public static HashMap<Button, Boolean> updateBooleans(Gamepad gp, HashMap<Button, Boolean> hm) {
-
-
 
         pressA = gp.a && !lastA;
 
@@ -135,7 +131,6 @@ public class BooleanUpdater {
         lastRS = gp.right_stick_button;
 
         hm.put(right_stick_button, pressRS);
-
 
 
         return hm;

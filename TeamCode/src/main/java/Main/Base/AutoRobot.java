@@ -16,7 +16,6 @@ import Main.Base.RobotUtilities.WobbleArm;
 
 public abstract class AutoRobot extends Hardware {
 
-
     public Camera camera;
     public Gyro gyro;
     public WheelBase wheelBase;
@@ -34,12 +33,11 @@ public abstract class AutoRobot extends Hardware {
         }
     });
 
-
     public int rings = -1;
+
 
     @Override
     public void init() {
-
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         OpenCvInternalCamera phoneCamera = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
@@ -57,10 +55,6 @@ public abstract class AutoRobot extends Hardware {
         rightBack = hardwareMap.dcMotor.get(rightBackName);
         rightFront = hardwareMap.dcMotor.get(rightFrontName);
 
-        left = hardwareMap.dcMotor.get(leftName);
-        right = hardwareMap.dcMotor.get(rightName);
-        mid = hardwareMap.dcMotor.get(midName);
-
         wheelBase = new WheelBase(leftFront, leftBack, rightFront, rightBack);
 
 
@@ -71,10 +65,11 @@ public abstract class AutoRobot extends Hardware {
 
 
         flyWheel = hardwareMap.get(DcMotorEx.class, flyWheelName);
-
         feederServo = hardwareMap.servo.get(feederServoName);
 
         shooter = new Shooter(flyWheel, feederServo);
+
+        shooter.firstSetPID();
 
 
         wobbleArmServo = hardwareMap.servo.get(wobbleArmServoName);
@@ -82,9 +77,16 @@ public abstract class AutoRobot extends Hardware {
 
         wobbleArm = new WobbleArm(wobbleArmServo, wobbleClaw);
 
+
+        left = hardwareMap.dcMotor.get(leftName);
+        right = hardwareMap.dcMotor.get(rightName);
+        mid = hardwareMap.dcMotor.get(midName);
+
         odometry = new Odometer(left, right, mid,  50);
+
         positionThread = new Thread(odometry);
         positionThread.start();
+
 
         camera.startStreaming();
 
@@ -93,9 +95,11 @@ public abstract class AutoRobot extends Hardware {
 
     @Override
     public void init_loop() {
+
         rings = camera.detectRings();
         telemetry.addData("Rings: ", rings);
         telemetry.update();
+
     }
 
 
@@ -107,15 +111,18 @@ public abstract class AutoRobot extends Hardware {
 
     @Override
     public void loop() {
+
         telemetry.addData("X Position", odometry.returnXCoordinateInches());
         telemetry.addData("Y Position", odometry.returnYCoordinateInches());
         telemetry.addData("Orientation (Degrees)", gyro.getHeading());
         telemetry.update();
+
     }
 
 
     @Override
     public void stop() {
+
         try {
             autoThread.join();
             autoThread.interrupt();

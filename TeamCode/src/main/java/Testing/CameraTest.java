@@ -11,13 +11,13 @@ public class CameraTest extends AutoRobot {
     public void loop() {
 
         int rings = camera.detectRings();
+
         telemetry.addData("Rings: ", rings);
         telemetry.update();
 
     }
 
     @Override
-    public void runAutonomous() {
+    public void runAutonomous() {}
 
-    }
 }

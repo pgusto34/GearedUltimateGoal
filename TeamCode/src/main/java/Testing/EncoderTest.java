@@ -17,8 +17,6 @@ public class EncoderTest extends Robot {
     @Override
     public void loop() {
 
-
-
         lf = leftFront.getCurrentPosition();
         rf = rightFront.getCurrentPosition();
         lb = leftBack.getCurrentPosition();
@@ -30,6 +28,7 @@ public class EncoderTest extends Robot {
         telemetry.addData("RB Motor Pos: ",  rb);
 
         telemetry.update();
+
     }
 
 

@@ -8,8 +8,8 @@ public class WobbleArm {
     private Servo wobbleClaw;
 
     double wobbleClawPosition;
-    double wobbleClawOpenPosition = 0.58;
-    double wobbleClawClosedPosition = 0.0;
+    double wobbleClawOpenPosition = 0;
+    double wobbleClawClosedPosition = 0.58;
 
     double wobbleArmPosition;
     double wobbleArmOutPosition = 0.0;
@@ -43,10 +43,5 @@ public class WobbleArm {
     public void setWobbleArmInPosition() {
         wobbleArm.setPosition(wobbleArmInPosition);
     }
-
-    public void WobbleArmIn() {
-        wobbleArm.setPosition(wobbleArmInPosition);
-    }
-
 
 }
