@@ -8,9 +8,25 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import Main.Base.Robot;
+
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
 
-public class Shooter {
+public class Shooter extends Robot {
+
+    int currentIndex = 0;
+    public double[] values = {1000, 80, 14, 3, 2.5, 5.7, 0, 0, 0, 0};
+    public String[] modes = {"highGoalV", "PowerShotV", "p", "i", "d", "f", "PSp", "PSi", "PSd", "PSf"};
+    public double[] changers = {25,      5,        0.1, 0.1, 0.1, 0.1,  0.1,   0.1,   0.1,  0.1};
+
+    //Mode Variables
+//        public double highGoalV = shooter.getHGV();
+//        public double powerShotV = shooter.getPSV();
+//        public double p = shooter.getPIDCoefients().p;
+//        public double i = shooter.getPIDCoefients().i;
+//        public double d = shooter.getPIDCoefients().d;
+//        public double f = shooter.getPIDCoefients().f;
+
 
     /** Reverse flyWheel motor so positive powers will shoot out **/
 
@@ -22,8 +38,8 @@ public class Shooter {
     double feederServoPrepPosition = 0.25;
     double feederServoPosition = feederServoPrepPosition;
 
-    public static double highGoalVelocity = 1000;
-    public static double powerShotVelocity = 80;
+    public double highGoalVelocity = values[0];
+    public double powerShotVelocity = values[1];
 
 //    public static double highGoalVelocity = 2000;
 //    public static double powerShotVelocity = 250;
@@ -47,7 +63,7 @@ public class Shooter {
     public void firstSetPID(){
 
         /** Real **/
-       flyWheel.setVelocityPIDFCoefficients(14,3,2.5,5.7);
+       flyWheel.setVelocityPIDFCoefficients(values[2],values[3],values[4],values[5]);
 
         /** Practice **/
 //        highGoalVelocity = 3700;
@@ -58,7 +74,9 @@ public class Shooter {
 
     //Sets Motor either high goal or power shot velocity and shoots a given number of times
     public void shoot(boolean highGoal, int times){
-
+        highGoalVelocity = values[0];
+        powerShotVelocity = values[1];
+        firstSetPID();
         double velocity;
         if(highGoal) velocity = highGoalVelocity;
         else velocity = powerShotVelocity;
@@ -70,6 +88,9 @@ public class Shooter {
 
         runTime.reset();
         while(runTime.milliseconds() < 1400) { }
+        if(times == 1){
+            flyWheel.setVelocityPIDFCoefficients(values[6],values[7],values[8],values[9]);
+        }
 
         for(int i = 0; i < times; i++) {
             feedShooter();
@@ -78,6 +99,7 @@ public class Shooter {
         resetShooter();
         flyWheel.setVelocity(0);
         flyWheel.setPower(0);
+        firstSetPID();
 
     }
 
@@ -98,8 +120,9 @@ public class Shooter {
             resetShooter();
         }
         resetShooter();
-        flyWheel.setVelocity(0);
         flyWheel.setPower(0);
+        flyWheel.setVelocity(0);
+
         firstSetPID();
 
     }
@@ -206,4 +229,47 @@ public class Shooter {
 
     public double getHGV(){ return highGoalVelocity; }
 
-}
+
+
+        public void updateIndex(boolean up){
+            if(up){
+                if(currentIndex == modes.length-1){
+                    currentIndex = 0;
+                } else {
+                    currentIndex++;
+                }
+            } else {
+                if(currentIndex == 0){
+                    currentIndex = modes.length-1;
+                }
+                else{
+                    currentIndex--;
+                }
+            }
+        }
+
+
+
+
+        public void updateValues(boolean increase){
+            if(increase){
+                values[currentIndex] += changers[currentIndex];
+            } else {
+                values[currentIndex] -= changers[currentIndex];
+            }
+        }
+
+        public int getIndex(){
+            return  currentIndex;
+        }
+
+        public double getValue(int index){
+            return values[index];
+        }
+
+        public String getMode(int index){
+            return modes[index];
+        }
+    }
+
+

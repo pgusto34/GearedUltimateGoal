@@ -3,6 +3,8 @@ package Main.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import Main.Base.Robot;
 
 import static Main.Base.HelperClasses.BooleanUpdater.updateBooleans;
@@ -52,16 +54,16 @@ import static Main.Base.HelperClasses.Button.y;
 @TeleOp(name = "TeleOp", group = "competition")
 public class RobotTeleOp extends Robot {
 
-
     //Booleans for use in TeleOp
     boolean intakeLIn = false, intakeLOut = false;
 
     boolean wobbleArmDown = false, wobbleClawOpen = true;
 
+    boolean stopperDown = false;
+
     boolean slomo = false, reverse = false;
 
     boolean FOD = true;
-
 
     @Override
     public void loop() {
@@ -73,7 +75,7 @@ public class RobotTeleOp extends Robot {
         //Drive
         if (buttonChecker.get(x)) slomo = !slomo;
 
-        if(buttonChecker.get(a)) reverse = !reverse;
+        //if(buttonChecker.get(a)) reverse = !reverse;
 
         if(buttonChecker.get(left_stick_button)) FOD = !FOD;
 
@@ -132,6 +134,33 @@ public class RobotTeleOp extends Robot {
 
         wobbleArm.ControlWobbleClaw(wobbleClawOpen);
 
+
+        //stopper
+        if(buttonChecker.get(a)) stopperDown = !stopperDown;
+
+        stopper.controlStopper(stopperDown);
+
+        
+        //tuner
+        if(buttonChecker.get(dpad_left)){
+            shooter.updateIndex(false);
+        } else if(buttonChecker.get(dpad_right)){
+            shooter.updateIndex(true);
+        }
+
+        if(buttonChecker.get(dpad_up)){
+            shooter.updateValues(true);
+        } else if(buttonChecker.get(dpad_down)){
+            shooter.updateValues(false);
+        }
+
+
+
+
+
+        telemetry.addData("Mode: ", shooter.getMode(shooter.getIndex()));
+        telemetry.addData("Value: ", shooter.getValue(shooter.getIndex()));
+        telemetry.update();
     }
 
 

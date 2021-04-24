@@ -10,11 +10,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Stopper {
 
-    Servo stopper;
+    private Servo stopper;
 
-    double stopperUpPosition = 0.5;
+    double stopperUpPosition = 0.0;
 
-    double stopperDownPosition = 0.5;
+    double stopperDownPosition = 1.0;
 
 
     public Stopper(Servo sServo) {

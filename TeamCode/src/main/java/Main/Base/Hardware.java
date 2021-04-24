@@ -8,11 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-/**TODO:
- * -Add Stopper
- *      -Add Stopper motor
- *      -Add Stopper name ('stopper')
- */
+
 
 
 /**
@@ -52,6 +48,9 @@ public class Hardware extends OpMode {
     Servo wobbleArmServo, wobbleClaw;
     String wobbleArmServoName = "wobbleArm", wobbleClawName = "wobbleClaw";
 
+    //Stopper Servo
+    Servo stopperServo;
+    String stopperServoName = "stopper";
 
     //IMU for Gyro
     BNO055IMU imu;

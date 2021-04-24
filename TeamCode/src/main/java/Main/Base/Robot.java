@@ -18,14 +18,11 @@ import Main.Base.RobotUtilities.Camera;
 import Main.Base.RobotUtilities.Gyro;
 import Main.Base.RobotUtilities.Intake;
 import Main.Base.RobotUtilities.Shooter;
+import Main.Base.RobotUtilities.Stopper;
 import Main.Base.RobotUtilities.WheelBase;
 import Main.Base.RobotUtilities.WobbleArm;
 
-/**TODO:
- * -Add Stopper
- *      -Initialize stopper servo
- *      -Initialize new Stopper()
- */
+
 
 
 /** Base Class for TeleOp code
@@ -47,6 +44,7 @@ public class Robot extends Hardware{
     public Shooter shooter;
     public WobbleArm wobbleArm;
     public Intake intake;
+    public Stopper stopper;
 
     public HashMap<Button, Boolean> buttonChecker = new HashMap<Button, Boolean>();
 
@@ -98,6 +96,10 @@ public class Robot extends Hardware{
         wobbleClaw = hardwareMap.servo.get(wobbleClawName);
 
         wobbleArm = new WobbleArm(wobbleArmServo, wobbleClaw);
+
+        stopperServo = hardwareMap.servo.get(stopperServoName);
+        stopper = new Stopper(stopperServo);
+
 
     }
 
