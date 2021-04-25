@@ -45,7 +45,7 @@ public class PIDTuningTeleOp extends Robot {
     public void init() {
 
         super.init();
-        shooter.firstSetPID();
+
 
     }
 
@@ -115,7 +115,7 @@ public class PIDTuningTeleOp extends Robot {
             intake.controlRIntake(false, false);
             intakeLIn = false;
             intakeRIn = false;
-            shooter.shoot(false, 1);
+            shooter.shootPS();
         }
 
 

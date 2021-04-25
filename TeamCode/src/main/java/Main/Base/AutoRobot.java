@@ -84,8 +84,6 @@ public abstract class AutoRobot extends Hardware {
 
         shooter = new Shooter(flyWheel, feederServo);
 
-        shooter.firstSetPID();
-
 
         wobbleArmServo = hardwareMap.servo.get(wobbleArmServoName);
         wobbleClaw = hardwareMap.servo.get(wobbleClawName);

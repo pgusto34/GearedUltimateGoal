@@ -12,7 +12,7 @@ public class ShooterTest extends Robot {
     @Override
     public void loop() {
 
-        if (gp.a && !lastA) shooter.shoot(true, 3);
+        if (gp.a && !lastA) shooter.shootHG();
 
         if (gp.a) lastA = true;
         else lastA = false;

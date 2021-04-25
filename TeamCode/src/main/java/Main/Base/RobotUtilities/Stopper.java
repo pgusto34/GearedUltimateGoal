@@ -12,9 +12,9 @@ public class Stopper {
 
     private Servo stopper;
 
-    double stopperUpPosition = 0.0;
+    double stopperUpPosition = 0.1;
 
-    double stopperDownPosition = 1.0;
+    double stopperDownPosition = .65;
 
 
     public Stopper(Servo sServo) {

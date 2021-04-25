@@ -56,7 +56,7 @@ public class UGAuto extends AutoRobot {
             if(rings == 0) {
 
                 //Drop Off Wobble Goal
-                wheelBase.goToPosition(odometry,  gyro, 56, 0, 0, speed, error);
+                wheelBase.goToPosition(odometry,  gyro, 59, -2, 0, speed, error);
                 wobbleArm.ControlWobbleArm(true);
                 pause(1000);
                 wobbleArm.ControlWobbleClaw(true);
@@ -67,19 +67,24 @@ public class UGAuto extends AutoRobot {
 
                 //Shoot 3 Rings in High Goal
                 wheelBase.goToPosition(odometry,  gyro, 60, 13, 0, 0.3, 2);
-                shooter.shoot(true, 3);
+                shooter.shootHG();
                 wobbleArm.ControlWobbleArm(true);
-                wheelBase.goToPosition(odometry,  gyro, 35, 28, 180, 0.5, 2);
+                wheelBase.goToPosition(odometry,  gyro, 35, 30, 180, 0.5, 2);
                 pause(1000);
 
                 //Grab and Drop off 2nd Wobble Goal
-                wheelBase.goToPosition(odometry, gyro, 24, 28, 180, speed, error);
+                //
+                // wheelBase.goToPosition(odometry, gyro, 32, 30, 180, speed, error);
                 wobbleArm.ControlWobbleClaw(false);
                 pause(2000);
-                wheelBase.goToPosition(odometry,  gyro, 56, 8, 0, speed, error);
-                wobbleArm.ControlWobbleClaw(false);
+                wheelBase.goToPosition(odometry,  gyro, 58, 3, 0, speed, error);
+                wobbleArm.ControlWobbleClaw(true);
                 pause(1000);
                 wobbleArm.ControlWobbleArm(false);
+                pause(1000);
+                wheelBase.goToPosition(odometry,  gyro, 53, 10, 0, speed, error);
+
+
 
                 //Park
                 wheelBase.goToPosition(odometry,  gyro, 66, 14, 0, speed, error);
@@ -92,7 +97,7 @@ public class UGAuto extends AutoRobot {
                 //Shoot 3 Rings in High Goal
                 wheelBase.goToPosition(odometry, gyro, 56, 0, 0, speed, error);
                 wheelBase.goToPosition(odometry,  gyro, 60, 13, 0, 0.5, 1);
-                shooter.shoot(true, 3);
+                shooter.shootHG();
                 pause(1000);
 
                 //Grab and Shoot Ring
@@ -101,16 +106,30 @@ public class UGAuto extends AutoRobot {
                 wheelBase.goToPosition(odometry, gyro, 37, 14, 0, 0.7, 2);
                 wheelBase.goToPosition(odometry, gyro, 55, 14, 0, speed, error);
                 wheelBase.goToPosition(odometry,  gyro, 60, 13, 0, 0.5, 1);
-                shooter.shoot(true, 3);
+                shooter.shootHG();
                 intake.controlLIntake(false, false);
 
                 //Drop Off Wobble Goal
-                wheelBase.goToPosition(odometry, gyro, 80, 22, 0, speed, error);
+                wheelBase.goToPosition(odometry, gyro, 86, 20, 0, speed, error);
                 wobbleArm.ControlWobbleArm(true);
                 pause(1000);
                 wobbleArm.ControlWobbleClaw(true);
                 pause(1000);
                 wobbleArm.ControlWobbleArm(false);
+
+                //Grab and Drop off 2nd Wobble Goal
+                wheelBase.goToPosition(odometry, gyro, 30, 28, 180, speed, error);
+                wobbleArm.ControlWobbleArm(true);
+                pause(1000);
+                wobbleArm.ControlWobbleClaw(false);
+                pause(2000);
+                wheelBase.goToPosition(odometry,  gyro, 82, 24, 0, speed, error);
+                wobbleArm.ControlWobbleClaw(true);
+                pause(1000);
+                wobbleArm.ControlWobbleArm(false);
+                pause(1000);
+                wheelBase.goToPosition(odometry,  gyro, 56, 8, 0, speed, error);
+
 
                 //Park
                 wheelBase.goToPosition(odometry,  gyro, 66, 14, 0, speed, error);
@@ -123,7 +142,7 @@ public class UGAuto extends AutoRobot {
                 //Shoot
                 wheelBase.goToPosition(odometry, gyro, 56, 0, 0, speed, error);
                 wheelBase.goToPosition(odometry,  gyro, 59.5, 13, 0, 0.5, 1);
-                shooter.shoot(true, 3);
+                shooter.shootHG();
                 pause(1000);
 
                 //Pick Up Rings
@@ -136,7 +155,7 @@ public class UGAuto extends AutoRobot {
                 //Shoot Rings
                 wheelBase.goToPosition(odometry, gyro, 55,  14, 0, speed, error);
                 wheelBase.goToPosition(odometry,  gyro, 59.5,  14, 0, 0.5, 1);
-                shooter.shoot(true, 3);
+                shooter.shootHG();
                 pause(500);
                 intake.controlLIntake(false, true);
 

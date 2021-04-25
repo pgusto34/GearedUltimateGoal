@@ -15,9 +15,9 @@ import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
 public class Shooter extends Robot {
 
     int currentIndex = 0;
-    public double[] values = {1000, 80, 14, 3, 2.5, 5.7, 0, 0, 0, 0};
     public String[] modes = {"highGoalV", "PowerShotV", "p", "i", "d", "f", "PSp", "PSi", "PSd", "PSf"};
-    public double[] changers = {25,      5,        0.1, 0.1, 0.1, 0.1,  0.1,   0.1,   0.1,  0.1};
+    public double[] values = {1000,            700,       14,  3,  2.5, 5.7,  1.5,     1.2,     0,     0};
+    public double[] changers = {25,            5,       0.1, 0.1, 0.1, 0.1,  0.1,   0.1,   0.1,  0.1};
 
     //Mode Variables
 //        public double highGoalV = shooter.getHGV();
@@ -59,63 +59,42 @@ public class Shooter extends Robot {
     }
 
 
-    //Sets Motor PID values
-    public void firstSetPID(){
-
-        /** Real **/
-       flyWheel.setVelocityPIDFCoefficients(values[2],values[3],values[4],values[5]);
-
-        /** Practice **/
-//        highGoalVelocity = 3700;
-//        flyWheel.setVelocityPIDFCoefficients(18,13,3.6,6.4);
-
-    }
-
 
     //Sets Motor either high goal or power shot velocity and shoots a given number of times
-    public void shoot(boolean highGoal, int times){
-        highGoalVelocity = values[0];
-        powerShotVelocity = values[1];
-        firstSetPID();
-        double velocity;
-        if(highGoal) velocity = highGoalVelocity;
-        else velocity = powerShotVelocity;
+
+    public void shootPS(){
+        //Tuning and Variables
+        flyWheel.setMode(RUN_USING_ENCODER);
+        flyWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        flyWheel.setVelocityPIDFCoefficients(values[6],values[7],values[8],values[9]);
 
         resetShooter();
-        flyWheel.setMode(RUN_USING_ENCODER);
-        runTime.reset();
-        flyWheel.setVelocity(velocity);
+        flyWheel.setVelocity(values[1]);
 
         runTime.reset();
         while(runTime.milliseconds() < 1400) { }
-        if(times == 1){
-            flyWheel.setVelocityPIDFCoefficients(values[6],values[7],values[8],values[9]);
-        }
+        feedShooter();
 
-        for(int i = 0; i < times; i++) {
-            feedShooter();
-            resetShooter();
-        }
         resetShooter();
-        flyWheel.setVelocity(0);
         flyWheel.setPower(0);
-        firstSetPID();
+        flyWheel.setVelocity(0);
 
     }
 
 
-    //Sets motor velocity based on input and shoots a given number of times
-    public void shoot(double velocity, int times){
-
-        resetShooter();
+    public void shootHG(){
+        //Tuning and Variables
         flyWheel.setMode(RUN_USING_ENCODER);
-        runTime.reset();
-        runFlyWheel(velocity);
+        flyWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        flyWheel.setVelocityPIDFCoefficients(values[2],values[3],values[4],values[5]);
+
+        resetShooter();
+        flyWheel.setVelocity(values[0]);
 
         runTime.reset();
-        while(runTime.milliseconds() < 1000) { }
+        while(runTime.milliseconds() < 1400) { }
 
-        for(int i = 0; i < times; i++) {
+        for(int i = 0; i < 3; i++) {
             feedShooter();
             resetShooter();
         }
@@ -123,9 +102,35 @@ public class Shooter extends Robot {
         flyWheel.setPower(0);
         flyWheel.setVelocity(0);
 
-        firstSetPID();
-
     }
+
+    public void setHighGoalPID(){
+        flyWheel.setVelocityPIDFCoefficients(values[2],values[3],values[4],values[5]);
+    }
+
+
+//    //Sets motor velocity based on input and shoots a given number of times
+//    public void shoot(double velocity, int times){
+//
+//        resetShooter();
+//        flyWheel.setMode(RUN_USING_ENCODER);
+//        runTime.reset();
+//        runFlyWheel(velocity);
+//
+//        runTime.reset();
+//        while(runTime.milliseconds() < 1000) { }
+//
+//        for(int i = 0; i < times; i++) {
+//            feedShooter();
+//            resetShooter();
+//        }
+//        resetShooter();
+//        flyWheel.setPower(0);
+//        flyWheel.setVelocity(0);
+//
+//        firstSetPID();
+//
+//    }
 
 
     //Sets servo to feed position

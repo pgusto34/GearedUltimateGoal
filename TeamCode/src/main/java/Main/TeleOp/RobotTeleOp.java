@@ -59,7 +59,7 @@ public class RobotTeleOp extends Robot {
 
     boolean wobbleArmDown = false, wobbleClawOpen = true;
 
-    boolean stopperDown = false;
+    boolean stopperDown = true;
 
     boolean slomo = false, reverse = false;
 
@@ -75,7 +75,7 @@ public class RobotTeleOp extends Robot {
         //Drive
         if (buttonChecker.get(x)) slomo = !slomo;
 
-        //if(buttonChecker.get(a)) reverse = !reverse;
+        if(buttonChecker.get(a)) reverse = !reverse;
 
         if(buttonChecker.get(left_stick_button)) FOD = !FOD;
 
@@ -100,9 +100,13 @@ public class RobotTeleOp extends Robot {
 
 
         //Shoot
-        if (buttonChecker.get(right_trigger)) { shooter.runFlyWheelHigh(); }
+        if (buttonChecker.get(right_trigger)) {
+            shooter.setHighGoalPID();
+            shooter.runFlyWheelHigh();
+        }
 
         if (buttonChecker.get(right_bumper)) {
+            shooter.setHighGoalPID();
 
             intake.controlLIntake(false, false);
             intakeLIn = false;
@@ -120,7 +124,7 @@ public class RobotTeleOp extends Robot {
             intake.controlRIntake(false, false);
             intakeLIn = false;
 
-            shooter.shoot(false, 1);
+            shooter.shootPS();
 
         }
 
@@ -136,15 +140,13 @@ public class RobotTeleOp extends Robot {
 
 
         //stopper
-        if(buttonChecker.get(a)) stopperDown = !stopperDown;
+        if(buttonChecker.get(dpad_left)) stopperDown = !stopperDown;
 
         stopper.controlStopper(stopperDown);
 
         
         //tuner
-        if(buttonChecker.get(dpad_left)){
-            shooter.updateIndex(false);
-        } else if(buttonChecker.get(dpad_right)){
+        if(buttonChecker.get(dpad_right)){
             shooter.updateIndex(true);
         }
 
@@ -160,7 +162,9 @@ public class RobotTeleOp extends Robot {
 
         telemetry.addData("Mode: ", shooter.getMode(shooter.getIndex()));
         telemetry.addData("Value: ", shooter.getValue(shooter.getIndex()));
+        telemetry.addData("StopperDown: ", stopperDown);
         telemetry.update();
+
     }
 
 
