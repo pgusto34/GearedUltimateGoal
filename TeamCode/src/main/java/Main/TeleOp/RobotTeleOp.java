@@ -59,7 +59,7 @@ public class RobotTeleOp extends Robot {
 
     boolean wobbleArmDown = false, wobbleClawOpen = true;
 
-    boolean stopperDown = true;
+    boolean stopperUp = true;
 
     boolean slomo = false, reverse = false;
 
@@ -103,6 +103,9 @@ public class RobotTeleOp extends Robot {
         if (buttonChecker.get(right_trigger)) {
             shooter.setHighGoalPID();
             shooter.runFlyWheelHigh();
+            stopperUp = true;
+            stopper.controlStopper(stopperUp);
+
         }
 
         if (buttonChecker.get(right_bumper)) {
@@ -140,9 +143,9 @@ public class RobotTeleOp extends Robot {
 
 
         //stopper
-        if(buttonChecker.get(dpad_left)) stopperDown = !stopperDown;
+        if(buttonChecker.get(dpad_left)) stopperUp = !stopperUp;
 
-        stopper.controlStopper(stopperDown);
+        stopper.controlStopper(stopperUp);
 
         
         //tuner
@@ -162,7 +165,6 @@ public class RobotTeleOp extends Robot {
 
         telemetry.addData("Mode: ", shooter.getMode(shooter.getIndex()));
         telemetry.addData("Value: ", shooter.getValue(shooter.getIndex()));
-        telemetry.addData("StopperDown: ", stopperDown);
         telemetry.update();
 
     }
