@@ -12,9 +12,9 @@ public class WobbleArm {
     double wobbleClawClosedPosition = 0.58;
 
     double wobbleArmPosition;
-    double wobbleArmOutPosition = 0.0;
-    double wobbleArmUpPosition = 0.4;
-    double wobbleArmInPosition = 0.7;
+    double wobbleArmOutPosition = 0.65;
+    double wobbleArmUpPosition = 0.15;
+    double wobbleArmInPosition = 0;
 
 
     public WobbleArm(Servo wA, Servo wC) {

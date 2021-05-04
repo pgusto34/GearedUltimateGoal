@@ -195,6 +195,34 @@ public class WheelBase {
 
     }
 
+    //Robot turns to a desired Orientation
+    public void turn(Odometer odometry, Gyro gyro, double desiredRobotOrientation, double robotPower){
+
+        boolean Slomo = false;
+
+        //Travel to point while distance > error and the difference between the robot orientation and robot heading is greater than 3
+        while(abs(desiredRobotOrientation - gyro.getHeading()) > 5) {
+
+
+            //Calculate TurnPower/Angle based on current robot heading and desired heading
+            double relativeAngleToTarget = angleWrapDegrees(180 - gyro.getHeading() + desiredRobotOrientation);
+            double relativeTurnAngle = relativeAngleToTarget - 180;
+
+            double turnPower = Range.clip(Math.toRadians(relativeTurnAngle), -1, 1) * 0.8;
+
+            //Robot enters slomo if robot is close enough to point
+//            if(abs(desiredRobotOrientation - gyro.getHeading()) < 10) Slomo = true;
+
+            //Drive Function
+            odometryDrive(gyro, 0, 0, turnPower, 0, Slomo);
+
+        }
+
+        setMotorPowers(0, 0, 0, 0);
+
+    }
+
+
 
     //Sets the RunMode for all drive motors
     public void setModeAll(DcMotor.RunMode runMode) {

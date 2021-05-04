@@ -11,6 +11,7 @@ import Main.Base.RobotUtilities.Gyro;
 import Main.Base.RobotUtilities.Intake;
 import Main.Base.RobotUtilities.Odometry.Odometer;
 import Main.Base.RobotUtilities.Shooter;
+import Main.Base.RobotUtilities.Stopper;
 import Main.Base.RobotUtilities.WheelBase;
 import Main.Base.RobotUtilities.WobbleArm;
 
@@ -35,6 +36,7 @@ public abstract class AutoRobot extends Hardware {
     public WobbleArm wobbleArm;
     public Intake intake;
     public Odometer odometry;
+    public Stopper stopper;
 
     //Position Thread for updating Robot Position through Odometry. Runs on Init.
     public Thread positionThread;
@@ -90,6 +92,10 @@ public abstract class AutoRobot extends Hardware {
 
         wobbleArm = new WobbleArm(wobbleArmServo, wobbleClaw);
 
+        stopperServo = hardwareMap.servo.get(stopperServoName);
+        stopper = new Stopper(stopperServo);
+
+        wobbleArm = new WobbleArm(wobbleArmServo, wobbleClaw);
 
         left = hardwareMap.dcMotor.get(leftName);
         right = hardwareMap.dcMotor.get(rightName);
@@ -121,9 +127,7 @@ public abstract class AutoRobot extends Hardware {
 
     //Starts AutoThread
     @Override
-    public void start() {
-        autoThread.start();
-    }
+    public void start() { autoThread.start(); }
 
 
     //Displays Robot Position During Loop

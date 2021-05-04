@@ -75,8 +75,6 @@ public class RobotTeleOp extends Robot {
         //Drive
         if (buttonChecker.get(x)) slomo = !slomo;
 
-        if(buttonChecker.get(a)) reverse = !reverse;
-
         if(buttonChecker.get(left_stick_button)) FOD = !FOD;
 
         wheelBase.fieldOrientatedDrive(gp, gyro, slomo, reverse);
@@ -86,6 +84,9 @@ public class RobotTeleOp extends Robot {
         if (buttonChecker.get(left_trigger)) {
             intakeLIn = !intakeLIn;
             intakeLOut = false;
+            stopperUp = !stopperUp;
+            if(intakeLIn) stopperUp = false;
+            stopper.controlStopper(stopperUp);
         }
 
         if(gp.back) {
@@ -117,6 +118,7 @@ public class RobotTeleOp extends Robot {
             shooter.flickFeeder();
             shooter.flickFeeder();
             shooter.flickFeeder();
+            shooter.flickFeeder();
             shooter.stopFlyWheel();
 
         }
@@ -143,9 +145,15 @@ public class RobotTeleOp extends Robot {
 
 
         //stopper
-        if(buttonChecker.get(dpad_left)) stopperUp = !stopperUp;
+        if(buttonChecker.get(a)) stopperUp = !stopperUp;
 
         stopper.controlStopper(stopperUp);
+
+        stopper.controlStopper(stopperUp);;
+
+//        if(buttonChecker.get(dpad_left)) stopperUp = !stopperUp;
+//
+//        stopper.controlStopper(stopperUp);
 
         
         //tuner

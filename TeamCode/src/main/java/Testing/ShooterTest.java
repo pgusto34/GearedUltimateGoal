@@ -12,7 +12,13 @@ public class ShooterTest extends Robot {
     @Override
     public void loop() {
 
-        if (gp.a && !lastA) shooter.shootHG();
+        if (gp.a && !lastA) {
+            try {
+                shooter.shootHG();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         if (gp.a) lastA = true;
         else lastA = false;

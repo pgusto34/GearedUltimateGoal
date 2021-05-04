@@ -16,7 +16,7 @@ public class Shooter extends Robot {
 
     int currentIndex = 0;
     public String[] modes = {"highGoalV", "PowerShotV", "p", "i", "d", "f", "PSp", "PSi", "PSd", "PSf"};
-    public double[] values = {1000,            700,       14,  3,  2.5, 5.7,  1.5,     1.2,     0,     0};
+    public double[] values = {1000,            530,       14,  3,  2.5, 5.7,  1.5,     1.2,     0,     0};
     public double[] changers = {25,            5,       0.1, 0.1, 0.1, 0.1,  0.1,   0.1,   0.1,  0.1};
 
     //Mode Variables
@@ -82,7 +82,7 @@ public class Shooter extends Robot {
     }
 
 
-    public void shootHG(){
+    public void shootHG() throws InterruptedException {
         //Tuning and Variables
         flyWheel.setMode(RUN_USING_ENCODER);
         flyWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -94,7 +94,7 @@ public class Shooter extends Robot {
         runTime.reset();
         while(runTime.milliseconds() < 1400) { }
 
-        for(int i = 0; i < 3; i++) {
+        for(int i = 0; i < 4; i++) {
             feedShooter();
             resetShooter();
         }

@@ -12,6 +12,7 @@ public class Stopper {
 
     private Servo stopper;
 
+    double stopperPosition;
     double stopperUpPosition = 0.1;
 
     double stopperDownPosition = .65;
@@ -22,14 +23,16 @@ public class Stopper {
     }
 
 
-    private void setStopperPosition(double position) {
+    public void setStopperPosition(double position) {
         stopper.setPosition(position);
     }
 
 
     public void controlStopper(boolean up) {
 
-        double stopperPosition = up ? stopperUpPosition : stopperDownPosition;
+        if(up) stopperPosition = stopperUpPosition;
+        else stopperPosition = stopperDownPosition;
+        //double stopperPosition = up ? stopperUpPosition : stopperDownPosition;
 
         stopper.setPosition(stopperPosition);
 
