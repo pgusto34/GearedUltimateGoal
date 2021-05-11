@@ -269,7 +269,7 @@ public class UGAuto extends AutoRobot {
         wheelBase.goToPosition(odometry, gyro, 20,  15, 0, 0.6, 2);
         wheelBase.turn(gyro, -90, 0.8);
 
-
+        //Arm Out
         wobbleArm.ControlWobbleArm(true);
         pause(500);
 
