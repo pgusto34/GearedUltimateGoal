@@ -3,7 +3,6 @@ package Main.Auto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import Main.Base.AutoRobot;
-import Main.Base.RobotUtilities.WheelBase;
 
 /** TODO:
  * -Fine Tune Path A
@@ -57,51 +56,47 @@ public class UGAuto extends AutoRobot {
 
             //Path A
             if(rings == 0) {
-
-                //Drop Off Wobble Goal
+              //Drop Off Wobble Goal
                 wheelBase.goToPosition(odometry,  gyro, 54, -1, 0, speed, 2);
                 wobbleArm.ControlWobbleArm(true);
-                pause(1500);
+                pause(1000);
                 wobbleArm.ControlWobbleClaw(true);
                 pause(500);
                 wobbleArm.ControlWobbleArm(false);
-                pause(1000);
+                pause(250);
 
 
                 //Shoot 3 Rings in High Goal
-                wheelBase.goToPosition(odometry,  gyro, 60, 13, 0, 0.4, 1);
+                wheelBase.goToPosition(odometry,  gyro, 60, 13, 0, 0.45, 0.75);
                 shooter.shootHG();
 
 
                 //Grab and Drop off 2nd Wobble Goal
-                //
-                //wheelBase.goToPosition(odometry, gyro, 34, 30, 180, speed, error);
-             //   wheelBase.goToPosition(odometry, gyro, 15.05,  23.25, -90, 0.4, 2);
-                wheelBase.goToPosition(odometry, gyro, 20,  15, 0, 0.6, 2);
-                wheelBase.turn(odometry, gyro, -90, 0.8);
+                wheelBase.goToPosition(odometry, gyro, 25,  10, 0, 0.6, 5);
+                wheelBase.goToPosition(odometry, gyro, 20,  10, 0, 0.5, 2);
+                wheelBase.turn(gyro, -80, 0.8);
 
 
                 wobbleArm.ControlWobbleArm(true);
                 pause(500);
 
-                wheelBase.goToPosition(odometry, gyro, 14,  23, -90, 0.55, 1);
-                wheelBase.goToPosition(odometry, gyro, 13,  23.5, -90, 0.55, 1);
+                wheelBase.goToPosition(odometry, gyro, 14,  22.7, -90, 0.55, 1);
+                wheelBase.goToPosition(odometry, gyro, 13,  23.1, -90, 0.5, 1);
 
                 wobbleArm.ControlWobbleClaw(false);
                 pause(1000);
 
-                wheelBase.goToPosition(odometry,  gyro, 56.5, 10, 0, 0.5, error);
+                wheelBase.goToPosition(odometry,  gyro, 58, 11.25, 0, 0.5, 6);
                 wobbleArm.ControlWobbleClaw(true);
                 pause(250);
                 wobbleArm.ControlWobbleArm(false);
-                pause(500);
+                pause(250);
                 wheelBase.goToPosition(odometry,  gyro, 45, 31, 0, speed, error);
 
 
 
-                //Park
-                wheelBase.goToPosition(odometry,  gyro, 68, 55, 0, 0.5, error);
-
+            //Park
+            wheelBase.goToPosition(odometry,  gyro, 68, 55, 0, 0.5, error);
             }
 
             //Path B
@@ -115,199 +110,185 @@ public class UGAuto extends AutoRobot {
                 shooter.stopFlyWheel();
 
                 //Drop Off Wobble Goal
-                wheelBase.goToPosition(odometry, gyro, 78, 23.5, 0, 0.8, 6);
+                wheelBase.goToPosition(odometry, gyro, 81, 19, 0, 0.8, 6);
                 wobbleArm.ControlWobbleArm(true);
-                wheelBase.goToPosition(odometry, gyro, 80, 23, 0, 0.5, 1.5);
+                wheelBase.goToPosition(odometry, gyro, 81, 21, 0, 0.5, 2.5);
                 wobbleArm.ControlWobbleArm(true);
-                pause(1000);
+                pause(500);
                 wobbleArm.ControlWobbleClaw(true);
                 pause(250);
                 wobbleArm.ControlWobbleArm(false);
 
                 //Grab Ring
                 intake.controlLIntake(true, false);
-                wheelBase.goToPosition(odometry,  gyro, 35, 0, 0,  speed, 3);
-                wheelBase.goToPosition(odometry, gyro, 33, 14, 0, 0.8, 2);
+                wheelBase.goToPosition(odometry,  gyro, 40, 4, 0,  0.9, 4);
+                wheelBase.goToPosition(odometry, gyro, 39.5, 14, 0, 0.8, 2);
 
 ;
 //                //Grab   2nd Wobble Goal
-//
-//                wheelBase.goToPosition(odometry, gyro, 35, 3, -45, 0.55, 5);
-//                wheelBase.goToPosition(odometry, gyro, 35,21,-90,0.55, 5);
-
-                //wheelBase.goToPosition(odometry, gyro, 35,  12, -90, 0.5, 5);
-                wheelBase.turn(odometry, gyro, -90, 0.75);
+                wheelBase.goToPosition(odometry, gyro, 25,  4, 0, 0.7, 5);
+                wheelBase.goToPosition(odometry, gyro, 20,  4, 0, 0.7, 3);
+                wheelBase.turn(gyro, -80, 0.8);
 
 
                 wobbleArm.ControlWobbleArm(true);
-                pause(500);
+                pause(250);
 
-                wheelBase.goToPosition(odometry, gyro, 34,  9, -90, 0.7, 2);
-                wheelBase.goToPosition(odometry, gyro, 12,  10, -90, 0.6, 2);
-                wheelBase.goToPosition(odometry, gyro, 10.5,  21, -90, 0.6, 2);
+                wheelBase.goToPosition(odometry, gyro, 12.85,  17.6, -90, 0.55, 1);
+                wheelBase.goToPosition(odometry, gyro, 10.5,  18.4, -90, 0.5, 0.75);
 
 
                 wobbleArm.ControlWobbleClaw(false);
-                pause(750);
-//
-                wheelBase.turn(odometry, gyro, 0, 0.75);
+                pause(400);
+
+                wheelBase.turn(gyro, 0, 0.75);
 //                //Drop 2nd Wobble Goal
                 wobbleArm.setWobbleArmInPosition();
-                //shooter.runFlyWheelHigh();
-                wheelBase.goToPosition(odometry, gyro, 51, 26, 0, 0.8, 5);
-                wheelBase.goToPosition(odometry,  gyro, 53, 34, 0, 0.5, 3);;
+
+                wheelBase.goToPosition(odometry, gyro, 52.5, 42, 0, 0.8, 6);
+                wheelBase.goToPosition(odometry,  gyro, 53.5, 43, 0, 0.63, 2);
                 shooter.shootPS();
-                //shooter.flickFeeder(2);
-                //shooter.stopFlyWheel();
-
-//                wheelBase.goToPosition(odometry, gyro, 74, 23, 0, speed, error);
-                wheelBase.goToPosition(odometry,  gyro, 60, 35, 0, 1, 6);
-                wheelBase.goToPosition(odometry,  gyro, 71, 34, 0, 1, 4);
-                wobbleArm.ControlWobbleArm(true);
                 pause(100);
+
+                wobbleArm.ControlWobbleArm(true);
+                wheelBase.goToPosition(odometry,  gyro, 62, 30, 0, 1, 6);
+                shooter.stopFlyWheel();
+                wobbleArm.ControlWobbleArm(true);
+                wheelBase.goToPosition(odometry,  gyro, 74.5, 30, 0, 0.73, 2);
                 wobbleArm.ControlWobbleClaw(true);
-                pause(500);
-//
-                //fire ring
+                pause(150);
+                wobbleArm.ControlWobbleArm(false);
 
-                wheelBase.goToPosition(odometry, gyro, 64, 40, 0, 1, 3);
-//                intake.controlLIntake(false, false);
-//                shooter.shootPS();
-                //wheelBase.goToPosition(odometry, gyro, 60, 42, 0 ,1, error );
-                //wheelBase.goToPosition(odometry, gyro, 55, 14, 0, 1, error);
+                //Park
+                wheelBase.goToPosition(odometry, gyro, 64, 38, 0, 1, 3);
 
-
-//                shooter.runFlyWheelHigh();
-//                wheelBase.goToPosition(odometry,  gyro, 56, 15, 0, 0.8, 1);
-//
-//                shooter.flickFeeder();
-//                shooter.stopFlyWheel();
-//                intake.controlLIntake(false, false);
-//
-//
-//                //Park
-//                wheelBase.goToPosition(odometry,  gyro, 66, 14, 0, 0.5, error);
 
             }
 
             //Path C
             else if(rings == 4) {
 
-//                //Shoot 3 Rings in High Goal
-//                wheelBase.goToPosition(odometry, gyro, 44, 0, 0, 0.8, 6);
-//                shooter.runFlyWheelHigh();
-//                wheelBase.goToPosition(odometry,  gyro, 56.5, 15, 0, 0.45, 1);
-//                shooter.flickFeeder(4);
-//                shooter.stopFlyWheel();
-//
-//                //Drop Off Wobble Goal
-//                wheelBase.goToPosition(odometry, gyro, 90, 4, 0, 0.8, 6);
-//                wheelBase.goToPosition(odometry, gyro, 99, 4, 0, 0.5, 1.5);
-//                wobbleArm.ControlWobbleArm(true);
-//                pause(500);
-//                wobbleArm.ControlWobbleClaw(true);
-//                pause(250);
-//                wobbleArm.ControlWobbleArm(false);
-//
-//                wheelBase.goToPosition(odometry, gyro, 34,  9, -90, 0.7, 2);
-//
-//
-//                wheelBase.turn(odometry, gyro, -90, 0.75);
-//
-//                wobbleArm.ControlWobbleArm(true);
-//
-//                wheelBase.goToPosition(odometry, gyro, 12,  10, -90, 0.6, 2);
-//                wheelBase.goToPosition(odometry, gyro, 10.5,  20.5, -90, 0.6, 2);
-//
-//
-//                wobbleArm.ControlWobbleClaw(false);
-//                pause(500);
-//
-//                wheelBase.turn(odometry, gyro, 0, 0.75);
-//
-//
-//                wheelBase.goToPosition(odometry, gyro, 89, 50, 0, 0.8, 6);
-//                wheelBase.goToPosition(odometry, gyro, 98, 50, 0, 0.5, 1.5);
-//                wobbleArm.ControlWobbleArm(true);
-//                pause(500);
-//                wobbleArm.ControlWobbleClaw(true);
-//                pause(250);
-//                wobbleArm.ControlWobbleArm(false);
-//
-//                wheelBase.goToPosition(odometry, gyro, 58, 27, 0, 0.7, 3);
 
-
-                //Shoot
-                //stopper.controlStopper(false);
-                wheelBase.goToPosition(odometry, gyro, 48, 8, 0, 1, error);
+                //Shoot 3 Rings in High Goal
+                wheelBase.goToPosition(odometry, gyro, 44, 0, 0, 0.8, 6);
                 shooter.runFlyWheelHigh();
-                wheelBase.goToPosition(odometry,  gyro, 57, 13, 0, 0.5, 1);
-                wheelBase.goToPosition(odometry,  gyro, 56.5, 15, 0, 0.45, 1);
+                wheelBase.goToPosition(odometry,  gyro, 56.5, 13.5, 0, 0.45, 1);
                 shooter.flickFeeder(4);
                 shooter.stopFlyWheel();
 
-                pause(250);
 
                 //Drop Off Wobble Goal
-                wheelBase.goToPosition(odometry, gyro,87, 10, 0,1, 6);
-                wheelBase.goToPosition(odometry, gyro,96, 10, 0,0.5, 1);
+                wheelBase.goToPosition(odometry, gyro,92, 2, 0,1, 6);
 
                 //stopper.controlStopper(false);
                 wobbleArm.ControlWobbleArm(true);
-                pause(250);
-                wobbleArm.ControlWobbleClaw(true);
                 pause(500);
+                wobbleArm.ControlWobbleClaw(true);
+                pause(250);
                 wobbleArm.ControlWobbleArm(false);
 
 
                 //Pick Up Rings
-                wheelBase.goToPosition(odometry,  gyro, 37, 7, 0,  0.8, 2);
-                wheelBase.goToPosition(odometry, gyro, 37,  18, 0, 1, 2);
-                wheelBase.goToPosition(odometry, gyro, 37,  7, 0, 0.7, 2);
+                wheelBase.goToPosition(odometry,  gyro, 34, -1.5, 0,  0.6, 1);
                 intake.controlLIntake(true, false);
-                wheelBase.goToPosition(odometry, gyro, 38,  24, 0, 0.4, 2);
-                wheelBase.goToPosition(odometry, gyro, 37,  9.5, 0, 0.7, 2);
+                wheelBase.goToPosition(odometry, gyro, 34,  4.1, 0, 0.4, 0.5);
+                pause(250);
+                intake.controlLIntake(false, false);
+                pause(250);
 
-                //Grab   2nd Wobble Goal
-                //wheelBase.goToPosition(odometry, gyro, 37, 3, 0, 0.6, 2);
-                //wheelBase.goToPosition(odometry, gyro, 29, 23, 180, 1, 10);
-//                wheelBase.goToPosition(odometry, gyro, 12,  17, -90, 0.6, 2);
-//
-//                wobbleArm.ControlWobbleArm(true);
-//                pause(500);
-//                wobbleArm.ControlWobbleClaw(false);
-//                pause(250);
+                intake.controlLIntake(true,false);
+                wheelBase.goToPosition(odometry, gyro, 34,  5, 0, 0.4, 0.5);
+                pause(250);
+                intake.controlLIntake(true,false);
+
+
+                wheelBase.goToPosition(odometry, gyro, 34,  -1, 0, 0.8, 4);
+                intake.controlLIntake(false,false);
+                wobbleArm.ControlWobbleArm(true);
+
+                wheelBase.turn(gyro, -90, 0.8);
+
+                wheelBase.goToPosition(odometry, gyro, 13.25,  15.4, -90, 0.55, 1);
+                wheelBase.goToPosition(odometry, gyro, 10.2,  17.3, -90, 0.47, 0.75);
+
+
+                wobbleArm.ControlWobbleClaw(false);
+                pause(600);
+
 
                 //Shoot Rings
-                wheelBase.goToPosition(odometry, gyro, 54,  20, 0, 1, error);
                 shooter.runFlyWheelHigh();
-                wheelBase.goToPosition(odometry,  gyro, 58,  18, 0, 0.55, 1);
-                shooter.flickFeeder();
-                shooter.flickFeeder();
-                shooter.flickFeeder();
+                wobbleArm.setWobbleArmInPosition();
+                intake.controlLIntake(true, false);
+                wheelBase.goToPosition(odometry,  gyro, 50, 10, 0, 0.8, 6);
+                wheelBase.goToPosition(odometry,  gyro, 52.5, 18, 0, 0.55, 1);
+                shooter.flickFeeder(4);
                 shooter.stopFlyWheel();
-                intake.controlLIntake(false, true);
 
-//                //Drop 2nd Wobble Goal
-//                wheelBase.goToPosition(odometry,  gyro, 110, 8, 0, 1, 30);
-//                //wheelBase.goToPosition(odometry,  gyro, 78, 27, 0, 0.5, 2);
-//                wobbleArm.ControlWobbleClaw(true);
-//                pause(500);
-//                wobbleArm.ControlWobbleArm(false);
-//                pause(500);
+                intake.controlLIntake(false,false);
+
+                //Drop 2nd Wobble Goal
+                wobbleArm.ControlWobbleArm(true);
+                wheelBase.goToPosition(odometry,  gyro, 102, 10, 0, 1, 30);
+                wobbleArm.ControlWobbleClaw(true);
+                pause(500);
+                wobbleArm.ControlWobbleArm(false);
+                pause(250);
 
 
 
 
 
                 //Park
-                wheelBase.goToPosition(odometry,  gyro, 66, 14, 0, 1, error);
-                intake.controlLIntake(false, false);
+               wheelBase.goToPosition(odometry,  gyro, 64, 20, 0, 1, 5);
+
 
             }
         }catch(Exception e){
             autoThread.interrupt();
             telemetry.addData("AUTONOMOUS WAS INTERRUPTED", e);
         }
+    }
+
+    public void aParker(){
+        //Drop Off Wobble Goal
+        wheelBase.goToPosition(odometry,  gyro, 54, -1, 0, speed, 2);
+        wobbleArm.ControlWobbleArm(true);
+        pause(1500);
+        wobbleArm.ControlWobbleClaw(true);
+        pause(500);
+        wobbleArm.ControlWobbleArm(false);
+        pause(1000);
+
+
+        //Shoot 3 Rings in High Goal
+        wheelBase.goToPosition(odometry,  gyro, 60, 13, 0, 0.4, 1);
+
+
+        //Grab and Drop off 2nd Wobble Goal
+        wheelBase.goToPosition(odometry, gyro, 20,  15, 0, 0.6, 2);
+        wheelBase.turn(gyro, -90, 0.8);
+
+
+        wobbleArm.ControlWobbleArm(true);
+        pause(500);
+
+        wheelBase.goToPosition(odometry, gyro, 14,  23, -90, 0.55, 1);
+        wheelBase.goToPosition(odometry, gyro, 13,  23.5, -90, 0.55, 1);
+
+        wobbleArm.ControlWobbleClaw(false);
+        pause(1000);
+
+        wheelBase.goToPosition(odometry,  gyro, 56.5, 10, 0, 0.5, error);
+        wobbleArm.ControlWobbleClaw(true);
+        pause(250);
+        wobbleArm.ControlWobbleArm(false);
+        pause(500);
+        wheelBase.goToPosition(odometry,  gyro, 45, 31, 0, speed, error);
+
+
+
+        //Park
+        wheelBase.goToPosition(odometry,  gyro, 68, 55, 0, 0.5, error);
     }
 }

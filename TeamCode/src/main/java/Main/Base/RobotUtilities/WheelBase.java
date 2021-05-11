@@ -196,7 +196,7 @@ public class WheelBase {
     }
 
     //Robot turns to a desired Orientation
-    public void turn(Odometer odometry, Gyro gyro, double desiredRobotOrientation, double robotPower){
+    public void turn(Gyro gyro, double desiredRobotOrientation, double robotPower){
 
         boolean Slomo = false;
 
@@ -208,7 +208,7 @@ public class WheelBase {
             double relativeAngleToTarget = angleWrapDegrees(180 - gyro.getHeading() + desiredRobotOrientation);
             double relativeTurnAngle = relativeAngleToTarget - 180;
 
-            double turnPower = Range.clip(Math.toRadians(relativeTurnAngle), -1, 1) * 0.8;
+            double turnPower = Range.clip(Math.toRadians(relativeTurnAngle), -1, 1) * robotPower;
 
             //Robot enters slomo if robot is close enough to point
 //            if(abs(desiredRobotOrientation - gyro.getHeading()) < 10) Slomo = true;

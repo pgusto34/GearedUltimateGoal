@@ -16,7 +16,7 @@ public class Shooter extends Robot {
 
     int currentIndex = 0;
     public String[] modes = {"highGoalV", "PowerShotV", "p", "i", "d", "f", "PSp", "PSi", "PSd", "PSf"};
-    public double[] values = {1000,            530,       14,  3,  2.5, 5.7,  1.5,     1.2,     0,     0};
+    public double[] values = {1000,            625,       14,  3,  2.5, 5.7,  1.5,     1.2,     0,     0};
     public double[] changers = {25,            5,       0.1, 0.1, 0.1, 0.1,  0.1,   0.1,   0.1,  0.1};
 
     //Mode Variables
@@ -109,28 +109,7 @@ public class Shooter extends Robot {
     }
 
 
-//    //Sets motor velocity based on input and shoots a given number of times
-//    public void shoot(double velocity, int times){
-//
-//        resetShooter();
-//        flyWheel.setMode(RUN_USING_ENCODER);
-//        runTime.reset();
-//        runFlyWheel(velocity);
-//
-//        runTime.reset();
-//        while(runTime.milliseconds() < 1000) { }
-//
-//        for(int i = 0; i < times; i++) {
-//            feedShooter();
-//            resetShooter();
-//        }
-//        resetShooter();
-//        flyWheel.setPower(0);
-//        flyWheel.setVelocity(0);
-//
-//        firstSetPID();
-//
-//    }
+
 
 
     //Sets servo to feed position
@@ -198,8 +177,16 @@ public class Shooter extends Robot {
     //Sets flywheel to the velocity for a power shot
     public void runFlyWheelPower() {
 
+//        flyWheel.setMode(RUN_USING_ENCODER);
+//        flyWheel.setVelocity(powerShotVelocity);
+
+        //Tuning and Variables
         flyWheel.setMode(RUN_USING_ENCODER);
-        flyWheel.setVelocity(powerShotVelocity);
+        flyWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        flyWheel.setVelocityPIDFCoefficients(values[2],values[3],values[4],values[5]);
+
+        resetShooter();
+        flyWheel.setVelocity(values[0]);
 
     }
 

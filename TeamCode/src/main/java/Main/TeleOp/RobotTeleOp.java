@@ -65,6 +65,7 @@ public class RobotTeleOp extends Robot {
 
     boolean FOD = true;
 
+
     @Override
     public void loop() {
 
@@ -131,6 +132,16 @@ public class RobotTeleOp extends Robot {
 
             shooter.shootPS();
 
+//            wheelBase.turn(gyro, 30, 0.7);
+//
+//            shooter.shootPS();
+//
+//            wheelBase.turn(gyro, -30, 0.7);
+//
+//            shooter.shootPS();
+
+            //shooter.shootPS();
+
         }
 
 
@@ -173,9 +184,12 @@ public class RobotTeleOp extends Robot {
 
         telemetry.addData("Mode: ", shooter.getMode(shooter.getIndex()));
         telemetry.addData("Value: ", shooter.getValue(shooter.getIndex()));
+        telemetry.addData("Heading: ", gyro.getHeading());
         telemetry.update();
 
     }
+
+
 
 
 }
